@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { PAGES } from '../types/pages';
 import styled from 'styled-components';
+import { MintPage } from '../pages/MintPage';
 
 const Container = styled.div`
   height: 100vh;
@@ -27,7 +28,11 @@ const Page = styled.div<{ bgColor: string; textColor: string }>`
   font-weight: bold;
 `;
 
-export const PageContainer = () => {
+interface PageContainerProps {
+  sendHash: (hash: string) => void;
+}
+
+export const PageContainer = ({ sendHash }: PageContainerProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [currentPage, setCurrentPage] = useState(0);
 
@@ -65,16 +70,24 @@ export const PageContainer = () => {
     };
   }, [currentPage]);
 
+  const renderPageContent = (pageName: string) => {
+    switch (pageName) {
+      case 'Mint':
+        return <MintPage sendHash={sendHash} />;
+      default:
+        return pageName;
+    }
+  };
+
   return (
     <Container ref={containerRef}>
-      {PAGES.map((page, index) => (
+      {PAGES.map((page) => (
         <Page
           key={page.name}
           bgColor={page.color}
           textColor={page.textColor}
         >
-          {page.name}
-          {/* We'll add page-specific content here later */}
+          {renderPageContent(page.name)}
         </Page>
       ))}
     </Container>

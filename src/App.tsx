@@ -71,13 +71,8 @@ export function App() {
         <WalletButton>
           <appkit-button />
         </WalletButton>
-        <ActionButtonList
-          sendHash={handleHash}
-          sendSignMsg={handleSignMsg}
-          sendBalance={handleBalance}
-        />
       </WalletControls>
-      <PageContainer />
+      <PageContainer sendHash={handleHash} />
     </AppContainer>
   );
 }
