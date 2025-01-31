@@ -1,7 +1,8 @@
 import { createAppKit } from '@reown/appkit/react'
 import { networks, projectId, metadata, ethersAdapter } from './config'
 import { ActionButtonList } from './components/ActionButtonList'
-// import { InfoList } from './components/InfoList'
+import { PageContainer } from './components/PageContainer'
+import styled from 'styled-components'
 import { useState } from 'react'
 
 import "./App.css"
@@ -21,39 +22,64 @@ createAppKit({
   }
 })
 
+const AppContainer = styled.div`
+  position: relative;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+`;
+
+const WalletControls = styled.div`
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 1000;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+`;
+
+const WalletButton = styled.div`
+  appkit-button {
+    display: block;
+  }
+`;
+
 export function App() {
   const [transactionHash, setTransactionHash] = useState('');
   const [signedMsg, setSignedMsg] = useState('');
   const [balance, setBalance] = useState('');
 
-
-  const receiveHash = (hash: string) => {
-    setTransactionHash(hash); // Update the state with the transaction hash
+  const handleHash = (hash: string) => {
+    setTransactionHash(hash);
+    console.log('Transaction hash:', hash);
   };
 
-  const receiveSignedMsg = (signedMsg: string) => {
-    setSignedMsg(signedMsg); // Update the state with the transaction hash
+  const handleSignMsg = (sig: string) => {
+    setSignedMsg(sig);
+    console.log('Signature:', sig);
   };
 
-  const receivebalance = (balance: string) => {
-    setBalance(balance)
-  }
+  const handleBalance = (balance: string) => {
+    setBalance(balance);
+    console.log('Balance:', balance);
+  };
 
   return (
-    <div className={"pages"}>
-      <img src="/caribou-logo.png" alt="Reown" style={{ width: '150px', height: '150px' }} />
-      <h1>Caribou</h1>
+    <AppContainer>
+      <WalletControls>
+        <WalletButton>
           <appkit-button />
-          <ActionButtonList sendHash={receiveHash} sendSignMsg={receiveSignedMsg} sendBalance={receivebalance}/>
-          {/* <div className="advice">
-            <p>
-              This projectId only works on localhost. <br/>
-              Go to <a href="https://cloud.reown.com" target="_blank" className="link-button" rel="Reown Cloud">Reown Cloud</a> to get your own.
-            </p>
-          </div> */}
-          {/* <InfoList hash={transactionHash} signedMsg={signedMsg} balance={balance}/> */}
-    </div>
-  )
+        </WalletButton>
+        <ActionButtonList
+          sendHash={handleHash}
+          sendSignMsg={handleSignMsg}
+          sendBalance={handleBalance}
+        />
+      </WalletControls>
+      <PageContainer />
+    </AppContainer>
+  );
 }
 
 export default App
