@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { PAGES } from '../types/pages';
 import styled from 'styled-components';
 import { MintPage } from '../pages/MintPage';
+import { HorizontalPages } from './HorizontalPages';
 
 const Container = styled.div`
   height: 100vh;
@@ -70,24 +71,42 @@ export const PageContainer = ({ sendHash }: PageContainerProps) => {
     };
   }, [currentPage]);
 
-  const renderPageContent = (pageName: string) => {
+  const renderPageContent = (pageName: string, pageIndex: number) => {
     switch (pageName) {
       case 'Mint':
-        return <MintPage sendHash={sendHash} />;
+        return (
+          <HorizontalPages
+            subPages={PAGES[pageIndex].subPages}
+            bgColor={PAGES[pageIndex].color}
+            textColor={PAGES[pageIndex].textColor}
+            pageIndex={pageIndex}
+          >
+            <MintPage sendHash={sendHash} />
+          </HorizontalPages>
+        );
       default:
-        return pageName;
+        return (
+          <HorizontalPages
+            subPages={PAGES[pageIndex].subPages}
+            bgColor={PAGES[pageIndex].color}
+            textColor={PAGES[pageIndex].textColor}
+            pageIndex={pageIndex}
+          >
+            {pageName}
+          </HorizontalPages>
+        );
     }
   };
 
   return (
     <Container ref={containerRef}>
-      {PAGES.map((page) => (
+      {PAGES.map((page, index) => (
         <Page
           key={page.name}
           bgColor={page.color}
           textColor={page.textColor}
         >
-          {renderPageContent(page.name)}
+          {renderPageContent(page.name, index)}
         </Page>
       ))}
     </Container>
