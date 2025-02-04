@@ -14,6 +14,9 @@ createAppKit({
   metadata,
   projectId,
   themeMode: 'light',
+  chainImages: {
+    534351: 'public/scroll.png',
+  },
   features: {
     analytics: true // Optional - defaults to your Cloud configuration
   },
