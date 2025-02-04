@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import { useAppKitAccount, useAppKitNetworkCore, useAppKitProvider, type Provider } from '@reown/appkit/react';
-import { BrowserProvider, JsonRpcSigner, Contract } from 'ethers';
+import { BrowserProvider, JsonRpcSigner, Contract, formatUnits } from 'ethers';
+import { useEffect, useState } from 'react';
 
 const PageContent = styled.div`
   display: flex;
@@ -19,6 +20,12 @@ const ButtonContainer = styled.div`
   gap: 10px;
 `;
 
+const BalanceDisplay = styled.div`
+  font-size: 1.2rem;
+  margin-bottom: 20px;
+  text-align: center;
+`;
+
 // USDC Contract
 const USDC_ADDRESS = "0x06eFdBFf2a14a7c8E15944D1F4A48F9F95F663A4";
 const USDC_ABI = [
@@ -28,7 +35,9 @@ const USDC_ABI = [
 // rUSDC Contract
 const RUSDC_ADDRESS = "0xAE1846110F72f2DaaBC75B7cEEe96558289EDfc5";
 const RUSDC_ABI = [
-  "function mint(uint256 mintAmount) external returns (uint256)"
+  "function mint(uint256 mintAmount) external returns (uint256)",
+  "function balanceOf(address account) external view returns (uint256)",
+  "function exchangeRateStored() external view returns (uint256)"
 ];
 
 interface LendPageProps {
@@ -39,6 +48,42 @@ export const LendPage = ({ sendHash }: LendPageProps) => {
   const { address } = useAppKitAccount();
   const { chainId } = useAppKitNetworkCore();
   const { walletProvider } = useAppKitProvider<Provider>('eip155');
+  const [usdcBalance, setUsdcBalance] = useState<string>('0');
+
+  // Function to fetch and calculate the actual USDC balance
+  const fetchBalance = async () => {
+    if (!walletProvider || !address) return;
+
+    try {
+      const provider = new BrowserProvider(walletProvider, chainId);
+      const rUSDCContract = new Contract(RUSDC_ADDRESS, RUSDC_ABI, provider);
+      
+      // Get rUSDC balance and exchange rate
+      const [rUSDCBalance, exchangeRate] = await Promise.all([
+        rUSDCContract.balanceOf(address),
+        rUSDCContract.exchangeRateStored()
+      ]);
+
+      // Calculate actual USDC balance:
+      // (rUSDCBalance * exchangeRate) / 1e18 (to account for exchangeRate decimals)
+      // Note: rUSDCBalance is in 6 decimals, final result will be in 6 decimals
+      const actualBalance = (rUSDCBalance * exchangeRate) / BigInt(1e18);
+      
+      // Format the balance to display with 2 decimal places
+      const formattedBalance = formatUnits(actualBalance, 6);
+      const roundedBalance = Number(formattedBalance).toFixed(2);
+      
+      setUsdcBalance(roundedBalance);
+    } catch (error) {
+      console.error("Failed to fetch balance:", error);
+      setUsdcBalance('Error');
+    }
+  };
+
+  // Fetch balance on mount and when address changes
+  useEffect(() => {
+    fetchBalance();
+  }, [address, walletProvider, chainId]);
 
   const handleApprove = async () => {
     if (!walletProvider || !address) throw Error('user is disconnected');
@@ -76,13 +121,14 @@ export const LendPage = ({ sendHash }: LendPageProps) => {
     const rUSDCContract = new Contract(RUSDC_ADDRESS, RUSDC_ABI, signer);
     
     try {
-      // Deposit 1 USDC (6 decimals)
-      const tx = await rUSDCContract.mint("1000000"); // 1 USDC = 1000000 (6 decimals)
+      const tx = await rUSDCContract.mint("1000000");
       
       const receipt = await tx.wait();
       if (receipt.status === 1) {
         console.log('Deposit successful');
         sendHash(tx.hash);
+        // Refresh balance after successful deposit
+        await fetchBalance();
       } else {
         console.error('Deposit failed');
       }
@@ -94,6 +140,9 @@ export const LendPage = ({ sendHash }: LendPageProps) => {
   return (
     <PageContent>
       <PageTitle>Lend</PageTitle>
+      <BalanceDisplay>
+        Your Lending Balance: ${usdcBalance} USDC
+      </BalanceDisplay>
       <ButtonContainer>
         <button onClick={handleApprove}>Approve</button>
         <button onClick={handleDeposit}>Deposit $1</button>
