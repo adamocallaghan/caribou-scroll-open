@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { PAGES } from '../types/pages';
 import styled from 'styled-components';
 import { MintPage } from '../pages/MintPage';
+import { LendPage } from '../pages/LendPage';
 import { HorizontalPages } from './HorizontalPages';
 
 const Container = styled.div`
@@ -82,6 +83,17 @@ export const PageContainer = ({ sendHash }: PageContainerProps) => {
             pageIndex={pageIndex}
           >
             <MintPage sendHash={sendHash} />
+          </HorizontalPages>
+        );
+      case 'Lend':
+        return (
+          <HorizontalPages
+            subPages={PAGES[pageIndex].subPages}
+            bgColor={PAGES[pageIndex].color}
+            textColor={PAGES[pageIndex].textColor}
+            pageIndex={pageIndex}
+          >
+            <LendPage sendHash={sendHash} />
           </HorizontalPages>
         );
       default:
