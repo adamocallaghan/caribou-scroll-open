@@ -18,6 +18,7 @@ createAppKit({
     534351: 'public/scroll.png',
   },
   features: {
+    emailShowWallets: false,
     analytics: true // Optional - defaults to your Cloud configuration
   },
   themeVariables: {

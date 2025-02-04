@@ -18,7 +18,8 @@ export const metadata = {
 }
 
 // for custom networks visit -> https://docs.reown.com/appkit/react/core/custom-networks
-export const networks = [mainnet, arbitrum, sepolia, scrollSepolia] as [AppKitNetwork, ...AppKitNetwork[]]
+export const networks = [scrollSepolia] as [AppKitNetwork, ...AppKitNetwork[]]
+// export const networks = [mainnet, arbitrum, sepolia, scrollSepolia] as [AppKitNetwork, ...AppKitNetwork[]]
 
 // Set up Solana Adapter
 export const ethersAdapter = new EthersAdapter();
