@@ -27,7 +27,6 @@ const BalanceDisplay = styled.div`
   text-align: center;
 `;
 
-// Update ToastContainer styling
 const ToastContainer = styled.div`
   .custom-toast {
     padding: 16px;
@@ -36,7 +35,6 @@ const ToastContainer = styled.div`
   }
 `;
 
-// Add toast style configurations
 const toastStyles = {
   loading: {
     style: {
@@ -74,11 +72,11 @@ const RUSDC_ABI = [
   "function redeem(uint256 redeemTokens) external returns (uint256)"
 ];
 
-interface LendPageProps {
+interface EarnPageProps {
   sendHash: (hash: string) => void;
 }
 
-export const LendPage = ({ sendHash }: LendPageProps) => {
+export const EarnPage = ({ sendHash }: EarnPageProps) => {
   const { address } = useAppKitAccount();
   const { chainId } = useAppKitNetworkCore();
   const { walletProvider } = useAppKitProvider<Provider>('eip155');
@@ -109,19 +107,15 @@ export const LendPage = ({ sendHash }: LendPageProps) => {
       const provider = new BrowserProvider(walletProvider, chainId);
       const rUSDCContract = new Contract(RUSDC_ADDRESS, RUSDC_ABI, provider);
       
-      // Get rUSDC balance and exchange rate
       const [rUSDCBalance, exchangeRate] = await Promise.all([
         rUSDCContract.balanceOf(address),
         rUSDCContract.exchangeRateStored()
       ]);
 
-      // Store rUSDC balance for withdraw function
       setRUsdcBalance(rUSDCBalance);
 
-      // Calculate actual USDC balance
       const actualBalance = (BigInt(rUSDCBalance) * BigInt(exchangeRate)) / BigInt(1e18);
       
-      // Format the balance to display with 2 decimal places
       const formattedBalance = formatUnits(actualBalance, 6);
       const roundedBalance = Number(formattedBalance).toFixed(2);
       
@@ -132,7 +126,6 @@ export const LendPage = ({ sendHash }: LendPageProps) => {
     }
   };
 
-  // Fetch balances on mount and when address changes
   useEffect(() => {
     fetchBalance();
     fetchUsdcBalance();
@@ -249,7 +242,7 @@ export const LendPage = ({ sendHash }: LendPageProps) => {
             },
           }}
         />
-        <PageTitle>Lend</PageTitle>
+        <PageTitle>Earn</PageTitle>
         <BalanceDisplay>
           Your Lending Balance: ${usdcBalance} USDC
         </BalanceDisplay>

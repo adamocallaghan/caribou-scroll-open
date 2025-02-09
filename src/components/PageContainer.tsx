@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { PAGES } from '../types/pages';
 import styled from 'styled-components';
 import { MintPage } from '../pages/MintPage';
-import { LendPage } from '../pages/LendPage';
+import { EarnPage } from '../pages/EarnPage';
 import { HorizontalPages } from './HorizontalPages';
 
 const Container = styled.div`
@@ -84,14 +84,14 @@ export const PageContainer = ({ sendHash }: PageContainerProps) => {
             <MintPage sendHash={sendHash} />
           </HorizontalPages>
         );
-      case 'Lend':
+      case 'Earn':
         return (
           <HorizontalPages
             subPages={PAGES[pageIndex].subPages}
             bgColor={PAGES[pageIndex].color}
             textColor={PAGES[pageIndex].textColor}
           >
-            <LendPage sendHash={sendHash} />
+            <EarnPage sendHash={sendHash} />
           </HorizontalPages>
         );
       default:
