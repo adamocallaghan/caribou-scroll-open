@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import { useAppKitAccount, useAppKitNetworkCore, useAppKitProvider, type Provider } from '@reown/appkit/react';
 import { BrowserProvider, JsonRpcSigner, Contract, formatUnits } from 'ethers';
 import { useEffect, useState } from 'react';
+import toast, { Toaster } from 'react-hot-toast';
 
 const PageContent = styled.div`
   display: flex;
@@ -24,6 +25,17 @@ const BalanceDisplay = styled.div`
   font-size: 1.2rem;
   margin-bottom: 20px;
   text-align: center;
+`;
+
+// Add styled toast container
+const ToastContainer = styled.div`
+  .custom-toast {
+    background-color: #4a5568;
+    color: white;
+    padding: 16px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
 `;
 
 // USDC Contract
@@ -109,97 +121,121 @@ export const LendPage = ({ sendHash }: LendPageProps) => {
   const handleApprove = async () => {
     if (!walletProvider || !address) throw Error('user is disconnected');
 
-    const provider = new BrowserProvider(walletProvider, chainId);
-    const signer = new JsonRpcSigner(provider, address);
-    
-    const usdcContract = new Contract(USDC_ADDRESS, USDC_ABI, signer);
+    const loadingToast = toast.loading('Approving USDC...');
     
     try {
-      // Approve max uint256 amount
+      const provider = new BrowserProvider(walletProvider, chainId);
+      const signer = new JsonRpcSigner(provider, address);
+      const usdcContract = new Contract(USDC_ADDRESS, USDC_ABI, signer);
+      
       const tx = await usdcContract.approve(
         RUSDC_ADDRESS, 
-        "115792089237316195423570985008687907853269984665640564039457584007913129639935" // uint256.max
+        "115792089237316195423570985008687907853269984665640564039457584007913129639935"
       );
       
       const receipt = await tx.wait();
       if (receipt.status === 1) {
-        console.log('Approval successful');
-        sendHash(tx.hash);
-      } else {
-        console.error('Approval failed');
+        const success = await usdcContract.approve.staticCall(
+          RUSDC_ADDRESS,
+          "115792089237316195423570985008687907853269984665640564039457584007913129639935"
+        );
+        
+        if (success) {
+          toast.success('USDC approved successfully!', { id: loadingToast });
+          sendHash(tx.hash);
+        } else {
+          toast.error('Approval returned false', { id: loadingToast });
+        }
       }
     } catch (error) {
       console.error("Failed to approve USDC:", error);
+      toast.error('Failed to approve USDC', { id: loadingToast });
     }
   };
 
   const handleDeposit = async () => {
     if (!walletProvider || !address) throw Error('user is disconnected');
 
-    const provider = new BrowserProvider(walletProvider, chainId);
-    const signer = new JsonRpcSigner(provider, address);
-    
-    const rUSDCContract = new Contract(RUSDC_ADDRESS, RUSDC_ABI, signer);
+    const loadingToast = toast.loading('Depositing USDC...');
     
     try {
-      const tx = await rUSDCContract.mint("1000000");
+      const provider = new BrowserProvider(walletProvider, chainId);
+      const signer = new JsonRpcSigner(provider, address);
+      const rUSDCContract = new Contract(RUSDC_ADDRESS, RUSDC_ABI, signer);
       
+      const tx = await rUSDCContract.mint("1000000");
       const receipt = await tx.wait();
+      
       if (receipt.status === 1) {
-        console.log('Deposit successful');
-        sendHash(tx.hash);
-        // Refresh both balances after successful deposit
-        await Promise.all([fetchBalance(), fetchUsdcBalance()]);
-      } else {
-        console.error('Deposit failed');
+        // Check return value
+        const returnValue = await rUSDCContract.mint.staticCall("1000000");
+        
+        if (returnValue === BigInt(0)) {
+          toast.success('USDC deposited successfully!', { id: loadingToast });
+          sendHash(tx.hash);
+          await Promise.all([fetchBalance(), fetchUsdcBalance()]);
+        } else {
+          toast.error('Deposit returned non-zero value', { id: loadingToast });
+        }
       }
     } catch (error) {
       console.error("Failed to deposit USDC:", error);
+      toast.error('Failed to deposit USDC', { id: loadingToast });
     }
   };
 
-  // New withdraw function
   const handleWithdraw = async () => {
-    if (!walletProvider || !address || rUsdcBalance === BigInt(0)) throw Error('user is disconnected or has no balance');
+    if (!walletProvider || !address || rUsdcBalance === BigInt(0)) {
+      throw Error('user is disconnected or has no balance');
+    }
 
-    const provider = new BrowserProvider(walletProvider, chainId);
-    const signer = new JsonRpcSigner(provider, address);
-    
-    const rUSDCContract = new Contract(RUSDC_ADDRESS, RUSDC_ABI, signer);
+    const loadingToast = toast.loading('Withdrawing USDC...');
     
     try {
-      const tx = await rUSDCContract.redeem(rUsdcBalance);
+      const provider = new BrowserProvider(walletProvider, chainId);
+      const signer = new JsonRpcSigner(provider, address);
+      const rUSDCContract = new Contract(RUSDC_ADDRESS, RUSDC_ABI, signer);
       
+      const tx = await rUSDCContract.redeem(rUsdcBalance);
       const receipt = await tx.wait();
+      
       if (receipt.status === 1) {
-        console.log('Withdrawal successful');
+        // Log the return value for debugging but don't use it as success condition
+        const returnValue = await rUSDCContract.redeem.staticCall(rUsdcBalance);
+        console.log('Withdrawal return value:', returnValue);
+        
+        // Consider transaction successful if receipt status is 1
+        toast.success('USDC withdrawn successfully!', { id: loadingToast });
         sendHash(tx.hash);
-        // Refresh both balances after successful withdrawal
         await Promise.all([fetchBalance(), fetchUsdcBalance()]);
       } else {
-        console.error('Withdrawal failed');
+        toast.error('Withdrawal failed', { id: loadingToast });
       }
     } catch (error) {
       console.error("Failed to withdraw USDC:", error);
+      toast.error('Failed to withdraw USDC', { id: loadingToast });
     }
   };
 
   return (
-    <PageContent>
-      <PageTitle>Lend</PageTitle>
-      <BalanceDisplay>
-        Your Lending Balance: ${usdcBalance} USDC
-      </BalanceDisplay>
-      <BalanceDisplay>
-        Your Wallet Balance: ${walletUsdcBalance} USDC
-      </BalanceDisplay>
-      <ButtonContainer>
-        <button onClick={handleApprove}>Approve</button>
-        <button onClick={handleDeposit}>Deposit $1</button>
-        <button onClick={handleWithdraw} disabled={rUsdcBalance === BigInt(0)}>
-          Withdraw All
-        </button>
-      </ButtonContainer>
-    </PageContent>
+    <ToastContainer>
+      <PageContent>
+        <Toaster position="top-right" />
+        <PageTitle>Lend</PageTitle>
+        <BalanceDisplay>
+          Your Lending Balance: ${usdcBalance} USDC
+        </BalanceDisplay>
+        <BalanceDisplay>
+          Your Wallet Balance: ${walletUsdcBalance} USDC
+        </BalanceDisplay>
+        <ButtonContainer>
+          <button onClick={handleApprove}>Approve</button>
+          <button onClick={handleDeposit}>Deposit $1</button>
+          <button onClick={handleWithdraw} disabled={rUsdcBalance === BigInt(0)}>
+            Withdraw All
+          </button>
+        </ButtonContainer>
+      </PageContent>
+    </ToastContainer>
   );
 }; 
