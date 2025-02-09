@@ -105,7 +105,7 @@ export const PageContainer = ({ sendHash }: PageContainerProps) => {
             textColor={PAGES[pageIndex].textColor}
             sendHash={sendHash}
           >
-            <EarnPage sendHash={sendHash} />
+            {sendHash && <EarnPage sendHash={sendHash} />}
           </HorizontalPages>
         );
       default:

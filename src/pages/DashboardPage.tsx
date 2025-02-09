@@ -19,8 +19,6 @@ const Logo = styled.img`
   height: auto;
 `;
 
-interface DashboardPageProps {}
-
 export const DashboardPage = () => {
   return (
     <PageContent>

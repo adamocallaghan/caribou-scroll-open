@@ -11,8 +11,6 @@ const PageTitle = styled.h1`
   margin: 0;
 `;
 
-interface MintPageProps {}
-
 export const MintPage = () => {
   return (
     <PageContent>
