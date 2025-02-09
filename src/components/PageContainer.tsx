@@ -3,6 +3,7 @@ import { PAGES } from '../types/pages';
 import styled from 'styled-components';
 import { MintPage } from '../pages/MintPage';
 import { EarnPage } from '../pages/EarnPage';
+import { DashboardPage } from '../pages/DashboardPage';
 import { HorizontalPages } from './HorizontalPages';
 
 const Container = styled.div`
@@ -74,6 +75,16 @@ export const PageContainer = ({ sendHash }: PageContainerProps) => {
 
   const renderPageContent = (pageName: string, pageIndex: number) => {
     switch (pageName) {
+      case 'Dashboard':
+        return (
+          <HorizontalPages
+            subPages={PAGES[pageIndex].subPages}
+            bgColor={PAGES[pageIndex].color}
+            textColor={PAGES[pageIndex].textColor}
+          >
+            <DashboardPage sendHash={sendHash} />
+          </HorizontalPages>
+        );
       case 'Mint':
         return (
           <HorizontalPages
