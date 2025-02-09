@@ -19,11 +19,9 @@ const Logo = styled.img`
   height: auto;
 `;
 
-interface DashboardPageProps {
-  sendHash: (hash: string) => void;
-}
+interface DashboardPageProps {}
 
-export const DashboardPage = ({ sendHash }: DashboardPageProps) => {
+export const DashboardPage = () => {
   return (
     <PageContent>
       <LogoContainer>

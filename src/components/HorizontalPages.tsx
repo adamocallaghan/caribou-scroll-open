@@ -35,7 +35,7 @@ interface HorizontalPagesProps {
   textColor: string;
   children?: React.ReactNode;
   pageType?: string;
-  sendHash: (hash: string) => void;
+  sendHash?: (hash: string) => void;
 }
 
 export const HorizontalPages = ({
@@ -84,7 +84,7 @@ export const HorizontalPages = ({
   }, [currentSubPage, subPages.length]);
 
   const renderSubPageContent = (subPage: SubPageConfig) => {
-    if (pageType === 'Mint') {
+    if (pageType === 'Mint' && sendHash) {
       return <MintContractCard sendHash={sendHash} />;
     }
     return subPage.name;

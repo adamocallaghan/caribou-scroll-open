@@ -32,7 +32,7 @@ const Page = styled.div<{ bgColor: string; textColor: string }>`
 `;
 
 interface PageContainerProps {
-  sendHash: (hash: string) => void;
+  sendHash?: (hash: string) => void;
 }
 
 export const PageContainer = ({ sendHash }: PageContainerProps) => {
@@ -82,7 +82,7 @@ export const PageContainer = ({ sendHash }: PageContainerProps) => {
             bgColor={PAGES[pageIndex].color}
             textColor={PAGES[pageIndex].textColor}
           >
-            <DashboardPage sendHash={sendHash} />
+            <DashboardPage />
           </HorizontalPages>
         );
       case 'Mint':
@@ -94,7 +94,7 @@ export const PageContainer = ({ sendHash }: PageContainerProps) => {
             pageType="Mint"
             sendHash={sendHash}
           >
-            <MintPage sendHash={sendHash} />
+            <MintPage />
           </HorizontalPages>
         );
       case 'Earn':
@@ -103,6 +103,7 @@ export const PageContainer = ({ sendHash }: PageContainerProps) => {
             subPages={PAGES[pageIndex].subPages}
             bgColor={PAGES[pageIndex].color}
             textColor={PAGES[pageIndex].textColor}
+            sendHash={sendHash}
           >
             <EarnPage sendHash={sendHash} />
           </HorizontalPages>

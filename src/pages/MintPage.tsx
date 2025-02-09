@@ -11,11 +11,9 @@ const PageTitle = styled.h1`
   margin: 0;
 `;
 
-interface MintPageProps {
-  sendHash: (hash: string) => void;
-}
+interface MintPageProps {}
 
-export const MintPage = ({ sendHash }: MintPageProps) => {
+export const MintPage = () => {
   return (
     <PageContent>
       <PageTitle>Mint</PageTitle>
