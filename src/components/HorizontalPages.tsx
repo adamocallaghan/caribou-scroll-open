@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { SubPageConfig } from '../types/pages';
+import { MintContractCard } from './contracts/mint/MintContractCard';
 
 const Container = styled.div`
   width: 100vw;
@@ -33,13 +34,17 @@ interface HorizontalPagesProps {
   bgColor: string;
   textColor: string;
   children?: React.ReactNode;
+  pageType?: string;
+  sendHash: (hash: string) => void;
 }
 
 export const HorizontalPages = ({
   subPages,
   bgColor,
   textColor,
-  children
+  children,
+  pageType,
+  sendHash
 }: HorizontalPagesProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [currentSubPage, setCurrentSubPage] = useState(0);
@@ -78,6 +83,13 @@ export const HorizontalPages = ({
     };
   }, [currentSubPage, subPages.length]);
 
+  const renderSubPageContent = (subPage: SubPageConfig) => {
+    if (pageType === 'Mint') {
+      return <MintContractCard sendHash={sendHash} />;
+    }
+    return subPage.name;
+  };
+
   return (
     <Container ref={containerRef}>
       <SubPage bgColor={bgColor} textColor={textColor}>
@@ -89,7 +101,7 @@ export const HorizontalPages = ({
           bgColor={bgColor}
           textColor={textColor}
         >
-          {subPage.name}
+          {renderSubPageContent(subPage)}
         </SubPage>
       ))}
     </Container>

@@ -91,6 +91,8 @@ export const PageContainer = ({ sendHash }: PageContainerProps) => {
             subPages={PAGES[pageIndex].subPages}
             bgColor={PAGES[pageIndex].color}
             textColor={PAGES[pageIndex].textColor}
+            pageType="Mint"
+            sendHash={sendHash}
           >
             <MintPage sendHash={sendHash} />
           </HorizontalPages>
