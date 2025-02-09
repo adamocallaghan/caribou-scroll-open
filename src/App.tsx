@@ -13,7 +13,7 @@ createAppKit({
   projectId,
   themeMode: 'light',
   chainImages: {
-    534351: 'public/scroll.png',
+    534351: '/scroll.png',
   },
   features: {
     emailShowWallets: false,

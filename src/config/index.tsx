@@ -3,17 +3,17 @@ import type { AppKitNetwork } from '@reown/appkit/networks'
 import { EthersAdapter } from '@reown/appkit-adapter-ethers'
 
 // Get projectId from https://cloud.reown.com
-export const projectId = import.meta.env.VITE_PROJECT_ID || "b56e18d47c72ab683b10814fe9495694" // this is a public projectId only to use on localhost
+export const projectId = import.meta.env.VITE_PROJECT_ID || "b56e18d47c72ab683b10814fe9495694"
 
 if (!projectId) {
   throw new Error('Project ID is not defined')
 }
 
-// Create a metadata object - optional
+// Create a metadata object
 export const metadata = {
   name: 'Caribou',
   description: 'Caribou App',
-  url: 'http://localhost:5173', // origin must match your domain & subdomain
+  url: 'https://caribou-scroll-open.vercel.app', // Update to match your deployed URL
   icons: ['https://avatars.githubusercontent.com/u/179229932']
 }
 
