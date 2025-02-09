@@ -33,15 +33,13 @@ interface HorizontalPagesProps {
   bgColor: string;
   textColor: string;
   children?: React.ReactNode;
-  pageIndex: number;
 }
 
 export const HorizontalPages = ({
   subPages,
   bgColor,
   textColor,
-  children,
-  pageIndex
+  children
 }: HorizontalPagesProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [currentSubPage, setCurrentSubPage] = useState(0);

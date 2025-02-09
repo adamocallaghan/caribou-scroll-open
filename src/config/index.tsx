@@ -1,4 +1,4 @@
-import { mainnet, arbitrum, sepolia, scroll, scrollSepolia } from '@reown/appkit/networks'
+import { scroll, scrollSepolia } from '@reown/appkit/networks'
 import type { AppKitNetwork } from '@reown/appkit/networks'
 import { EthersAdapter } from '@reown/appkit-adapter-ethers'
 
