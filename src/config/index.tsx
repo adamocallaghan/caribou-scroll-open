@@ -9,11 +9,25 @@ if (!projectId) {
   throw new Error('Project ID is not defined')
 }
 
+// Function to get the correct URL based on environment
+const getAppUrl = () => {
+  const origin = window.location.origin;
+  
+  // Map of allowed origins
+  const allowedOrigins = {
+    'http://localhost:5173': 'http://localhost:5173',
+    'https://caribou-scroll-open.vercel.app': 'https://caribou-scroll-open.vercel.app',
+    'https://www.caribouapp.xyz': 'https://www.caribouapp.xyz'
+  };
+
+  return allowedOrigins[origin] || origin;
+};
+
 // Create a metadata object
 export const metadata = {
   name: 'Caribou',
   description: 'Caribou App',
-  url: 'https://caribou-scroll-open.vercel.app', // Update to match your deployed URL
+  url: getAppUrl(),
   icons: ['https://avatars.githubusercontent.com/u/179229932']
 }
 
