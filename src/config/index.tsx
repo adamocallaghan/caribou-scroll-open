@@ -13,8 +13,8 @@ if (!projectId) {
 const getAppUrl = () => {
   const origin = window.location.origin;
   
-  // Map of allowed origins
-  const allowedOrigins = {
+  // Map of allowed origins with type definition
+  const allowedOrigins: Record<string, string> = {
     'http://localhost:5173': 'http://localhost:5173',
     'https://caribou-scroll-open.vercel.app': 'https://caribou-scroll-open.vercel.app',
     'https://www.caribouapp.xyz': 'https://www.caribouapp.xyz'
