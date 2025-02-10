@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { SubPageConfig } from '../types/pages';
 import { MintContractCard } from './contracts/mint/MintContractCard';
+import { EarnContractCard } from './contracts/earn/EarnContractCard';
 
 const Container = styled.div`
   width: 100vw;
@@ -86,6 +87,9 @@ export const HorizontalPages = ({
   const renderSubPageContent = (subPage: SubPageConfig) => {
     if (pageType === 'Mint' && sendHash) {
       return <MintContractCard sendHash={sendHash} contractIndex={subPage.index} />;
+    }
+    if (pageType === 'Earn' && sendHash) {
+      return <EarnContractCard sendHash={sendHash} contractIndex={subPage.index} />;
     }
     return subPage.name;
   };
