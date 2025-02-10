@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import { useAppKitAccount, useAppKitNetworkCore, useAppKitProvider, type Provider } from '@reown/appkit/react';
 import { BrowserProvider, JsonRpcSigner, Contract } from 'ethers';
+import toast, { Toaster } from 'react-hot-toast';
 
 const CardContent = styled.div`
   display: flex;
@@ -27,6 +28,35 @@ const ButtonContainer = styled.div`
   flex-direction: column;
   gap: 10px;
 `;
+
+const ToastContainer = styled.div`
+  .custom-toast {
+    padding: 16px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+`;
+
+const toastStyles = {
+  loading: {
+    style: {
+      background: '#FF9800',
+      color: 'white',
+    },
+  },
+  success: {
+    style: {
+      background: '#4CAF50',
+      color: 'white',
+    },
+  },
+  error: {
+    style: {
+      background: '#F44336',
+      color: 'white',
+    },
+  },
+};
 
 interface ContractConfig {
   address: string;
@@ -86,28 +116,61 @@ export const MintContractCard = ({ sendHash, contractIndex }: MintContractCardPr
   const handleMint = async () => {
     if (!walletProvider || !address) throw Error('user is disconnected');
 
-    const provider = new BrowserProvider(walletProvider, chainId);
-    const signer = new JsonRpcSigner(provider, address);
-    
-    const contractInstance = new Contract(contract.address, contract.abi, signer);
+    const loadingToast = toast.loading('Minting NFT...', toastStyles.loading);
     
     try {
+      const provider = new BrowserProvider(walletProvider, chainId);
+      const signer = new JsonRpcSigner(provider, address);
+      
+      const contractInstance = new Contract(contract.address, contract.abi, signer);
+      
       const tx = await contractInstance.safeMint(address);
-      sendHash(tx.hash);
+      const receipt = await tx.wait();
+      
+      if (receipt.status === 1) {
+        toast.success('NFT minted successfully!', { 
+          id: loadingToast,
+          ...toastStyles.success 
+        });
+        sendHash(tx.hash);
+      } else {
+        toast.error('Minting failed', { 
+          id: loadingToast,
+          ...toastStyles.error 
+        });
+      }
     } catch (error) {
       console.error("Failed to mint NFT:", error);
+      toast.error('Failed to mint NFT', { 
+        id: loadingToast,
+        ...toastStyles.error 
+      });
     }
   };
 
   return (
-    <CardContent>
-      <CardTitle>{contract.name}</CardTitle>
-      {contract.imageUrl && (
-        <NFTImage src={contract.imageUrl} alt={contract.name} />
-      )}
-      <ButtonContainer>
-        <button onClick={handleMint}>Mint NFT</button>
-      </ButtonContainer>
-    </CardContent>
+    <ToastContainer>
+      <CardContent>
+        <Toaster 
+          position="bottom-center"
+          toastOptions={{
+            duration: 5000,
+            style: {
+              minWidth: '250px',
+              maxWidth: '500px',
+              padding: '16px',
+              textAlign: 'center',
+            },
+          }}
+        />
+        <CardTitle>{contract.name}</CardTitle>
+        {contract.imageUrl && (
+          <NFTImage src={contract.imageUrl} alt={contract.name} />
+        )}
+        <ButtonContainer>
+          <button onClick={handleMint}>Mint NFT</button>
+        </ButtonContainer>
+      </CardContent>
+    </ToastContainer>
   );
 }; 
