@@ -276,8 +276,8 @@ const CardBack = styled.div`
 
 const FlipButton = styled.button`
   position: absolute;
-  bottom: 20px;
-  right: 20px;
+  bottom: max(20px, env(safe-area-inset-bottom));
+  right: max(20px, env(safe-area-inset-right));
   background: none;
   border: none;
   cursor: pointer;
