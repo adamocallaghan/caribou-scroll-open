@@ -288,7 +288,7 @@ const FlipButton = styled.button`
   @media (max-width: 768px) {
     width: 24px;
     height: 24px;
-    bottom: calc(env(safe-area-inset-bottom) + 60px);
+    bottom: calc(env(safe-area-inset-bottom) + 120px);
     right: max(20px, env(safe-area-inset-right));
   }
 
