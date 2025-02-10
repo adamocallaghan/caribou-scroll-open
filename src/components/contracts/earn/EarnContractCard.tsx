@@ -245,6 +245,75 @@ interface EarnContractCardProps {
   contractIndex: number;
 }
 
+// Add flip-related styled components
+const CardWrapper = styled.div`
+  perspective: 1000px;
+  width: 100%;
+  height: 100%;
+`;
+
+const FlipContainer = styled.div<{ isFlipped: boolean }>`
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.6s;
+  transform-style: preserve-3d;
+  transform: ${props => props.isFlipped ? 'rotateY(180deg)' : 'rotateY(0)'};
+`;
+
+const CardFront = styled.div`
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+  padding: 15px;
+  max-width: 100%;
+  box-sizing: border-box;
+`;
+
+const CardBack = styled.div`
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  transform: rotateY(180deg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+  padding: 15px;
+  max-width: 100%;
+  box-sizing: border-box;
+`;
+
+const FlipButton = styled.button`
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  width: 30px;
+  height: 30px;
+  
+  @media (max-width: 768px) {
+    width: 24px;
+    height: 24px;
+    bottom: calc(env(safe-area-inset-bottom) + 60px);
+  }
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+`;
+
 export const EarnContractCard = ({ sendHash, contractIndex }: EarnContractCardProps) => {
   if (contractIndex >= CONTRACTS.length) {
     return (
@@ -265,6 +334,7 @@ export const EarnContractCard = ({ sendHash, contractIndex }: EarnContractCardPr
   const [withdrawAmount, setWithdrawAmount] = useState<string>('0');
   const [isDepositing, setIsDepositing] = useState(false);
   const [isWithdrawing, setIsWithdrawing] = useState(false);
+  const [isFlipped, setIsFlipped] = useState(false);
 
   // Function to fetch USDC wallet balance
   const fetchWalletBalance = async () => {
@@ -458,81 +528,93 @@ export const EarnContractCard = ({ sendHash, contractIndex }: EarnContractCardPr
   };
 
   return (
-    <ToastContainer>
-      <CardContent>
-        <Toaster 
-          position="bottom-center"
-          toastOptions={{
-            duration: 5000,
-            style: {
-              minWidth: '250px',
-              maxWidth: '500px',
-              padding: '16px',
-              textAlign: 'center',
-            },
-          }}
-        />
-        {contract.logoUrl && (
-          <ProtocolLogo src={contract.logoUrl} alt={contract.protocol} />
-        )}
-        <ProtocolName>{contract.protocol}</ProtocolName>
-        
-        <MarketInfo>
-          <MarketName>{contract.name}</MarketName>
-          <APY>{contract.apy}</APY>
-        </MarketInfo>
+    <CardWrapper>
+      <FlipContainer isFlipped={isFlipped}>
+        <CardFront>
+          <Toaster 
+            position="bottom-center"
+            toastOptions={{
+              duration: 5000,
+              style: {
+                minWidth: '250px',
+                maxWidth: '500px',
+                padding: '16px',
+                textAlign: 'center',
+              },
+            }}
+          />
+          {contract.logoUrl && (
+            <ProtocolLogo src={contract.logoUrl} alt={contract.protocol} />
+          )}
+          <ProtocolName>{contract.protocol}</ProtocolName>
+          
+          <MarketInfo>
+            <MarketName>{contract.name}</MarketName>
+            <APY>{contract.apy}</APY>
+          </MarketInfo>
 
-        <BalanceContainer>
-          <Balance>
-            <div className="label">Available</div>
-            <div className="amount">${walletUsdcBalance} {contract.asset}</div>
-          </Balance>
-          <Balance>
-            <div className="label">Supplied</div>
-            <div className="amount">${usdcBalance} {contract.asset}</div>
-          </Balance>
-        </BalanceContainer>
+          <BalanceContainer>
+            <Balance>
+              <div className="label">Available</div>
+              <div className="amount">${walletUsdcBalance} {contract.asset}</div>
+            </Balance>
+            <Balance>
+              <div className="label">Supplied</div>
+              <div className="amount">${usdcBalance} {contract.asset}</div>
+            </Balance>
+          </BalanceContainer>
 
-        <ButtonContainer>
-          <SliderSection>
-            <AmountSlider
-              maxAmount={walletUsdcBalance}
-              asset={contract.asset}
-              onChange={setDepositAmount}
-            />
-          </SliderSection>
-          <ActionRow>
-            <button 
-              onClick={handleDeposit}
-              disabled={isDepositing || parseFloat(depositAmount) === 0}
-            >
-              {isDepositing ? 'Depositing...' : 'Deposit'}
-            </button>
-            <AmountText>
-              ${parseFloat(depositAmount).toFixed(2)} {contract.asset}
-            </AmountText>
-          </ActionRow>
+          <FlipButton onClick={() => setIsFlipped(!isFlipped)}>
+            <img src="/flip-card.png" alt="Flip card" />
+          </FlipButton>
+        </CardFront>
 
-          <SliderSection>
-            <AmountSlider
-              maxAmount={usdcBalance}
-              asset={contract.asset}
-              onChange={setWithdrawAmount}
-            />
-          </SliderSection>
-          <ActionRow>
-            <button 
-              onClick={handleWithdraw}
-              disabled={isWithdrawing || parseFloat(withdrawAmount) === 0}
-            >
-              {isWithdrawing ? 'Withdrawing...' : 'Withdraw'}
-            </button>
-            <AmountText>
-              ${parseFloat(withdrawAmount).toFixed(2)} {contract.asset}
-            </AmountText>
-          </ActionRow>
-        </ButtonContainer>
-      </CardContent>
-    </ToastContainer>
+        <CardBack>
+          <ButtonContainer>
+            <SliderSection>
+              <AmountSlider
+                maxAmount={walletUsdcBalance}
+                asset={contract.asset}
+                onChange={setDepositAmount}
+              />
+            </SliderSection>
+            <ActionRow>
+              <button 
+                onClick={handleDeposit}
+                disabled={isDepositing || parseFloat(depositAmount) === 0}
+              >
+                {isDepositing ? 'Depositing...' : 'Deposit'}
+              </button>
+              <AmountText>
+                ${parseFloat(depositAmount).toFixed(2)} {contract.asset}
+              </AmountText>
+            </ActionRow>
+
+            <SliderSection>
+              <AmountSlider
+                maxAmount={usdcBalance}
+                asset={contract.asset}
+                onChange={setWithdrawAmount}
+              />
+            </SliderSection>
+            <ActionRow>
+              <button 
+                onClick={handleWithdraw}
+                disabled={isWithdrawing || parseFloat(withdrawAmount) === 0}
+              >
+                {isWithdrawing ? 'Withdrawing...' : 'Withdraw'}
+              </button>
+              <AmountText>
+                ${parseFloat(withdrawAmount).toFixed(2)} {contract.asset}
+              </AmountText>
+            </ActionRow>
+          </ButtonContainer>
+
+          <FlipButton onClick={() => setIsFlipped(!isFlipped)}>
+            <img src="/flip-card.png" alt="Flip card" />
+          </FlipButton>
+        </CardBack>
+      </FlipContainer>
+    </CardWrapper>
   );
 }; 
