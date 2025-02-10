@@ -8,24 +8,26 @@ import toast, { Toaster } from 'react-hot-toast';
 const CardWrapper = styled.div`
   perspective: 1000px;
   width: 100%;
-  height: 100%;
+  height: 100dvh;
+  max-height: 100dvh;
+  overflow: auto;
 `;
 
 // Container for the flip animation
 const FlipContainer = styled.div<{ isFlipped: boolean }>`
   position: relative;
   width: 100%;
-  height: 100%;
+  min-height: 100%;
   transition: transform 0.6s;
   transform-style: preserve-3d;
   transform: ${props => props.isFlipped ? 'rotateY(180deg)' : 'rotateY(0)'};
 `;
 
-// Front of card (existing content)
+// Front of card
 const CardFront = styled.div`
   position: absolute;
   width: 100%;
-  height: 100%;
+  min-height: 100%;
   backface-visibility: hidden;
   display: flex;
   flex-direction: column;
@@ -33,13 +35,14 @@ const CardFront = styled.div`
   gap: 20px;
   padding: 20px;
   padding-top: 80px;
+  padding-bottom: 80px;
 `;
 
 // Back of card
 const CardBack = styled.div`
   position: absolute;
   width: 100%;
-  height: 100%;
+  min-height: 100%;
   backface-visibility: hidden;
   transform: rotateY(180deg);
   display: flex;
@@ -47,6 +50,7 @@ const CardBack = styled.div`
   align-items: center;
   padding: 20px;
   padding-top: 80px;
+  padding-bottom: 80px;
   text-align: center;
   font-size: 1.2rem;
 `;
