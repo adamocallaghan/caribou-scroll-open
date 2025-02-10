@@ -312,6 +312,7 @@ const FlipButton = styled.button`
     width: 100%;
     height: 100%;
     object-fit: contain;
+    filter: invert(92%) sepia(14%) saturate(1241%) hue-rotate(84deg) brightness(97%) contrast(105%);
   }
 `;
 
@@ -566,7 +567,7 @@ export const EarnContractCard = ({ sendHash, contractIndex }: EarnContractCardPr
           </BalanceContainer>
 
           <FlipButton onClick={() => setIsFlipped(!isFlipped)}>
-            <img src="/flip-card.png" alt="Flip card" />
+            <img src="/flip-over.svg" alt="Flip card" />
           </FlipButton>
         </CardFront>
 
@@ -612,7 +613,7 @@ export const EarnContractCard = ({ sendHash, contractIndex }: EarnContractCardPr
           </ButtonContainer>
 
           <FlipButton onClick={() => setIsFlipped(!isFlipped)}>
-            <img src="/flip-card.png" alt="Flip card" />
+            <img src="/flip-over.svg" alt="Flip card" />
           </FlipButton>
         </CardBack>
       </FlipContainer>

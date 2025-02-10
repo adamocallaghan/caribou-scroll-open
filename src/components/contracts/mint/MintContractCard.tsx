@@ -76,6 +76,7 @@ const FlipButton = styled.button`
     width: 100%;
     height: 100%;
     object-fit: contain;
+    filter: invert(89%) sepia(11%) saturate(595%) hue-rotate(190deg) brightness(103%) contrast(103%);
   }
 `;
 
@@ -263,13 +264,13 @@ export const MintContractCard = ({ sendHash, contractIndex }: MintContractCardPr
             <Button onClick={handleMint}>Mint NFT</Button>
           </ButtonContainer>
           <FlipButton onClick={() => setIsFlipped(!isFlipped)}>
-            <img src="/flip-card.png" alt="Flip card" />
+            <img src="/flip-over.svg" alt="Flip card" />
           </FlipButton>
         </CardFront>
         <CardBack>
           <div>This NFT collection...</div>
           <FlipButton onClick={() => setIsFlipped(!isFlipped)}>
-            <img src="/flip-card.png" alt="Flip card" />
+            <img src="/flip-over.svg" alt="Flip card" />
           </FlipButton>
         </CardBack>
       </FlipContainer>
