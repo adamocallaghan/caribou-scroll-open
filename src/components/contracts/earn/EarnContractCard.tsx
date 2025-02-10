@@ -23,10 +23,51 @@ const ProtocolLogo = styled.img`
   object-fit: contain;
 `;
 
-const BalanceDisplay = styled.div`
+const ProtocolName = styled.div`
   font-size: 1.2rem;
-  margin-bottom: 20px;
+  margin-top: 10px;
+`;
+
+const MarketInfo = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 10px 0;
+`;
+
+const MarketName = styled.div`
+  font-size: 1rem;
+`;
+
+const APY = styled.div`
+  font-size: 1rem;
+  color: #0AEB9A;
+  &:before {
+    content: '•';
+    margin-right: 5px;
+  }
+`;
+
+const BalanceContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 400px;
+  margin: 20px 0;
+`;
+
+const Balance = styled.div`
   text-align: center;
+  
+  .label {
+    font-size: 0.9rem;
+    opacity: 0.8;
+    margin-bottom: 5px;
+  }
+  
+  .amount {
+    font-size: 1.1rem;
+  }
 `;
 
 const ButtonContainer = styled.div`
@@ -373,18 +414,27 @@ export const EarnContractCard = ({ sendHash, contractIndex }: EarnContractCardPr
             },
           }}
         />
-        <CardTitle>{contract.name}</CardTitle>
         {contract.logoUrl && (
           <ProtocolLogo src={contract.logoUrl} alt={contract.protocol} />
         )}
-        <div>Protocol: {contract.protocol}</div>
-        <div>APY: {contract.apy}</div>
-        <BalanceDisplay>
-          Your Lending Balance: ${usdcBalance} {contract.asset}
-        </BalanceDisplay>
-        <BalanceDisplay>
-          Your Wallet Balance: ${walletUsdcBalance} {contract.asset}
-        </BalanceDisplay>
+        <ProtocolName>{contract.protocol}</ProtocolName>
+        
+        <MarketInfo>
+          <MarketName>{contract.name}</MarketName>
+          <APY>{contract.apy}</APY>
+        </MarketInfo>
+
+        <BalanceContainer>
+          <Balance>
+            <div className="label">Available</div>
+            <div className="amount">${walletUsdcBalance} {contract.asset}</div>
+          </Balance>
+          <Balance>
+            <div className="label">Supplied</div>
+            <div className="amount">${usdcBalance} {contract.asset}</div>
+          </Balance>
+        </BalanceContainer>
+
         <ButtonContainer>
           <button onClick={handleApprove}>Approve</button>
           <button onClick={handleDeposit}>Deposit $1</button>
