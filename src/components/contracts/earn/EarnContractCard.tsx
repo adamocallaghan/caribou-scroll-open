@@ -24,7 +24,6 @@ const ProtocolLogo = styled.img`
   width: 60px;
   height: 60px;
   object-fit: contain;
-  margin-top: 10px;
 `;
 
 const ProtocolName = styled.div`
@@ -269,8 +268,11 @@ const CardFront = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   gap: 15px;
   padding: 15px;
+  padding-top: 60px;
+  padding-bottom: 60px;
   max-width: 100%;
   box-sizing: border-box;
 `;
@@ -284,8 +286,11 @@ const CardBack = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   gap: 15px;
   padding: 15px;
+  padding-top: 60px;
+  padding-bottom: 60px;
   max-width: 100%;
   box-sizing: border-box;
 `;
