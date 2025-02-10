@@ -92,14 +92,6 @@ const ButtonContainer = styled.div`
   gap: 10px;
 `;
 
-const ToastContainer = styled.div`
-  .custom-toast {
-    padding: 16px;
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  }
-`;
-
 const toastStyles = {
   loading: {
     style: {
