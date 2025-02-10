@@ -116,6 +116,26 @@ const CONTRACTS: ContractConfig[] = [
     aTokenAddress: "0xC5776416Ea3e88e04E95bCd3fF99b27902da7892",
     asset: "USDT",
     apy: "5.2%"
+  },
+  {
+    name: "USDC Lending Pool",
+    protocol: "AAVE",
+    logoUrl: "/aave-scroll.svg",
+    address: "0x11fCfe756c05AD438e312a7fd934381537D3cFfe",
+    abi: [
+      "function supply(address asset, uint256 amount, address onBehalfOf, uint16 referralCode) external",
+      "function withdraw(address asset, uint256 amount, address to) external returns (uint256)",
+      "function balanceOf(address account) external view returns (uint256)",
+      "function getUserAccountData(address user) external view returns (uint256 totalCollateralBase, uint256 totalDebtBase, uint256 availableBorrowsBase, uint256 currentLiquidationThreshold, uint256 ltv, uint256 healthFactor)"
+    ],
+    tokenAddress: "0x06eFdBFf2a14a7c8E15944D1F4A48F9F95F663A4",
+    tokenAbi: [
+      "function approve(address spender, uint256 amount) external returns (bool)",
+      "function balanceOf(address account) external view returns (uint256)"
+    ],
+    aTokenAddress: "0x1D738a3436A8C49CefFbaB7fbF04B660fb528CbD",
+    asset: "USDC",
+    apy: "3.8%"
   }
 ];
 
@@ -179,7 +199,7 @@ export const EarnContractCard = ({ sendHash, contractIndex }: EarnContractCardPr
         
         setUsdcBalance(roundedBalance);
       } else {
-        // Lore Finance balance checking using aToken
+        // Lore Finance and AAVE balance checking using aToken
         const aTokenContract = new Contract(
           contract.aTokenAddress!,
           ["function balanceOf(address) view returns (uint256)"],
@@ -253,13 +273,20 @@ export const EarnContractCard = ({ sendHash, contractIndex }: EarnContractCardPr
       let tx;
       if (contract.protocol === "RHO Markets") {
         tx = await poolContract.mint("1000000");
-      } else {
-        // Lore Finance deposit
+      } else if (contract.protocol === "Lore Finance") {
         tx = await poolContract.deposit(
-          contract.tokenAddress, // asset address
-          "1000000", // amount (1 USDT)
-          address, // onBehalfOf
-          0 // referralCode
+          contract.tokenAddress,
+          "1000000",
+          address,
+          0
+        );
+      } else {
+        // AAVE deposit
+        tx = await poolContract.supply(
+          contract.tokenAddress,
+          "1000000",
+          address,
+          0
         );
       }
 
@@ -297,12 +324,18 @@ export const EarnContractCard = ({ sendHash, contractIndex }: EarnContractCardPr
       let tx;
       if (contract.protocol === "RHO Markets") {
         tx = await poolContract.redeem(rUsdcBalance);
-      } else {
-        // Lore Finance withdraw
+      } else if (contract.protocol === "Lore Finance") {
         tx = await poolContract.withdraw(
-          contract.tokenAddress, // asset address
-          rUsdcBalance, // amount
-          address // to address
+          contract.tokenAddress,
+          rUsdcBalance,
+          address
+        );
+      } else {
+        // AAVE withdraw
+        tx = await poolContract.withdraw(
+          contract.tokenAddress,
+          rUsdcBalance,
+          address
         );
       }
 
