@@ -52,6 +52,14 @@ const CONTRACTS: ContractConfig[] = [
       "function safeMint(address to) public"
     ],
     imageUrl: "/scroll_tarot.jpg"
+  },
+  {
+    name: "The Maze",
+    address: "0xD85F3617D147a71e5482CC2Dd789E8bB0A29E04C",
+    abi: [
+      "function safeMint(address to) public"
+    ],
+    imageUrl: "/scroll_maze.jpg"
   }
 ];
 
