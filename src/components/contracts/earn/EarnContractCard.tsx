@@ -9,8 +9,10 @@ const CardContent = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 20px;
-  padding: 20px;
+  gap: 15px;
+  padding: 15px;
+  max-width: 100%;
+  box-sizing: border-box;
 `;
 
 const CardTitle = styled.h2`
@@ -19,21 +21,23 @@ const CardTitle = styled.h2`
 `;
 
 const ProtocolLogo = styled.img`
-  width: 100px;
-  height: 100px;
+  width: 60px;
+  height: 60px;
   object-fit: contain;
+  margin-top: 10px;
 `;
 
 const ProtocolName = styled.div`
-  font-size: 1.2rem;
-  margin-top: 10px;
+  font-size: 1.1rem;
+  margin: 0;
 `;
 
 const MarketInfo = styled.div`
   display: flex;
   align-items: center;
-  gap: 10px;
-  margin: 10px 0;
+  gap: 8px;
+  margin: 0;
+  font-size: 0.9rem;
 `;
 
 const MarketName = styled.div`
@@ -53,28 +57,64 @@ const BalanceContainer = styled.div`
   display: flex;
   justify-content: space-between;
   width: 100%;
-  max-width: 400px;
-  margin: 20px 0;
+  max-width: 300px;
+  margin: 10px 0;
+  gap: 20px;
 `;
 
 const Balance = styled.div`
   text-align: center;
+  flex: 1;
   
   .label {
-    font-size: 0.9rem;
+    font-size: 0.8rem;
     opacity: 0.8;
-    margin-bottom: 5px;
+    margin-bottom: 3px;
   }
   
   .amount {
-    font-size: 1.1rem;
+    font-size: 0.9rem;
+    white-space: nowrap;
   }
 `;
 
 const ButtonContainer = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 15px;
+  width: 100%;
+  max-width: 300px;
+
+  > div {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  button {
+    padding: 8px;
+    font-size: 0.9rem;
+  }
+`;
+
+// Update AmountSlider styles
+const SliderContainer = styled.div`
+  width: 100%;
+  margin: 5px 0;
+`;
+
+const SliderTrack = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 5px;
+`;
+
+const AmountDisplay = styled.div`
+  text-align: center;
+  font-size: 0.9rem;
+  margin-top: 3px;
 `;
 
 const ToastContainer = styled.div`
