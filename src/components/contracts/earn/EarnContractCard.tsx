@@ -3,6 +3,7 @@ import { useAppKitAccount, useAppKitNetworkCore, useAppKitProvider, type Provide
 import { BrowserProvider, JsonRpcSigner, Contract, formatUnits } from 'ethers';
 import { useEffect, useState } from 'react';
 import toast, { Toaster } from 'react-hot-toast';
+import { AmountSlider } from './AmountSlider';
 
 const CardContent = styled.div`
   display: flex;
@@ -134,6 +135,7 @@ const CONTRACTS: ContractConfig[] = [
     tokenAddress: "0x06eFdBFf2a14a7c8E15944D1F4A48F9F95F663A4",
     tokenAbi: [
       "function approve(address spender, uint256 amount) external returns (bool)",
+      "function allowance(address owner, address spender) external view returns (uint256)",
       "function balanceOf(address account) external view returns (uint256)"
     ],
     asset: "USDC",
@@ -152,6 +154,7 @@ const CONTRACTS: ContractConfig[] = [
     tokenAddress: "0xf55BEC9cafDbE8730f096Aa55dad6D22d44099Df",
     tokenAbi: [
       "function approve(address spender, uint256 amount) external returns (bool)",
+      "function allowance(address owner, address spender) external view returns (uint256)",
       "function balanceOf(address account) external view returns (uint256)"
     ],
     aTokenAddress: "0xC5776416Ea3e88e04E95bCd3fF99b27902da7892",
@@ -172,6 +175,7 @@ const CONTRACTS: ContractConfig[] = [
     tokenAddress: "0x06eFdBFf2a14a7c8E15944D1F4A48F9F95F663A4",
     tokenAbi: [
       "function approve(address spender, uint256 amount) external returns (bool)",
+      "function allowance(address owner, address spender) external view returns (uint256)",
       "function balanceOf(address account) external view returns (uint256)"
     ],
     aTokenAddress: "0x1D738a3436A8C49CefFbaB7fbF04B660fb528CbD",
@@ -201,6 +205,10 @@ export const EarnContractCard = ({ sendHash, contractIndex }: EarnContractCardPr
   const [usdcBalance, setUsdcBalance] = useState<string>('0');
   const [walletUsdcBalance, setWalletUsdcBalance] = useState<string>('0');
   const [rUsdcBalance, setRUsdcBalance] = useState<bigint>(BigInt(0));
+  const [depositAmount, setDepositAmount] = useState<string>('0');
+  const [withdrawAmount, setWithdrawAmount] = useState<string>('0');
+  const [isDepositing, setIsDepositing] = useState(false);
+  const [isWithdrawing, setIsWithdrawing] = useState(false);
 
   // Function to fetch USDC wallet balance
   const fetchWalletBalance = async () => {
@@ -266,66 +274,45 @@ export const EarnContractCard = ({ sendHash, contractIndex }: EarnContractCardPr
     fetchWalletBalance();
   }, [address, walletProvider, chainId]);
 
-  const handleApprove = async () => {
-    if (!walletProvider || !address) throw Error('user is disconnected');
-
-    const loadingToast = toast.loading('Approving USDC...', toastStyles.loading);
-    
-    try {
-      const provider = new BrowserProvider(walletProvider, chainId);
-      const signer = new JsonRpcSigner(provider, address);
-      const usdcContract = new Contract(contract.tokenAddress, contract.tokenAbi, signer);
-      
-      const tx = await usdcContract.approve(
-        contract.address, 
-        "115792089237316195423570985008687907853269984665640564039457584007913129639935"
-      );
-      
-      const receipt = await tx.wait();
-      if (receipt.status === 1) {
-        const success = await usdcContract.approve.staticCall(
-          contract.address,
-          "115792089237316195423570985008687907853269984665640564039457584007913129639935"
-        );
-        
-        if (success) {
-          toast.success('USDC approved successfully!', { id: loadingToast, ...toastStyles.success });
-          sendHash(tx.hash);
-        } else {
-          toast.error('Approval returned false', { id: loadingToast, ...toastStyles.error });
-        }
-      }
-    } catch (error) {
-      console.error("Failed to approve USDC:", error);
-      toast.error('Failed to approve USDC', { id: loadingToast, ...toastStyles.error });
-    }
-  };
-
   const handleDeposit = async () => {
     if (!walletProvider || !address) throw Error('user is disconnected');
+    if (parseFloat(depositAmount) === 0) return;
 
+    setIsDepositing(true);
     const loadingToast = toast.loading(`Depositing ${contract.asset}...`, toastStyles.loading);
     
     try {
       const provider = new BrowserProvider(walletProvider, chainId);
       const signer = new JsonRpcSigner(provider, address);
+      
+      // Convert amount to BigInt with 6 decimals
+      const depositAmountBigInt = BigInt(Math.floor(parseFloat(depositAmount) * 1_000_000));
+      
+      // First approve
+      const tokenContract = new Contract(contract.tokenAddress, contract.tokenAbi, signer);
+      const allowance = await tokenContract.allowance(address, contract.address);
+      if (allowance < depositAmountBigInt) {
+        const approveTx = await tokenContract.approve(contract.address, depositAmountBigInt);
+        await approveTx.wait();
+      }
+      
+      // Then deposit
       const poolContract = new Contract(contract.address, contract.abi, signer);
       
       let tx;
       if (contract.protocol === "RHO Markets") {
-        tx = await poolContract.mint("1000000");
+        tx = await poolContract.mint(depositAmountBigInt.toString());
       } else if (contract.protocol === "Lore Finance") {
         tx = await poolContract.deposit(
           contract.tokenAddress,
-          "1000000",
+          depositAmountBigInt.toString(),
           address,
           0
         );
       } else {
-        // AAVE deposit
         tx = await poolContract.supply(
           contract.tokenAddress,
-          "1000000",
+          depositAmountBigInt.toString(),
           address,
           0
         );
@@ -340,6 +327,7 @@ export const EarnContractCard = ({ sendHash, contractIndex }: EarnContractCardPr
         });
         sendHash(tx.hash);
         await Promise.all([fetchBalance(), fetchWalletBalance()]);
+        setDepositAmount('0');
       }
     } catch (error) {
       console.error(`Failed to deposit ${contract.asset}:`, error);
@@ -347,14 +335,16 @@ export const EarnContractCard = ({ sendHash, contractIndex }: EarnContractCardPr
         id: loadingToast, 
         ...toastStyles.error 
       });
+    } finally {
+      setIsDepositing(false);
     }
   };
 
   const handleWithdraw = async () => {
-    if (!walletProvider || !address || rUsdcBalance === BigInt(0)) {
-      throw Error('user is disconnected or has no balance');
-    }
+    if (!walletProvider || !address) throw Error('user is disconnected');
+    if (parseFloat(withdrawAmount) === 0) return;
 
+    setIsWithdrawing(true);
     const loadingToast = toast.loading(`Withdrawing ${contract.asset}...`, toastStyles.loading);
     
     try {
@@ -362,20 +352,29 @@ export const EarnContractCard = ({ sendHash, contractIndex }: EarnContractCardPr
       const signer = new JsonRpcSigner(provider, address);
       const poolContract = new Contract(contract.address, contract.abi, signer);
       
+      // For RHO Markets, we need to use the rToken amount directly
+      let withdrawAmountBigInt;
+      if (contract.protocol === "RHO Markets") {
+        // If withdrawing 100%, use the full rToken balance
+        if (parseFloat(withdrawAmount) === parseFloat(usdcBalance)) {
+          withdrawAmountBigInt = rUsdcBalance;
+        } else {
+          // Otherwise calculate the proportion of rTokens to withdraw
+          const proportion = parseFloat(withdrawAmount) / parseFloat(usdcBalance);
+          withdrawAmountBigInt = BigInt(Math.floor(Number(rUsdcBalance) * proportion));
+        }
+      } else {
+        // For other protocols, convert the amount to BigInt with 6 decimals
+        withdrawAmountBigInt = BigInt(Math.floor(parseFloat(withdrawAmount) * 1_000_000));
+      }
+      
       let tx;
       if (contract.protocol === "RHO Markets") {
-        tx = await poolContract.redeem(rUsdcBalance);
-      } else if (contract.protocol === "Lore Finance") {
-        tx = await poolContract.withdraw(
-          contract.tokenAddress,
-          rUsdcBalance,
-          address
-        );
+        tx = await poolContract.redeem(withdrawAmountBigInt.toString());
       } else {
-        // AAVE withdraw
         tx = await poolContract.withdraw(
           contract.tokenAddress,
-          rUsdcBalance,
+          withdrawAmountBigInt.toString(),
           address
         );
       }
@@ -389,6 +388,7 @@ export const EarnContractCard = ({ sendHash, contractIndex }: EarnContractCardPr
         });
         sendHash(tx.hash);
         await Promise.all([fetchBalance(), fetchWalletBalance()]);
+        setWithdrawAmount('0');
       }
     } catch (error) {
       console.error(`Failed to withdraw ${contract.asset}:`, error);
@@ -396,6 +396,8 @@ export const EarnContractCard = ({ sendHash, contractIndex }: EarnContractCardPr
         id: loadingToast, 
         ...toastStyles.error 
       });
+    } finally {
+      setIsWithdrawing(false);
     }
   };
 
@@ -436,11 +438,33 @@ export const EarnContractCard = ({ sendHash, contractIndex }: EarnContractCardPr
         </BalanceContainer>
 
         <ButtonContainer>
-          <button onClick={handleApprove}>Approve</button>
-          <button onClick={handleDeposit}>Deposit $1</button>
-          <button onClick={handleWithdraw} disabled={rUsdcBalance === BigInt(0)}>
-            Withdraw All
-          </button>
+          <div>
+            <AmountSlider
+              maxAmount={walletUsdcBalance}
+              asset={contract.asset}
+              onChange={setDepositAmount}
+            />
+            <button 
+              onClick={handleDeposit}
+              disabled={isDepositing || parseFloat(depositAmount) === 0}
+            >
+              {isDepositing ? 'Depositing...' : 'Deposit'}
+            </button>
+          </div>
+          
+          <div>
+            <AmountSlider
+              maxAmount={usdcBalance}
+              asset={contract.asset}
+              onChange={setWithdrawAmount}
+            />
+            <button 
+              onClick={handleWithdraw}
+              disabled={isWithdrawing || parseFloat(withdrawAmount) === 0}
+            >
+              {isWithdrawing ? 'Withdrawing...' : 'Withdraw'}
+            </button>
+          </div>
         </ButtonContainer>
       </CardContent>
     </ToastContainer>
