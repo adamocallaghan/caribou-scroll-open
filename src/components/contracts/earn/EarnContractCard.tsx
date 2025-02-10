@@ -74,6 +74,7 @@ interface ContractConfig {
   apy: string;
   tokenAddress: string;
   tokenAbi: string[];
+  aTokenAddress?: string;
 }
 
 // Contract configurations
@@ -96,6 +97,25 @@ const CONTRACTS: ContractConfig[] = [
     ],
     asset: "USDC",
     apy: "4.5%"
+  },
+  {
+    name: "USDT Lending Pool",
+    protocol: "Lore Finance",
+    logoUrl: "/lore-finance.svg",
+    address: "0x4cE1A1eC13DBd9084B1A741b036c061b2d58dABf",
+    abi: [
+      "function deposit(address asset, uint256 amount, address onBehalfOf, uint16 referralCode) external",
+      "function withdraw(address asset, uint256 amount, address to) external",
+      "function balanceOf(address account) external view returns (uint256)"
+    ],
+    tokenAddress: "0xf55BEC9cafDbE8730f096Aa55dad6D22d44099Df",
+    tokenAbi: [
+      "function approve(address spender, uint256 amount) external returns (bool)",
+      "function balanceOf(address account) external view returns (uint256)"
+    ],
+    aTokenAddress: "0xC5776416Ea3e88e04E95bCd3fF99b27902da7892",
+    asset: "USDT",
+    apy: "5.2%"
   }
 ];
 
@@ -122,17 +142,17 @@ export const EarnContractCard = ({ sendHash, contractIndex }: EarnContractCardPr
   const [rUsdcBalance, setRUsdcBalance] = useState<bigint>(BigInt(0));
 
   // Function to fetch USDC wallet balance
-  const fetchUsdcBalance = async () => {
+  const fetchWalletBalance = async () => {
     if (!walletProvider || !address) return;
 
     try {
       const provider = new BrowserProvider(walletProvider, chainId);
-      const usdcContract = new Contract(contract.tokenAddress, contract.tokenAbi, provider);
-      const balance = await usdcContract.balanceOf(address);
+      const tokenContract = new Contract(contract.tokenAddress, contract.tokenAbi, provider);
+      const balance = await tokenContract.balanceOf(address);
       const formattedBalance = formatUnits(balance, 6);
       setWalletUsdcBalance(Number(formattedBalance).toFixed(2));
     } catch (error) {
-      console.error("Failed to fetch USDC balance:", error);
+      console.error(`Failed to fetch ${contract.asset} balance:`, error);
     }
   };
 
@@ -142,21 +162,38 @@ export const EarnContractCard = ({ sendHash, contractIndex }: EarnContractCardPr
 
     try {
       const provider = new BrowserProvider(walletProvider, chainId);
-      const rUSDCContract = new Contract(contract.address, contract.abi, provider);
-      
-      const [rUSDCBalance, exchangeRate] = await Promise.all([
-        rUSDCContract.balanceOf(address),
-        rUSDCContract.exchangeRateStored()
-      ]);
 
-      setRUsdcBalance(rUSDCBalance);
+      if (contract.protocol === "RHO Markets") {
+        const rUSDCContract = new Contract(contract.address, contract.abi, provider);
+        
+        const [rUSDCBalance, exchangeRate] = await Promise.all([
+          rUSDCContract.balanceOf(address),
+          rUSDCContract.exchangeRateStored()
+        ]);
 
-      const actualBalance = (BigInt(rUSDCBalance) * BigInt(exchangeRate)) / BigInt(1e18);
-      
-      const formattedBalance = formatUnits(actualBalance, 6);
-      const roundedBalance = Number(formattedBalance).toFixed(2);
-      
-      setUsdcBalance(roundedBalance);
+        setRUsdcBalance(rUSDCBalance);
+
+        const actualBalance = (BigInt(rUSDCBalance) * BigInt(exchangeRate)) / BigInt(1e18);
+        const formattedBalance = formatUnits(actualBalance, 6);
+        const roundedBalance = Number(formattedBalance).toFixed(2);
+        
+        setUsdcBalance(roundedBalance);
+      } else {
+        // Lore Finance balance checking using aToken
+        const aTokenContract = new Contract(
+          contract.aTokenAddress!,
+          ["function balanceOf(address) view returns (uint256)"],
+          provider
+        );
+        
+        const balance = await aTokenContract.balanceOf(address);
+        setRUsdcBalance(balance);
+        
+        const formattedBalance = formatUnits(balance, 6);
+        const roundedBalance = Number(formattedBalance).toFixed(2);
+        
+        setUsdcBalance(roundedBalance);
+      }
     } catch (error) {
       console.error("Failed to fetch balance:", error);
       setUsdcBalance('Error');
@@ -165,7 +202,7 @@ export const EarnContractCard = ({ sendHash, contractIndex }: EarnContractCardPr
 
   useEffect(() => {
     fetchBalance();
-    fetchUsdcBalance();
+    fetchWalletBalance();
   }, [address, walletProvider, chainId]);
 
   const handleApprove = async () => {
@@ -206,30 +243,42 @@ export const EarnContractCard = ({ sendHash, contractIndex }: EarnContractCardPr
   const handleDeposit = async () => {
     if (!walletProvider || !address) throw Error('user is disconnected');
 
-    const loadingToast = toast.loading('Depositing USDC...', toastStyles.loading);
+    const loadingToast = toast.loading(`Depositing ${contract.asset}...`, toastStyles.loading);
     
     try {
       const provider = new BrowserProvider(walletProvider, chainId);
       const signer = new JsonRpcSigner(provider, address);
-      const rUSDCContract = new Contract(contract.address, contract.abi, signer);
+      const poolContract = new Contract(contract.address, contract.abi, signer);
       
-      const tx = await rUSDCContract.mint("1000000");
+      let tx;
+      if (contract.protocol === "RHO Markets") {
+        tx = await poolContract.mint("1000000");
+      } else {
+        // Lore Finance deposit
+        tx = await poolContract.deposit(
+          contract.tokenAddress, // asset address
+          "1000000", // amount (1 USDT)
+          address, // onBehalfOf
+          0 // referralCode
+        );
+      }
+
       const receipt = await tx.wait();
       
       if (receipt.status === 1) {
-        const returnValue = await rUSDCContract.mint.staticCall("1000000");
-        
-        if (returnValue === BigInt(0)) {
-          toast.success('USDC deposited successfully!', { id: loadingToast, ...toastStyles.success });
-          sendHash(tx.hash);
-          await Promise.all([fetchBalance(), fetchUsdcBalance()]);
-        } else {
-          toast.error('Deposit returned non-zero value', { id: loadingToast, ...toastStyles.error });
-        }
+        toast.success(`${contract.asset} deposited successfully!`, { 
+          id: loadingToast, 
+          ...toastStyles.success 
+        });
+        sendHash(tx.hash);
+        await Promise.all([fetchBalance(), fetchWalletBalance()]);
       }
     } catch (error) {
-      console.error("Failed to deposit USDC:", error);
-      toast.error('Failed to deposit USDC', { id: loadingToast, ...toastStyles.error });
+      console.error(`Failed to deposit ${contract.asset}:`, error);
+      toast.error(`Failed to deposit ${contract.asset}`, { 
+        id: loadingToast, 
+        ...toastStyles.error 
+      });
     }
   };
 
@@ -238,29 +287,41 @@ export const EarnContractCard = ({ sendHash, contractIndex }: EarnContractCardPr
       throw Error('user is disconnected or has no balance');
     }
 
-    const loadingToast = toast.loading('Withdrawing USDC...', toastStyles.loading);
+    const loadingToast = toast.loading(`Withdrawing ${contract.asset}...`, toastStyles.loading);
     
     try {
       const provider = new BrowserProvider(walletProvider, chainId);
       const signer = new JsonRpcSigner(provider, address);
-      const rUSDCContract = new Contract(contract.address, contract.abi, signer);
+      const poolContract = new Contract(contract.address, contract.abi, signer);
       
-      const tx = await rUSDCContract.redeem(rUsdcBalance);
+      let tx;
+      if (contract.protocol === "RHO Markets") {
+        tx = await poolContract.redeem(rUsdcBalance);
+      } else {
+        // Lore Finance withdraw
+        tx = await poolContract.withdraw(
+          contract.tokenAddress, // asset address
+          rUsdcBalance, // amount
+          address // to address
+        );
+      }
+
       const receipt = await tx.wait();
       
       if (receipt.status === 1) {
-        const returnValue = await rUSDCContract.redeem.staticCall(rUsdcBalance);
-        console.log('Withdrawal return value:', returnValue);
-        
-        toast.success('USDC withdrawn successfully!', { id: loadingToast, ...toastStyles.success });
+        toast.success(`${contract.asset} withdrawn successfully!`, { 
+          id: loadingToast, 
+          ...toastStyles.success 
+        });
         sendHash(tx.hash);
-        await Promise.all([fetchBalance(), fetchUsdcBalance()]);
-      } else {
-        toast.error('Withdrawal failed', { id: loadingToast, ...toastStyles.error });
+        await Promise.all([fetchBalance(), fetchWalletBalance()]);
       }
     } catch (error) {
-      console.error("Failed to withdraw USDC:", error);
-      toast.error('Failed to withdraw USDC', { id: loadingToast, ...toastStyles.error });
+      console.error(`Failed to withdraw ${contract.asset}:`, error);
+      toast.error(`Failed to withdraw ${contract.asset}`, { 
+        id: loadingToast, 
+        ...toastStyles.error 
+      });
     }
   };
 
