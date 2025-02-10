@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
 const SliderContainer = styled.div`
   width: 100%;
@@ -56,11 +56,10 @@ const Increment = styled.button<{ active: boolean }>`
 
 interface AmountSliderProps {
   maxAmount: string;
-  asset: string;
   onChange: (amount: string) => void;
 }
 
-export const AmountSlider = ({ maxAmount, asset, onChange }: AmountSliderProps) => {
+export const AmountSlider = ({ maxAmount, onChange }: AmountSliderProps) => {
   const [value, setValue] = useState(0);
   const increments = [0, 25, 50, 100];
   const maxAmountNum = parseFloat(maxAmount);

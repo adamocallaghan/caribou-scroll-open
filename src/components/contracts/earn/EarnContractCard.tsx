@@ -119,34 +119,6 @@ const AmountText = styled.div`
   text-align: right;
 `;
 
-// Update AmountSlider styles
-const SliderContainer = styled.div`
-  width: 100%;
-  margin: 5px 0;
-`;
-
-const SliderTrack = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
-  margin-bottom: 5px;
-`;
-
-const AmountDisplay = styled.div`
-  text-align: center;
-  font-size: 0.9rem;
-  margin-top: 3px;
-`;
-
-const ToastContainer = styled.div`
-  .custom-toast {
-    padding: 16px;
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  }
-`;
-
 const toastStyles = {
   loading: {
     style: {
@@ -586,7 +558,6 @@ export const EarnContractCard = ({ sendHash, contractIndex }: EarnContractCardPr
             <SliderSection>
               <AmountSlider
                 maxAmount={walletUsdcBalance}
-                asset={contract.asset}
                 onChange={setDepositAmount}
               />
             </SliderSection>
@@ -607,7 +578,6 @@ export const EarnContractCard = ({ sendHash, contractIndex }: EarnContractCardPr
             <SliderSection>
               <AmountSlider
                 maxAmount={usdcBalance}
-                asset={contract.asset}
                 onChange={setWithdrawAmount}
               />
             </SliderSection>
