@@ -80,9 +80,16 @@ const Balance = styled.div`
 const ButtonContainer = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 30px;
   width: 100%;
   max-width: 300px;
+`;
+
+const Separator = styled.div`
+  width: 100%;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.1);
+  margin: 10px 0;
 `;
 
 const ActionRow = styled.div`
@@ -594,6 +601,8 @@ export const EarnContractCard = ({ sendHash, contractIndex }: EarnContractCardPr
                 ${parseFloat(depositAmount).toFixed(2)} {contract.asset}
               </AmountText>
             </ActionRow>
+
+            <Separator />
 
             <SliderSection>
               <AmountSlider
