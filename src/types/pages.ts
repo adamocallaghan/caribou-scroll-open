@@ -39,7 +39,10 @@ export const PAGES: PageConfig[] = [
     name: 'Mint',
     color: '#143199',
     textColor: '#dee6ff',
-    subPages: Array.from({ length: 4 }, (_, i) => ({ name: `Borrow ${i + 1}`, index: i }))
+    subPages: Array.from({ length: 2 }, (_, i) => ({ 
+      name: `NFT ${i + 1}`, 
+      index: i 
+    }))
   },
   {
     name: 'Launch',

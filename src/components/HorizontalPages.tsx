@@ -85,7 +85,7 @@ export const HorizontalPages = ({
 
   const renderSubPageContent = (subPage: SubPageConfig) => {
     if (pageType === 'Mint' && sendHash) {
-      return <MintContractCard sendHash={sendHash} />;
+      return <MintContractCard sendHash={sendHash} contractIndex={subPage.index} />;
     }
     return subPage.name;
   };

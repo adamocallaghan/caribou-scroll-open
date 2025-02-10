@@ -36,21 +36,41 @@ interface ContractConfig {
 }
 
 // Contract configurations
-const CONTRACT_1: ContractConfig = {
-  name: "Caribou NFT",
-  address: "0x36f4fa06Bbc44910F21db31B754fd91A699dD961",
-  abi: [
-    "function safeMint(address to) public"
-  ],
-  imageUrl: "https://ipfs.io/ipfs/QmQicuf49WKck1YxranWF4UPMdungQYDvrZPsnG6TY8WTM/caribou_nft.jpg"
-};
+const CONTRACTS: ContractConfig[] = [
+  {
+    name: "Caribou NFT",
+    address: "0x36f4fa06Bbc44910F21db31B754fd91A699dD961",
+    abi: [
+      "function safeMint(address to) public"
+    ],
+    imageUrl: "https://ipfs.io/ipfs/QmQicuf49WKck1YxranWF4UPMdungQYDvrZPsnG6TY8WTM/caribou_nft.jpg"
+  },
+  {
+    name: "Scroll Tarot NFT",
+    address: "0x46597C6ae7a02a17038a53a207eEdaDDF565B11f",
+    abi: [
+      "function safeMint(address to) public"
+    ],
+    imageUrl: "/scroll_tarot.jpg"
+  }
+];
 
 interface MintContractCardProps {
   sendHash: (hash: string) => void;
-  contract?: ContractConfig;
+  contractIndex: number;
 }
 
-export const MintContractCard = ({ sendHash, contract = CONTRACT_1 }: MintContractCardProps) => {
+export const MintContractCard = ({ sendHash, contractIndex }: MintContractCardProps) => {
+  // Add safety check for contract index
+  if (contractIndex >= CONTRACTS.length) {
+    return (
+      <CardContent>
+        <CardTitle>No Contract Available</CardTitle>
+      </CardContent>
+    );
+  }
+
+  const contract = CONTRACTS[contractIndex];
   const { address } = useAppKitAccount();
   const { chainId } = useAppKitNetworkCore();
   const { walletProvider } = useAppKitProvider<Provider>('eip155');
