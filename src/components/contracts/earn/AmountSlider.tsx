@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 
 const SliderContainer = styled.div`
   width: 100%;
-  margin: 10px 0;
+  margin: 0;
 `;
 
 const SliderTrack = styled.div`
@@ -11,7 +11,7 @@ const SliderTrack = styled.div`
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  margin-bottom: 10px;
+  margin-bottom: 4px;
 `;
 
 const SliderInput = styled.input`
@@ -21,7 +21,7 @@ const SliderInput = styled.input`
   border-radius: 2px;
   background: #353f54;
   outline: none;
-  margin: 15px 0;
+  margin: 8px 0;
 
   &::-webkit-slider-thumb {
     -webkit-appearance: none;
@@ -52,12 +52,6 @@ const Increment = styled.button<{ active: boolean }>`
   &:hover {
     border-color: #0AEB9A;
   }
-`;
-
-const AmountDisplay = styled.div`
-  text-align: center;
-  font-size: 1rem;
-  margin-top: 5px;
 `;
 
 interface AmountSliderProps {
@@ -104,9 +98,6 @@ export const AmountSlider = ({ maxAmount, asset, onChange }: AmountSliderProps) 
         value={value}
         onChange={handleSliderChange}
       />
-      <AmountDisplay>
-        ${((maxAmountNum * value) / 100).toFixed(2)} {asset}
-      </AmountDisplay>
     </SliderContainer>
   );
 }; 

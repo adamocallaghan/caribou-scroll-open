@@ -81,20 +81,36 @@ const Balance = styled.div`
 const ButtonContainer = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: 8px;
   width: 100%;
   max-width: 300px;
+`;
 
-  > div {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-  }
+const ActionRow = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  margin-top: 2px;
 
   button {
+    min-width: 100px;
     padding: 8px;
     font-size: 0.9rem;
+    white-space: nowrap;
   }
+`;
+
+const SliderSection = styled.div`
+  width: 100%;
+  margin: 0;
+`;
+
+const AmountText = styled.div`
+  font-size: 0.9rem;
+  white-space: nowrap;
+  min-width: 80px;
+  text-align: right;
 `;
 
 // Update AmountSlider styles
@@ -478,33 +494,43 @@ export const EarnContractCard = ({ sendHash, contractIndex }: EarnContractCardPr
         </BalanceContainer>
 
         <ButtonContainer>
-          <div>
+          <SliderSection>
             <AmountSlider
               maxAmount={walletUsdcBalance}
               asset={contract.asset}
               onChange={setDepositAmount}
             />
+          </SliderSection>
+          <ActionRow>
             <button 
               onClick={handleDeposit}
               disabled={isDepositing || parseFloat(depositAmount) === 0}
             >
               {isDepositing ? 'Depositing...' : 'Deposit'}
             </button>
-          </div>
-          
-          <div>
+            <AmountText>
+              ${parseFloat(depositAmount).toFixed(2)} {contract.asset}
+            </AmountText>
+          </ActionRow>
+
+          <SliderSection>
             <AmountSlider
               maxAmount={usdcBalance}
               asset={contract.asset}
               onChange={setWithdrawAmount}
             />
+          </SliderSection>
+          <ActionRow>
             <button 
               onClick={handleWithdraw}
               disabled={isWithdrawing || parseFloat(withdrawAmount) === 0}
             >
               {isWithdrawing ? 'Withdrawing...' : 'Withdraw'}
             </button>
-          </div>
+            <AmountText>
+              ${parseFloat(withdrawAmount).toFixed(2)} {contract.asset}
+            </AmountText>
+          </ActionRow>
         </ButtonContainer>
       </CardContent>
     </ToastContainer>
