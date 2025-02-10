@@ -32,6 +32,7 @@ const CardFront = styled.div`
   align-items: center;
   gap: 20px;
   padding: 20px;
+  padding-top: 80px;
 `;
 
 // Back of card
@@ -45,6 +46,7 @@ const CardBack = styled.div`
   justify-content: center;
   align-items: center;
   padding: 20px;
+  padding-top: 80px;
   text-align: center;
   font-size: 1.2rem;
 `;
