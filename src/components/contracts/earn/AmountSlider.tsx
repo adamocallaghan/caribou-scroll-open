@@ -19,7 +19,7 @@ const SliderInput = styled.input`
   -webkit-appearance: none;
   height: 4px;
   border-radius: 2px;
-  background: #353f54;
+  background: #0AEB9A;
   outline: none;
   margin: 8px 0;
 

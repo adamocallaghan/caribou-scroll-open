@@ -21,13 +21,13 @@ const CardTitle = styled.h2`
 `;
 
 const ProtocolLogo = styled.img`
-  width: 60px;
-  height: 60px;
+  width: 80px;
+  height: 80px;
   object-fit: contain;
 `;
 
 const ProtocolName = styled.div`
-  font-size: 1.1rem;
+  font-size: 1.4rem;
   margin: 0;
 `;
 
@@ -36,15 +36,15 @@ const MarketInfo = styled.div`
   align-items: center;
   gap: 8px;
   margin: 0;
-  font-size: 0.9rem;
+  font-size: 1.1rem;
 `;
 
 const MarketName = styled.div`
-  font-size: 1rem;
+  font-size: 1.2rem;
 `;
 
 const APY = styled.div`
-  font-size: 1rem;
+  font-size: 1.2rem;
   color: #0AEB9A;
   &:before {
     content: '•';
@@ -66,13 +66,13 @@ const Balance = styled.div`
   flex: 1;
   
   .label {
-    font-size: 0.8rem;
+    font-size: 1rem;
     opacity: 0.8;
     margin-bottom: 3px;
   }
   
   .amount {
-    font-size: 0.9rem;
+    font-size: 1.2rem;
     white-space: nowrap;
   }
 `;
