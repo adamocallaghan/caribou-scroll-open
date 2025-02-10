@@ -1,14 +1,75 @@
+import { useState } from 'react';
 import styled from 'styled-components';
 import { useAppKitAccount, useAppKitNetworkCore, useAppKitProvider, type Provider } from '@reown/appkit/react';
 import { BrowserProvider, JsonRpcSigner, Contract } from 'ethers';
 import toast, { Toaster } from 'react-hot-toast';
 
-const CardContent = styled.div`
+// Wrapper to handle the 3D perspective
+const CardWrapper = styled.div`
+  perspective: 1000px;
+  width: 100%;
+  height: 100%;
+`;
+
+// Container for the flip animation
+const FlipContainer = styled.div<{ isFlipped: boolean }>`
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.6s;
+  transform-style: preserve-3d;
+  transform: ${props => props.isFlipped ? 'rotateY(180deg)' : 'rotateY(0)'};
+`;
+
+// Front of card (existing content)
+const CardFront = styled.div`
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 20px;
   padding: 20px;
+`;
+
+// Back of card
+const CardBack = styled.div`
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  transform: rotateY(180deg);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  text-align: center;
+  font-size: 1.2rem;
+`;
+
+const FlipButton = styled.button`
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  width: 30px;
+  height: 30px;
+  
+  @media (max-width: 768px) {
+    width: 24px;
+    height: 24px;
+  }
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
 `;
 
 const CardTitle = styled.h2`
@@ -99,12 +160,21 @@ interface MintContractCardProps {
 }
 
 export const MintContractCard = ({ sendHash, contractIndex }: MintContractCardProps) => {
+  const [isFlipped, setIsFlipped] = useState(false);
+
   // Add safety check for contract index
   if (contractIndex >= CONTRACTS.length) {
     return (
-      <CardContent>
-        <CardTitle>No Contract Available</CardTitle>
-      </CardContent>
+      <CardWrapper>
+        <FlipContainer isFlipped={isFlipped}>
+          <CardFront>
+            <CardTitle>No Contract Available</CardTitle>
+          </CardFront>
+          <CardBack>
+            <div>No Contract Available</div>
+          </CardBack>
+        </FlipContainer>
+      </CardWrapper>
     );
   }
 
@@ -149,28 +219,39 @@ export const MintContractCard = ({ sendHash, contractIndex }: MintContractCardPr
   };
 
   return (
-    <ToastContainer>
-      <CardContent>
-        <Toaster 
-          position="bottom-center"
-          toastOptions={{
-            duration: 5000,
-            style: {
-              minWidth: '250px',
-              maxWidth: '500px',
-              padding: '16px',
-              textAlign: 'center',
-            },
-          }}
-        />
-        <CardTitle>{contract.name}</CardTitle>
-        {contract.imageUrl && (
-          <NFTImage src={contract.imageUrl} alt={contract.name} />
-        )}
-        <ButtonContainer>
-          <button onClick={handleMint}>Mint NFT</button>
-        </ButtonContainer>
-      </CardContent>
-    </ToastContainer>
+    <CardWrapper>
+      <FlipContainer isFlipped={isFlipped}>
+        <CardFront>
+          <Toaster 
+            position="bottom-center"
+            toastOptions={{
+              duration: 5000,
+              style: {
+                minWidth: '250px',
+                maxWidth: '500px',
+                padding: '16px',
+                textAlign: 'center',
+              },
+            }}
+          />
+          <CardTitle>{contract.name}</CardTitle>
+          {contract.imageUrl && (
+            <NFTImage src={contract.imageUrl} alt={contract.name} />
+          )}
+          <ButtonContainer>
+            <button onClick={handleMint}>Mint NFT</button>
+          </ButtonContainer>
+          <FlipButton onClick={() => setIsFlipped(!isFlipped)}>
+            <img src="/flip-card.png" alt="Flip card" />
+          </FlipButton>
+        </CardFront>
+        <CardBack>
+          <div>This NFT collection...</div>
+          <FlipButton onClick={() => setIsFlipped(!isFlipped)}>
+            <img src="/flip-card.png" alt="Flip card" />
+          </FlipButton>
+        </CardBack>
+      </FlipContainer>
+    </CardWrapper>
   );
 }; 
