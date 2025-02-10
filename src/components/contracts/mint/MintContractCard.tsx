@@ -158,6 +158,28 @@ interface MintContractCardProps {
   contractIndex: number;
 }
 
+const Button = styled.button`
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  background-color: #dee6ff;  // Using the text color for background
+  color: #143199;            // Using the card background color for text
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    opacity: 0.9;
+    transform: translateY(-1px);
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+  }
+`;
+
 export const MintContractCard = ({ sendHash, contractIndex }: MintContractCardProps) => {
   const [isFlipped, setIsFlipped] = useState(false);
 
@@ -238,7 +260,7 @@ export const MintContractCard = ({ sendHash, contractIndex }: MintContractCardPr
             <NFTImage src={contract.imageUrl} alt={contract.name} />
           )}
           <ButtonContainer>
-            <button onClick={handleMint}>Mint NFT</button>
+            <Button onClick={handleMint}>Mint NFT</Button>
           </ButtonContainer>
           <FlipButton onClick={() => setIsFlipped(!isFlipped)}>
             <img src="/flip-card.png" alt="Flip card" />

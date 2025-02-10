@@ -92,19 +92,35 @@ const Separator = styled.div`
   margin: 10px 0;
 `;
 
+const Button = styled.button`
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  background-color: #0AEB9A;
+  color: #353f54;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    opacity: 0.9;
+    transform: translateY(-1px);
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+  }
+`;
+
 const ActionRow = styled.div`
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 10px;
   width: 100%;
   margin-top: 2px;
-
-  button {
-    min-width: 100px;
-    padding: 8px;
-    font-size: 0.9rem;
-    white-space: nowrap;
-  }
 `;
 
 const SliderSection = styled.div`
@@ -563,12 +579,12 @@ export const EarnContractCard = ({ sendHash, contractIndex }: EarnContractCardPr
               />
             </SliderSection>
             <ActionRow>
-              <button 
+              <Button 
                 onClick={handleDeposit}
                 disabled={isDepositing || parseFloat(depositAmount) === 0}
               >
                 {isDepositing ? 'Depositing...' : 'Deposit'}
-              </button>
+              </Button>
               <AmountText>
                 ${parseFloat(depositAmount).toFixed(2)} {contract.asset}
               </AmountText>
@@ -583,12 +599,12 @@ export const EarnContractCard = ({ sendHash, contractIndex }: EarnContractCardPr
               />
             </SliderSection>
             <ActionRow>
-              <button 
+              <Button 
                 onClick={handleWithdraw}
                 disabled={isWithdrawing || parseFloat(withdrawAmount) === 0}
               >
                 {isWithdrawing ? 'Withdrawing...' : 'Withdraw'}
-              </button>
+              </Button>
               <AmountText>
                 ${parseFloat(withdrawAmount).toFixed(2)} {contract.asset}
               </AmountText>
