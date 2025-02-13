@@ -25,45 +25,12 @@ interface PredictionPageProps {
   subPageCount?: number;
 }
 
-export const PredictionPage = ({ 
-  sendHash = () => {}, 
-  pageIndex,
-  subPageCount 
-}: PredictionPageProps) => {
-  const [marketAddresses, setMarketAddresses] = useState<string[]>([]);
-  const { walletProvider } = useAppKitProvider<Provider>('eip155');
-
-  useEffect(() => {
-    const fetchMarkets = async () => {
-      if (!walletProvider) return;
-
-      try {
-        const provider = new BrowserProvider(walletProvider);
-        const factory = new Contract(
-          PREDICTION_FACTORY.address,
-          PREDICTION_FACTORY.abi,
-          provider
-        );
-
-        const markets = await factory.getMarkets();
-        console.log('Fetched markets:', markets);
-        const marketArray = Array.from(
-          { length: Math.min(markets.length, subPageCount || markets.length) }, 
-          (_, i) => markets[i]
-        );
-        setMarketAddresses(marketArray);
-      } catch (error) {
-        console.error('Failed to fetch markets:', error);
-      }
-    };
-
-    fetchMarkets();
-  }, [walletProvider, subPageCount]);
-
-  console.log('Current pageIndex:', pageIndex);
-  console.log('Current marketAddresses:', marketAddresses);
+export const PredictionPage = ({ sendHash = () => {}, pageIndex }: PredictionPageProps) => {
+  console.log('PredictionPage rendered with pageIndex:', pageIndex);
+  console.log('Available markets:', PREDICTION_MARKETS);
 
   if (typeof pageIndex === 'undefined') {
+    console.log('Rendering main Prediction Markets page');
     return (
       <Container>
         <MainPageContent>
@@ -73,17 +40,14 @@ export const PredictionPage = ({
     );
   }
 
-  if (!marketAddresses.length || pageIndex >= marketAddresses.length) {
+  // Get market directly from config - remove the -1 here since we're already subtracting in PageContainer
+  const market = PREDICTION_MARKETS[pageIndex];
+  console.log('Selected market:', market, 'for index:', pageIndex);
+  
+  if (!market) {
+    console.log('No market found for index:', pageIndex);
     return null;
   }
-
-  const currentMarket = marketAddresses[pageIndex];
-  console.log('Current market:', currentMarket);
-  
-  // Use the static config instead of fetching from contract
-  const market = PREDICTION_MARKETS[pageIndex];
-  
-  if (!market) return null;
 
   return (
     <Container>

@@ -6,6 +6,7 @@ import { EarnPage } from '../pages/EarnPage';
 import { DashboardPage } from '../pages/DashboardPage';
 import { HorizontalPages } from './HorizontalPages';
 import { PredictionPage } from '../pages/PredictionPage';
+import { PREDICTION_MARKETS } from '../contracts/prediction/config';
 
 const Container = styled.div`
   height: 100vh;
@@ -135,15 +136,7 @@ export const PageContainer = ({ sendHash }: PageContainerProps) => {
             onSubPageChange={handleSubPageChange}
             currentSubPage={currentSubPage}
           >
-            {currentSubPage === 0 ? (
-              <PredictionPage sendHash={sendHash} />
-            ) : (
-              <PredictionPage 
-                sendHash={sendHash} 
-                pageIndex={currentSubPage - 1} 
-                subPageCount={PAGES[pageIndex].subPages.length - 1}
-              />
-            )}
+            <PredictionPage sendHash={sendHash} />
           </HorizontalPages>
         );
       default:

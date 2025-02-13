@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { SubPageConfig } from '../types/pages';
 import { MintContractCard } from './contracts/mint/MintContractCard';
 import { EarnContractCard } from './contracts/earn/EarnContractCard';
+import { PredictionContractCard } from './contracts/prediction/PredictionContractCard';
 
 const Container = styled.div`
   width: 100%;
@@ -89,6 +90,9 @@ export const HorizontalPages = ({
     if (pageType === 'Earn' && sendHash) {
       return <EarnContractCard sendHash={sendHash} contractIndex={subPage.index} />;
     }
+    if (pageType === 'Predict' && sendHash) {
+      return <PredictionContractCard sendHash={sendHash} contractIndex={subPage.index} />;
+    }
     return subPage.name;
   };
 
@@ -100,29 +104,15 @@ export const HorizontalPages = ({
       </Page>
       
       {/* Subsequent pages */}
-      {pageType === 'Predict' ? (
-        // For Predict pages, render the PredictionPage with different indices
-        subPages.map((subPage) => (
-          <Page
-            key={subPage.index}
-            bgColor={bgColor}
-            textColor={textColor}
-          >
-            {children} {/* This will be PredictionPage with the correct pageIndex */}
-          </Page>
-        ))
-      ) : (
-        // For other pages, render normally
-        subPages.map((subPage) => (
-          <Page
-            key={subPage.index}
-            bgColor={bgColor}
-            textColor={textColor}
-          >
-            {renderSubPageContent(subPage)}
-          </Page>
-        ))
-      )}
+      {subPages.map((subPage) => (
+        <Page
+          key={subPage.index}
+          bgColor={bgColor}
+          textColor={textColor}
+        >
+          {renderSubPageContent(subPage)}
+        </Page>
+      ))}
     </Container>
   );
 }; 
