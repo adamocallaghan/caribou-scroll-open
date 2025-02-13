@@ -4,6 +4,7 @@ import { useAppKitProvider, type Provider } from '@reown/appkit/react';
 import { BrowserProvider, Contract } from 'ethers';
 import { PredictionCard } from '../components/contracts/prediction/PredictionCard';
 import { PREDICTION_FACTORY } from '../contracts/prediction/types';
+import { PREDICTION_MARKETS } from '../contracts/prediction/config';
 
 const Container = styled.div`
   width: 100%;
@@ -21,9 +22,14 @@ const MainPageContent = styled.div`
 interface PredictionPageProps {
   sendHash?: (hash: string) => void;
   pageIndex?: number;
+  subPageCount?: number;
 }
 
-export const PredictionPage = ({ sendHash = () => {}, pageIndex }: PredictionPageProps) => {
+export const PredictionPage = ({ 
+  sendHash = () => {}, 
+  pageIndex,
+  subPageCount 
+}: PredictionPageProps) => {
   const [marketAddresses, setMarketAddresses] = useState<string[]>([]);
   const { walletProvider } = useAppKitProvider<Provider>('eip155');
 
@@ -41,7 +47,10 @@ export const PredictionPage = ({ sendHash = () => {}, pageIndex }: PredictionPag
 
         const markets = await factory.getMarkets();
         console.log('Fetched markets:', markets);
-        const marketArray = Array.from({ length: markets.length }, (_, i) => markets[i]);
+        const marketArray = Array.from(
+          { length: Math.min(markets.length, subPageCount || markets.length) }, 
+          (_, i) => markets[i]
+        );
         setMarketAddresses(marketArray);
       } catch (error) {
         console.error('Failed to fetch markets:', error);
@@ -49,7 +58,7 @@ export const PredictionPage = ({ sendHash = () => {}, pageIndex }: PredictionPag
     };
 
     fetchMarkets();
-  }, [walletProvider]);
+  }, [walletProvider, subPageCount]);
 
   console.log('Current pageIndex:', pageIndex);
   console.log('Current marketAddresses:', marketAddresses);
@@ -64,21 +73,25 @@ export const PredictionPage = ({ sendHash = () => {}, pageIndex }: PredictionPag
     );
   }
 
-  if (pageIndex >= marketAddresses.length) {
+  if (!marketAddresses.length || pageIndex >= marketAddresses.length) {
     return null;
   }
 
   const currentMarket = marketAddresses[pageIndex];
   console.log('Current market:', currentMarket);
   
+  // Use the static config instead of fetching from contract
+  const market = PREDICTION_MARKETS[pageIndex];
+  
+  if (!market) return null;
+
   return (
     <Container>
-      {currentMarket && (
-        <PredictionCard
-          marketAddress={currentMarket}
-          sendHash={sendHash}
-        />
-      )}
+      <PredictionCard
+        marketAddress={market.address}
+        description={market.description}
+        sendHash={sendHash}
+      />
     </Container>
   );
 }; 

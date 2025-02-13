@@ -36,6 +36,7 @@ interface HorizontalPagesProps {
   pageType?: string;
   sendHash?: (hash: string) => void;
   onSubPageChange?: (index: number) => void;
+  currentSubPage?: number;
 }
 
 export const HorizontalPages = ({
@@ -45,10 +46,22 @@ export const HorizontalPages = ({
   textColor,
   pageType,
   sendHash,
-  onSubPageChange
+  onSubPageChange,
+  currentSubPage = 0
 }: HorizontalPagesProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
-  const [currentPage, setCurrentPage] = useState(0);
+  const [currentPage, setCurrentPage] = useState(currentSubPage);
+
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+
+    const pageWidth = container.clientWidth;
+    container.scrollTo({
+      left: currentSubPage * pageWidth,
+      behavior: 'smooth'
+    });
+  }, [currentSubPage]);
 
   useEffect(() => {
     const container = containerRef.current;

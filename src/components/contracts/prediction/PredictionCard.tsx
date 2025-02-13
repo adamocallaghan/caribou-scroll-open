@@ -75,11 +75,11 @@ const Stat = styled.div<{ variant: 'yes' | 'no' }>`
 
 interface PredictionCardProps {
   marketAddress: string;
+  description: string;
   sendHash: (hash: string) => void;
 }
 
-export const PredictionCard = ({ marketAddress, sendHash }: PredictionCardProps) => {
-  const [description, setDescription] = useState<string>('');
+export const PredictionCard = ({ marketAddress, description, sendHash }: PredictionCardProps) => {
   const [totalTrue, setTotalTrue] = useState<bigint>(BigInt(0));
   const [totalFalse, setTotalFalse] = useState<bigint>(BigInt(0));
   const [isBetting, setIsBetting] = useState(false);
@@ -88,30 +88,28 @@ export const PredictionCard = ({ marketAddress, sendHash }: PredictionCardProps)
   const { chainId } = useAppKitNetworkCore();
   const { walletProvider } = useAppKitProvider<Provider>('eip155');
 
-  const fetchMarketData = async () => {
-    if (!walletProvider) return;
-
-    try {
-      const provider = new BrowserProvider(walletProvider, chainId);
-      const contract = new Contract(marketAddress, PREDICTION_MARKET_ABI, provider);
-
-      const [desc, trueBets, falseBets] = await Promise.all([
-        contract.description(),
-        contract.totalTrueBets(),
-        contract.totalFalseBets()
-      ]);
-
-      setDescription(desc);
-      setTotalTrue(trueBets);
-      setTotalFalse(falseBets);
-    } catch (error) {
-      console.error('Failed to fetch market data:', error);
-    }
-  };
-
   useEffect(() => {
-    fetchMarketData();
-  }, [marketAddress, walletProvider, chainId]);
+    const fetchTotals = async () => {
+      if (!walletProvider) return;
+
+      try {
+        const provider = new BrowserProvider(walletProvider);
+        const contract = new Contract(marketAddress, PREDICTION_MARKET_ABI, provider);
+
+        const [trueBets, falseBets] = await Promise.all([
+          contract.totalTrueBets(),
+          contract.totalFalseBets()
+        ]);
+
+        setTotalTrue(trueBets);
+        setTotalFalse(falseBets);
+      } catch (error) {
+        console.error('Failed to fetch bet totals:', error);
+      }
+    };
+
+    fetchTotals();
+  }, [walletProvider, marketAddress]);
 
   const calculatePercentage = (value: bigint, total: bigint): string => {
     if (total === BigInt(0)) return '0';
@@ -143,7 +141,7 @@ export const PredictionCard = ({ marketAddress, sendHash }: PredictionCardProps)
       if (receipt.status === 1) {
         toast.success('Bet placed successfully!', { id: loadingToast });
         sendHash(tx.hash);
-        await fetchMarketData();
+        await fetchTotals();
       }
     } catch (error) {
       console.error('Failed to place bet:', error);

@@ -49,8 +49,10 @@ export const PageContainer = ({ sendHash }: PageContainerProps) => {
       const pageHeight = window.innerHeight;
       const currentScroll = container.scrollTop;
       const newPage = Math.round(currentScroll / pageHeight);
-      setCurrentPage(newPage);
-      setCurrentSubPage(0);
+      if (newPage !== currentPage) {
+        setCurrentPage(newPage);
+        setCurrentSubPage(0);
+      }
     };
 
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -75,6 +77,11 @@ export const PageContainer = ({ sendHash }: PageContainerProps) => {
       window.removeEventListener('keydown', handleKeyDown);
     };
   }, [currentPage]);
+
+  useEffect(() => {
+    console.log('Current main page:', currentPage);
+    console.log('Current sub page:', currentSubPage);
+  }, [currentPage, currentSubPage]);
 
   const handleSubPageChange = (index: number) => {
     console.log('SubPage changed to:', index);
@@ -126,11 +133,16 @@ export const PageContainer = ({ sendHash }: PageContainerProps) => {
             pageType="Predict"
             sendHash={sendHash}
             onSubPageChange={handleSubPageChange}
+            currentSubPage={currentSubPage}
           >
             {currentSubPage === 0 ? (
               <PredictionPage sendHash={sendHash} />
             ) : (
-              <PredictionPage sendHash={sendHash} pageIndex={currentSubPage - 1} />
+              <PredictionPage 
+                sendHash={sendHash} 
+                pageIndex={currentSubPage - 1} 
+                subPageCount={PAGES[pageIndex].subPages.length - 1}
+              />
             )}
           </HorizontalPages>
         );
