@@ -243,7 +243,9 @@ interface EarnContractCardProps {
 const CardWrapper = styled.div`
   perspective: 1000px;
   width: 100%;
-  height: 100%;
+  height: 100dvh;
+  max-height: calc(100dvh - env(safe-area-inset-bottom));  // Subtract the safe area
+  overflow: auto;
 `;
 
 const FlipContainer = styled.div<{ isFlipped: boolean }>`
@@ -267,9 +269,13 @@ const CardFront = styled.div`
   gap: 15px;
   padding: 15px;
   padding-top: 60px;
-  padding-bottom: 60px;
+  padding-bottom: calc(80px + env(safe-area-inset-bottom));
   max-width: 100%;
   box-sizing: border-box;
+
+  @media (max-width: 768px) {
+    padding-bottom: calc(120px + env(safe-area-inset-bottom));
+  }
 `;
 
 const CardBack = styled.div`
@@ -285,9 +291,13 @@ const CardBack = styled.div`
   gap: 15px;
   padding: 15px;
   padding-top: 60px;
-  padding-bottom: 60px;
+  padding-bottom: calc(80px + env(safe-area-inset-bottom));
   max-width: 100%;
   box-sizing: border-box;
+
+  @media (max-width: 768px) {
+    padding-bottom: calc(120px + env(safe-area-inset-bottom));
+  }
 `;
 
 const FlipButton = styled.button`
