@@ -11,7 +11,7 @@ const Container = styled.div`
 `;
 
 const MainPageContent = styled.div`
-  font-size: 2rem;
+  font-size: 4rem;
   text-align: center;
 `;
 
@@ -30,7 +30,7 @@ export const PredictionPage = ({ sendHash = () => {}, pageIndex }: PredictionPag
     return (
       <Container>
         <MainPageContent>
-          Prediction Markets
+          Predict
         </MainPageContent>
       </Container>
     );
