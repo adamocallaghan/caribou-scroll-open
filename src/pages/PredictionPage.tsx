@@ -1,9 +1,5 @@
-import { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { useAppKitProvider, type Provider } from '@reown/appkit/react';
-import { BrowserProvider, Contract } from 'ethers';
 import { PredictionCard } from '../components/contracts/prediction/PredictionCard';
-import { PREDICTION_FACTORY } from '../contracts/prediction/types';
 import { PREDICTION_MARKETS } from '../contracts/prediction/config';
 
 const Container = styled.div`

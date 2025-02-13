@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { useAppKitAccount, useAppKitNetworkCore, useAppKitProvider, type Provider } from '@reown/appkit/react';
-import { BrowserProvider, JsonRpcSigner, Contract, formatEther, parseEther } from 'ethers';
+import { BrowserProvider, JsonRpcSigner, Contract, parseEther } from 'ethers';
 import toast, { Toaster } from 'react-hot-toast';
 import { PREDICTION_MARKET_ABI } from '../../../contracts/prediction/types';
 
@@ -61,12 +61,6 @@ const BetButton = styled.button<{ variant: 'yes' | 'no' }>`
     cursor: not-allowed;
     transform: none;
   }
-`;
-
-const BetStats = styled.div`
-  display: flex;
-  gap: 40px;
-  font-size: 1.1rem;
 `;
 
 const Stat = styled.div<{ variant: 'yes' | 'no' }>`
@@ -141,7 +135,7 @@ export const PredictionCard = ({ marketAddress, description, sendHash }: Predict
       if (receipt.status === 1) {
         toast.success('Bet placed successfully!', { id: loadingToast });
         sendHash(tx.hash);
-        await fetchTotals();
+        setTotalTrue(BigInt(0));
       }
     } catch (error) {
       console.error('Failed to place bet:', error);

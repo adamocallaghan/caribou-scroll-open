@@ -6,7 +6,6 @@ import { EarnPage } from '../pages/EarnPage';
 import { DashboardPage } from '../pages/DashboardPage';
 import { HorizontalPages } from './HorizontalPages';
 import { PredictionPage } from '../pages/PredictionPage';
-import { PREDICTION_MARKETS } from '../contracts/prediction/config';
 
 const Container = styled.div`
   height: 100vh;
