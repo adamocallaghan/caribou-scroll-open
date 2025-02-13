@@ -5,6 +5,7 @@ import { MintPage } from '../pages/MintPage';
 import { EarnPage } from '../pages/EarnPage';
 import { DashboardPage } from '../pages/DashboardPage';
 import { HorizontalPages } from './HorizontalPages';
+import { PredictionPage } from '../pages/PredictionPage';
 
 const Container = styled.div`
   height: 100vh;
@@ -38,6 +39,7 @@ interface PageContainerProps {
 export const PageContainer = ({ sendHash }: PageContainerProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [currentPage, setCurrentPage] = useState(0);
+  const [currentSubPage, setCurrentSubPage] = useState(0);
 
   useEffect(() => {
     const container = containerRef.current;
@@ -48,6 +50,7 @@ export const PageContainer = ({ sendHash }: PageContainerProps) => {
       const currentScroll = container.scrollTop;
       const newPage = Math.round(currentScroll / pageHeight);
       setCurrentPage(newPage);
+      setCurrentSubPage(0);
     };
 
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -72,6 +75,11 @@ export const PageContainer = ({ sendHash }: PageContainerProps) => {
       window.removeEventListener('keydown', handleKeyDown);
     };
   }, [currentPage]);
+
+  const handleSubPageChange = (index: number) => {
+    console.log('SubPage changed to:', index);
+    setCurrentSubPage(index);
+  };
 
   const renderPageContent = (pageName: string, pageIndex: number) => {
     switch (pageName) {
@@ -107,6 +115,23 @@ export const PageContainer = ({ sendHash }: PageContainerProps) => {
             sendHash={sendHash}
           >
             <EarnPage />
+          </HorizontalPages>
+        );
+      case 'Predict':
+        return (
+          <HorizontalPages
+            subPages={PAGES[pageIndex].subPages}
+            bgColor={PAGES[pageIndex].color}
+            textColor={PAGES[pageIndex].textColor}
+            pageType="Predict"
+            sendHash={sendHash}
+            onSubPageChange={handleSubPageChange}
+          >
+            {currentSubPage === 0 ? (
+              <PredictionPage sendHash={sendHash} />
+            ) : (
+              <PredictionPage sendHash={sendHash} pageIndex={currentSubPage - 1} />
+            )}
           </HorizontalPages>
         );
       default:
