@@ -6,6 +6,9 @@ import { EarnPage } from '../pages/EarnPage';
 import { DashboardPage } from '../pages/DashboardPage';
 import { HorizontalPages } from './HorizontalPages';
 import { PredictionPage } from '../pages/PredictionPage';
+import { SwapPage } from '../pages/SwapPage';
+import { LaunchPage } from '../pages/LaunchPage';
+import { SocialPage } from '../pages/SocialPage';
 
 const Container = styled.div`
   height: 100vh;
@@ -136,6 +139,42 @@ export const PageContainer = ({ sendHash }: PageContainerProps) => {
             currentSubPage={currentSubPage}
           >
             <PredictionPage sendHash={sendHash} />
+          </HorizontalPages>
+        );
+      case 'Swap':
+        return (
+          <HorizontalPages
+            subPages={PAGES[pageIndex].subPages}
+            bgColor={PAGES[pageIndex].color}
+            textColor={PAGES[pageIndex].textColor}
+            pageType="Swap"
+            sendHash={sendHash}
+          >
+            <SwapPage />
+          </HorizontalPages>
+        );
+      case 'Launch':
+        return (
+          <HorizontalPages
+            subPages={PAGES[pageIndex].subPages}
+            bgColor={PAGES[pageIndex].color}
+            textColor={PAGES[pageIndex].textColor}
+            pageType="Launch"
+            sendHash={sendHash}
+          >
+            <LaunchPage />
+          </HorizontalPages>
+        );
+      case 'Social':
+        return (
+          <HorizontalPages
+            subPages={PAGES[pageIndex].subPages}
+            bgColor={PAGES[pageIndex].color}
+            textColor={PAGES[pageIndex].textColor}
+            pageType="Social"
+            sendHash={sendHash}
+          >
+            <SocialPage />
           </HorizontalPages>
         );
       default:

@@ -10,9 +10,22 @@ const Container = styled.div`
   justify-content: center;
 `;
 
+const MainContent = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+`;
+
 const MainPageContent = styled.div`
   font-size: 4rem;
   text-align: center;
+`;
+
+const PredictImage = styled.img`
+  width: 200px;
+  height: auto;
+  margin-top: 1rem;
 `;
 
 interface PredictionPageProps {
@@ -29,9 +42,12 @@ export const PredictionPage = ({ sendHash = () => {}, pageIndex }: PredictionPag
     console.log('Rendering main Prediction Markets page');
     return (
       <Container>
-        <MainPageContent>
-          Predict
-        </MainPageContent>
+        <MainContent>
+          <MainPageContent>
+            Predict
+          </MainPageContent>
+          <PredictImage src="/predict.svg" alt="Predict" />
+        </MainContent>
       </Container>
     );
   }

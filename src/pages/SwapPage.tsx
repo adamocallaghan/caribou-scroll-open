@@ -20,20 +20,20 @@ const MainPageContent = styled.div`
   text-align: center;
 `;
 
-const MintImage = styled.img`
+const SwapImage = styled.img`
   width: 200px;
   height: auto;
   margin-top: 1rem;
 `;
 
-export const MintPage = () => {
+export const SwapPage = () => {
   return (
     <Container>
       <MainContent>
         <MainPageContent>
-          Mint
+          Swap
         </MainPageContent>
-        <MintImage src="/nft.svg" alt="Mint" />
+        <SwapImage src="/swap.svg" alt="Swap" />
       </MainContent>
     </Container>
   );

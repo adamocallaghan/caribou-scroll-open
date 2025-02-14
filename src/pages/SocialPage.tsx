@@ -20,20 +20,20 @@ const MainPageContent = styled.div`
   text-align: center;
 `;
 
-const MintImage = styled.img`
+const SocialImage = styled.img`
   width: 200px;
   height: auto;
   margin-top: 1rem;
 `;
 
-export const MintPage = () => {
+export const SocialPage = () => {
   return (
     <Container>
       <MainContent>
         <MainPageContent>
-          Mint
+          Social
         </MainPageContent>
-        <MintImage src="/nft.svg" alt="Mint" />
+        <SocialImage src="/social.svg" alt="Social" />
       </MainContent>
     </Container>
   );
