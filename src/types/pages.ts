@@ -24,10 +24,12 @@ export const PAGES: PageConfig[] = [
     name: 'Swap',
     color: '#96DCED',
     textColor: '#3D3D3D',
-    subPages: Array.from({ length: 4 }, (_, i) => ({ 
-      name: `Swap ${i + 1}`, 
-      index: i 
-    }))
+    subPages: [
+      { name: 'Swap', index: 0 },
+      { name: 'Swap Contract', index: 1 },
+      { name: 'Swap 2', index: 2 },
+      { name: 'Swap 3', index: 3 }
+    ]
   },
   {
     name: 'Predict',
