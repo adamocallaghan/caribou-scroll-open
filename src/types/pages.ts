@@ -15,13 +15,19 @@ export const PAGES: PageConfig[] = [
     name: 'Dashboard',
     color: '#FFA6A6',
     textColor: '#222222',
-    subPages: []
+    subPages: Array.from({ length: 4 }, (_, i) => ({ 
+      name: `Dashboard ${i + 1}`, 
+      index: i 
+    }))
   },
   {
     name: 'Swap',
     color: '#96DCED',
     textColor: '#3D3D3D',
-    subPages: []
+    subPages: Array.from({ length: 4 }, (_, i) => ({ 
+      name: `Swap ${i + 1}`, 
+      index: i 
+    }))
   },
   {
     name: 'Predict',
@@ -54,12 +60,18 @@ export const PAGES: PageConfig[] = [
     name: 'Launch',
     color: '#537b83',
     textColor: '#e5f0f0',
-    subPages: []
+    subPages: Array.from({ length: 4 }, (_, i) => ({ 
+      name: `Launch ${i + 1}`, 
+      index: i 
+    }))
   },
   {
     name: 'Social',
     color: '#cad9e5',
     textColor: '#222222',
-    subPages: []
-  },
+    subPages: Array.from({ length: 4 }, (_, i) => ({ 
+      name: `Social ${i + 1}`, 
+      index: i 
+    }))
+  }
 ]; 
