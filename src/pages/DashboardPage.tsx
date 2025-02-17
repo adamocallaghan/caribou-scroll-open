@@ -23,7 +23,7 @@ export const DashboardPage = () => {
   return (
     <PageContent>
       <LogoContainer>
-        <Logo src="caribou_logo_name.jpg" alt="Caribou Logo" />
+        <Logo src="caribou-logo-text-2.png" alt="Caribou Logo" />
       </LogoContainer>
     </PageContent>
   );

@@ -5,19 +5,98 @@ import { useEffect, useState } from 'react';
 import toast, { Toaster } from 'react-hot-toast';
 import { AmountSlider } from './AmountSlider';
 
+const CardWrapper = styled.div`
+  perspective: 1000px;
+  width: 100%;
+  height: 100dvh;
+  max-height: calc(100dvh - env(safe-area-inset-bottom));
+  overflow: auto;
+`;
+
 const CardContent = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 15px;
-  padding: 15px;
-  max-width: 100%;
-  box-sizing: border-box;
+  justify-content: center;
+  gap: 30px;
+  padding: 20px;
+  padding-top: 60px;
+  padding-bottom: calc(80px + env(safe-area-inset-bottom));
+  text-align: center;
+  background-color: #f3c86c;
+  color: #222222;
+
+  @media (max-width: 768px) {
+    padding-bottom: calc(120px + env(safe-area-inset-bottom));
+  }
 `;
 
-const CardTitle = styled.h2`
+const Title = styled.h2`
+  font-size: 1.8rem;
   margin: 0;
-  font-size: 1.5rem;
+  color: #222222;
+`;
+
+const StakeButton = styled.button`
+  padding: 15px 40px;
+  border: none;
+  border-radius: 8px;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background-color: #222222;
+  color: #f3c86c;
+
+  &:hover {
+    transform: translateY(-2px);
+    opacity: 0.9;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+  }
+`;
+
+const SliderContainer = styled.div`
+  width: 80%;
+  max-width: 300px;
+`;
+
+const Slider = styled.input`
+  width: 100%;
+  -webkit-appearance: none;
+  height: 10px;
+  border-radius: 5px;
+  background: #222222;
+  outline: none;
+
+  &::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #f3c86c;
+    border: 2px solid #222222;
+    cursor: pointer;
+  }
+
+  &::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #f3c86c;
+    border: 2px solid #222222;
+    cursor: pointer;
+  }
+`;
+
+const StakeAmount = styled.div`
+  font-size: 1.2rem;
+  color: #222222;
+  margin-top: 10px;
 `;
 
 const ProtocolLogo = styled.img`
@@ -45,7 +124,7 @@ const MarketName = styled.div`
 
 const APY = styled.div`
   font-size: 1.2rem;
-  color: #0AEB9A;
+  color: #222222;
   &:before {
     content: '•';
     margin-right: 5px;
@@ -96,8 +175,8 @@ const Button = styled.button`
   padding: 10px 20px;
   border: none;
   border-radius: 4px;
-  background-color: #0AEB9A;
-  color: #353f54;
+  background-color: #222222;
+  color: #f3c86c;
   font-size: 1rem;
   cursor: pointer;
   transition: all 0.2s ease;
@@ -240,14 +319,6 @@ interface EarnContractCardProps {
 }
 
 // Add flip-related styled components
-const CardWrapper = styled.div`
-  perspective: 1000px;
-  width: 100%;
-  height: 100dvh;
-  max-height: calc(100dvh - env(safe-area-inset-bottom));  // Subtract the safe area
-  overflow: auto;
-`;
-
 const FlipContainer = styled.div<{ isFlipped: boolean }>`
   position: relative;
   width: 100%;
@@ -322,7 +393,7 @@ const FlipButton = styled.button`
     width: 100%;
     height: 100%;
     object-fit: contain;
-    filter: invert(92%) sepia(14%) saturate(1241%) hue-rotate(84deg) brightness(97%) contrast(105%);
+    filter: invert(13%) sepia(0%) saturate(11%) hue-rotate(213deg) brightness(95%) contrast(86%);
   }
 `;
 
@@ -330,7 +401,7 @@ export const EarnContractCard = ({ sendHash, contractIndex }: EarnContractCardPr
   if (contractIndex >= CONTRACTS.length) {
     return (
       <CardContent>
-        <CardTitle>No Contract Available</CardTitle>
+        <Title>No Contract Available</Title>
       </CardContent>
     );
   }

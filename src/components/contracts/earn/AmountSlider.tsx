@@ -19,7 +19,7 @@ const SliderInput = styled.input`
   -webkit-appearance: none;
   height: 4px;
   border-radius: 2px;
-  background: #0AEB9A;
+  background: #222222;
   outline: none;
   margin: 8px 0;
 
@@ -29,7 +29,7 @@ const SliderInput = styled.input`
     width: 16px;
     height: 16px;
     border-radius: 50%;
-    background: #0AEB9A;
+    background: #222222;
     cursor: pointer;
     transition: all 0.2s ease;
 
@@ -42,15 +42,15 @@ const SliderInput = styled.input`
 const Increment = styled.button<{ active: boolean }>`
   padding: 4px 8px;
   border-radius: 4px;
-  border: 1px solid ${props => props.active ? '#0AEB9A' : '#353f54'};
-  background: ${props => props.active ? '#0AEB9A22' : 'transparent'};
-  color: ${props => props.active ? '#0AEB9A' : '#fff'};
+  border: 1px solid ${props => props.active ? '#222222' : '#f3c86c'};
+  background: ${props => props.active ? '#22222222' : 'transparent'};
+  color: ${props => props.active ? '#222222' : '#222222'};
   cursor: pointer;
   font-size: 0.8rem;
   transition: all 0.2s ease;
 
   &:hover {
-    border-color: #0AEB9A;
+    border-color: #222222;
   }
 `;
 

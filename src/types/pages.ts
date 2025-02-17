@@ -13,8 +13,8 @@ export interface PageConfig {
 export const PAGES: PageConfig[] = [
   {
     name: 'Dashboard',
-    color: '#FFA6A6',
-    textColor: '#222222',
+    color: '#48466d',
+    textColor: '#f7579c',
     subPages: Array.from({ length: 4 }, (_, i) => ({ 
       name: `Dashboard ${i + 1}`, 
       index: i 
@@ -40,8 +40,8 @@ export const PAGES: PageConfig[] = [
   },
   {
     name: 'Earn',
-    color: '#f3c86c', // #353f54
-    textColor: '#222222', // #0AEB9A
+    color: '#f3c86c',
+    textColor: '#222222',
     subPages: Array.from({ length: 3 }, (_, i) => ({ 
       name: `Earn ${i + 1}`, 
       index: i 
@@ -49,8 +49,8 @@ export const PAGES: PageConfig[] = [
   },
   {
     name: 'Mint',
-    color: '#FFA6A6', // #dee6ff
-    textColor: '#222222', // #143199
+    color: '#FFA6A6',
+    textColor: '#222222',
     subPages: Array.from({ length: 3 }, (_, i) => ({ 
       name: `NFT ${i + 1}`, 
       index: i 
