@@ -13,20 +13,20 @@ export interface PageConfig {
 export const PAGES: PageConfig[] = [
   {
     name: 'Dashboard',
-    color: '#6356E4',
-    textColor: '#dee6ff',
-    subPages: Array.from({ length: 4 }, (_, i) => ({ name: `Dashboard ${i + 1}`, index: i }))
+    color: '#FFA6A6',
+    textColor: '#222222',
+    subPages: []
   },
   {
     name: 'Swap',
     color: '#96DCED',
     textColor: '#3D3D3D',
-    subPages: Array.from({ length: 4 }, (_, i) => ({ name: `Launch ${i + 1}`, index: i }))
+    subPages: []
   },
   {
     name: 'Predict',
-    color: '#4D1A28',
-    textColor: '#EBADCB',
+    color: '#006b71',
+    textColor: '#e5f0f0',
     subPages: Array.from({ length: 3 }, (_, i) => ({
       name: `Prediction ${i + 1}`,
       index: i
@@ -34,8 +34,8 @@ export const PAGES: PageConfig[] = [
   },
   {
     name: 'Earn',
-    color: '#353f54',
-    textColor: '#0AEB9A',
+    color: '#f3c86c', // #353f54
+    textColor: '#222222', // #0AEB9A
     subPages: Array.from({ length: 3 }, (_, i) => ({ 
       name: `Earn ${i + 1}`, 
       index: i 
@@ -43,8 +43,8 @@ export const PAGES: PageConfig[] = [
   },
   {
     name: 'Mint',
-    color: '#143199',
-    textColor: '#dee6ff',
+    color: '#FFA6A6', // #dee6ff
+    textColor: '#222222', // #143199
     subPages: Array.from({ length: 3 }, (_, i) => ({ 
       name: `NFT ${i + 1}`, 
       index: i 
@@ -52,14 +52,14 @@ export const PAGES: PageConfig[] = [
   },
   {
     name: 'Launch',
-    color: '#222222',
-    textColor: '#FF4445',
-    subPages: Array.from({ length: 4 }, (_, i) => ({ name: `Mint ${i + 1}`, index: i }))
+    color: '#537b83',
+    textColor: '#e5f0f0',
+    subPages: []
   },
   {
     name: 'Social',
     color: '#cad9e5',
     textColor: '#222222',
-    subPages: Array.from({ length: 4 }, (_, i) => ({ name: `Earn ${i + 1}`, index: i }))
+    subPages: []
   },
 ]; 
