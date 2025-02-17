@@ -37,68 +37,6 @@ const Title = styled.h2`
   color: #222222;
 `;
 
-const StakeButton = styled.button`
-  padding: 15px 40px;
-  border: none;
-  border-radius: 8px;
-  font-size: 1.2rem;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  background-color: #222222;
-  color: #f3c86c;
-
-  &:hover {
-    transform: translateY(-2px);
-    opacity: 0.9;
-  }
-
-  &:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-    transform: none;
-  }
-`;
-
-const SliderContainer = styled.div`
-  width: 80%;
-  max-width: 300px;
-`;
-
-const Slider = styled.input`
-  width: 100%;
-  -webkit-appearance: none;
-  height: 10px;
-  border-radius: 5px;
-  background: #222222;
-  outline: none;
-
-  &::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    appearance: none;
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    background: #f3c86c;
-    border: 2px solid #222222;
-    cursor: pointer;
-  }
-
-  &::-moz-range-thumb {
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    background: #f3c86c;
-    border: 2px solid #222222;
-    cursor: pointer;
-  }
-`;
-
-const StakeAmount = styled.div`
-  font-size: 1.2rem;
-  color: #222222;
-  margin-top: 10px;
-`;
-
 const ProtocolLogo = styled.img`
   width: 80px;
   height: 80px;
