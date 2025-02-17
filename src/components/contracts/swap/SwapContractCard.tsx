@@ -116,7 +116,6 @@ export const SwapContractCard = ({ sendHash }: { sendHash: (hash: string) => voi
   const [outputToken, setOutputToken] = useState('');
   const [amount, setAmount] = useState('0');
   const [isSwapping, setIsSwapping] = useState(false);
-  const [balance, setBalance] = useState('0');
 
   const { address } = useAppKitAccount();
   const { chainId } = useAppKitNetworkCore();
@@ -210,7 +209,7 @@ export const SwapContractCard = ({ sendHash }: { sendHash: (hash: string) => voi
 
         <SliderContainer>
           <AmountSlider
-            maxAmount={balance}
+            maxAmount="100"
             onChange={setAmount}
           />
         </SliderContainer>

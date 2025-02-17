@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import { SwapContractCard } from '../components/contracts/swap/SwapContractCard';
 
 const Container = styled.div`
   width: 100%;
@@ -26,11 +25,6 @@ const SwapImage = styled.img`
   height: auto;
   margin-top: 1rem;
 `;
-
-interface SwapPageProps {
-  sendHash?: (hash: string) => void;
-  pageIndex?: number;
-}
 
 export const SwapPage = () => {
   return (
