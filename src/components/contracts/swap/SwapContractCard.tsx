@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useAppKitAccount, useAppKitNetworkCore, useAppKitProvider, type Provider } from '@reown/appkit/react';
 import { BrowserProvider, JsonRpcSigner, Contract, MaxUint256 } from 'ethers';
 import toast, { Toaster } from 'react-hot-toast';
@@ -116,13 +116,35 @@ export const SwapContractCard = ({ sendHash }: { sendHash: (hash: string) => voi
   const [outputToken, setOutputToken] = useState('');
   const [amount, setAmount] = useState('0');
   const [isSwapping, setIsSwapping] = useState(false);
+  const [tokenBalance, setTokenBalance] = useState('0');
 
   const { address } = useAppKitAccount();
   const { chainId } = useAppKitNetworkCore();
   const { walletProvider } = useAppKitProvider<Provider>('eip155');
 
+  useEffect(() => {
+    const fetchBalance = async () => {
+      if (!walletProvider || !address || !inputToken) return;
+
+      try {
+        const provider = new BrowserProvider(walletProvider, chainId);
+        const tokenContract = new Contract(inputToken, TOKEN_ABI, provider);
+        const rawBalance = await tokenContract.balanceOf(address);
+        const selectedToken = TOKENS.find(t => t.address === inputToken);
+        const formattedBalance = (Number(rawBalance) / 10 ** (selectedToken?.decimals || 18)).toString();
+        setTokenBalance(formattedBalance);
+      } catch (error) {
+        console.error('Failed to fetch balance:', error);
+        setTokenBalance('0');
+      }
+    };
+
+    fetchBalance();
+  }, [inputToken, address, walletProvider, chainId]);
+
   const handleInputTokenChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setInputToken(e.target.value);
+    setAmount('0');
   };
 
   const handleOutputTokenChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -209,7 +231,7 @@ export const SwapContractCard = ({ sendHash }: { sendHash: (hash: string) => voi
 
         <SliderContainer>
           <AmountSlider
-            maxAmount="100"
+            maxAmount={tokenBalance}
             onChange={setAmount}
           />
         </SliderContainer>
