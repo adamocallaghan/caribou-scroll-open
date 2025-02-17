@@ -40,6 +40,12 @@ const TokenSelect = styled.select`
   font-size: 1rem;
   width: 200px;
   margin: 10px 0;
+  cursor: pointer;
+
+  &:focus {
+    outline: none;
+    border-color: #3D3D3D;
+  }
 `;
 
 const SwapButton = styled.button`
@@ -116,6 +122,14 @@ export const SwapContractCard = ({ sendHash }: { sendHash: (hash: string) => voi
   const { chainId } = useAppKitNetworkCore();
   const { walletProvider } = useAppKitProvider<Provider>('eip155');
 
+  const handleInputTokenChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setInputToken(e.target.value);
+  };
+
+  const handleOutputTokenChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setOutputToken(e.target.value);
+  };
+
   const handleSwap = async () => {
     if (!walletProvider || !address || !inputToken || !outputToken) return;
     if (parseFloat(amount) === 0) return;
@@ -172,7 +186,7 @@ export const SwapContractCard = ({ sendHash }: { sendHash: (hash: string) => voi
         
         <TokenSelect 
           value={inputToken} 
-          onChange={(e) => setInputToken(e.target.value)}
+          onChange={handleInputTokenChange}
         >
           <option value="">Select input token</option>
           {TOKENS.map(token => (
@@ -184,7 +198,7 @@ export const SwapContractCard = ({ sendHash }: { sendHash: (hash: string) => voi
 
         <TokenSelect 
           value={outputToken} 
-          onChange={(e) => setOutputToken(e.target.value)}
+          onChange={handleOutputTokenChange}
         >
           <option value="">Select output token</option>
           {TOKENS.map(token => (
