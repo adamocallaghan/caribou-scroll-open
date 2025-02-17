@@ -5,7 +5,6 @@ import { MintContractCard } from './contracts/mint/MintContractCard';
 import { EarnContractCard } from './contracts/earn/EarnContractCard';
 import { PredictionContractCard } from './contracts/prediction/PredictionContractCard';
 import { SwapContractCard } from './contracts/swap/SwapContractCard';
-import React from 'react';
 
 const Container = styled.div`
   width: 100%;
@@ -96,7 +95,10 @@ export const HorizontalPages = ({
       return <PredictionContractCard sendHash={sendHash} contractIndex={subPage.index} />;
     }
     if (pageType === 'Swap' && sendHash) {
-      return <SwapContractCard sendHash={sendHash} />;
+      if (subPage.index === 0) {
+        return <SwapContractCard sendHash={sendHash} />;
+      }
+      return `Swap ${subPage.index + 1}`;
     }
     return subPage.name;
   };
