@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { AmountSlider } from './AmountSlider';
 import { ToastPortal } from '../../Toast';
+import { EarnCardV2 } from './EarnCardV2';
 
 const CardWrapper = styled.div`
   perspective: 1000px;
@@ -555,27 +556,13 @@ export const EarnContractCard = ({ sendHash, contractIndex }: EarnContractCardPr
       <CardWrapper>
         <FlipContainer isFlipped={isFlipped}>
           <CardFront>
-            {contract.logoUrl && (
-              <ProtocolLogo src={contract.logoUrl} alt={contract.protocol} />
-            )}
-            <ProtocolName>{contract.protocol}</ProtocolName>
-            
-            <MarketInfo>
-              <MarketName>{contract.name}</MarketName>
-              <APY>{contract.apy}</APY>
-            </MarketInfo>
-
-            <BalanceContainer>
-              <Balance>
-                <div className="label">Available</div>
-                <div className="amount">${walletUsdcBalance} {contract.asset}</div>
-              </Balance>
-              <Balance>
-                <div className="label">Supplied</div>
-                <div className="amount">${usdcBalance} {contract.asset}</div>
-              </Balance>
-            </BalanceContainer>
-
+            <EarnCardV2
+              poolName={contract.name}
+              apr="4.5"
+              available={walletUsdcBalance}
+              supplied={usdcBalance}
+              symbol={contract.asset}
+            />
             <FlipButton onClick={() => setIsFlipped(!isFlipped)}>
               <img src="/flip-over.svg" alt="Flip card" />
             </FlipButton>
