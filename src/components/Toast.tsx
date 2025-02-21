@@ -9,7 +9,8 @@ export const ToastPortal = () => {
         position: 'fixed',
         zIndex: 9999,
         transform: 'none',
-        perspective: 'none'
+        perspective: 'none',
+        bottom: 'calc(env(safe-area-inset-bottom) + 100px)'
       }}
       toastOptions={{
         duration: 5000,
