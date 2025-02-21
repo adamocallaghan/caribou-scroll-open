@@ -6,6 +6,7 @@ import toast from 'react-hot-toast';
 import { AmountSlider } from './AmountSlider';
 import { ToastPortal } from '../../Toast';
 import { EarnCardV2 } from './EarnCardV2';
+import { EarnCardBackV2 } from './EarnCardBackV2';
 
 const CardWrapper = styled.div`
   perspective: 1000px;
@@ -513,46 +514,17 @@ export const EarnContractCard = ({ sendHash, contractIndex }: EarnContractCardPr
           </CardFront>
 
           <CardBack>
-            <ButtonContainer>
-              <SliderSection>
-                <AmountSlider
-                  maxAmount={walletUsdcBalance}
-                  onChange={setDepositAmount}
-                />
-              </SliderSection>
-              <ActionRow>
-                <Button 
-                  onClick={handleDeposit}
-                  disabled={isDepositing || parseFloat(depositAmount) === 0}
-                >
-                  {isDepositing ? 'Depositing...' : 'Deposit'}
-                </Button>
-                <AmountText>
-                  ${parseFloat(depositAmount).toFixed(2)} {contract.asset}
-                </AmountText>
-              </ActionRow>
-
-              <Separator />
-
-              <SliderSection>
-                <AmountSlider
-                  maxAmount={usdcBalance}
-                  onChange={setWithdrawAmount}
-                />
-              </SliderSection>
-              <ActionRow>
-                <Button 
-                  onClick={handleWithdraw}
-                  disabled={isWithdrawing || parseFloat(withdrawAmount) === 0}
-                >
-                  {isWithdrawing ? 'Withdrawing...' : 'Withdraw'}
-                </Button>
-                <AmountText>
-                  ${parseFloat(withdrawAmount).toFixed(2)} {contract.asset}
-                </AmountText>
-              </ActionRow>
-            </ButtonContainer>
-
+            <EarnCardBackV2
+              poolName={contract.name}
+              symbol={contract.asset}
+              walletBalance={walletUsdcBalance}
+              depositedBalance={usdcBalance}
+              apy={contract.apy}
+              onDeposit={handleDeposit}
+              onWithdraw={handleWithdraw}
+              isDepositing={isDepositing}
+              isWithdrawing={isWithdrawing}
+            />
             <FlipButton onClick={() => setIsFlipped(!isFlipped)}>
               <img src="/flip-over.svg" alt="Flip card" />
             </FlipButton>
