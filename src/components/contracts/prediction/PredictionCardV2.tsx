@@ -131,17 +131,6 @@ const Volume = styled.span`
   color: #666666;
 `;
 
-const IconBadge = styled.div`
-  background: rgba(229, 240, 240, 0.1);
-  padding: 0.5rem;
-  border-radius: 9999px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 32px;
-  height: 32px;
-`;
-
 const DecorativeCircle = styled.div<{ position: 'top' | 'bottom' }>`
   position: absolute;
   border-radius: 9999px;
