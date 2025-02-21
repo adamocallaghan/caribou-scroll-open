@@ -87,19 +87,6 @@ const CardTitle = styled.h2`
   font-size: 1.5rem;
 `;
 
-const NFTImage = styled.img`
-  width: 300px;
-  height: 300px;
-  object-fit: cover;
-  border-radius: 8px;
-`;
-
-const ButtonContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-`;
-
 const toastStyles = {
   loading: {
     style: {
@@ -161,28 +148,6 @@ interface MintContractCardProps {
   sendHash: (hash: string) => void;
   contractIndex: number;
 }
-
-const Button = styled.button`
-  padding: 10px 20px;
-  border: none;
-  border-radius: 4px;
-  background-color: #dee6ff;  // Using the text color for background
-  color: #143199;            // Using the card background color for text
-  font-size: 1rem;
-  cursor: pointer;
-  transition: all 0.2s ease;
-
-  &:hover {
-    opacity: 0.9;
-    transform: translateY(-1px);
-  }
-
-  &:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-    transform: none;
-  }
-`;
 
 export const MintContractCard = ({ sendHash, contractIndex }: MintContractCardProps) => {
   const [isFlipped, setIsFlipped] = useState(false);
