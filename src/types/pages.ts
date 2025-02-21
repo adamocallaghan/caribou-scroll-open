@@ -25,10 +25,10 @@ export const PAGES: PageConfig[] = [
     color: '#96DCED',
     textColor: '#3D3D3D',
     subPages: [
-      { name: 'Swap', index: 0 },
-      { name: 'Swap Contract', index: 1 },
-      { name: 'Swap 2', index: 2 },
-      { name: 'Swap 3', index: 3 }
+      { name: 'Swap 1', index: 0 },
+      { name: 'Swap 2', index: 1 },
+      { name: 'Swap 3', index: 2 },
+      { name: 'Swap 4', index: 3 }
     ]
   },
   {
