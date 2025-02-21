@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { useState } from 'react';
+import { ContractConfig } from './MintContractCard';  // You might need to export this type
 
 // SVG Icons as components
 const LoaderIcon = () => (
@@ -168,9 +169,10 @@ const MintButton = styled.button<{ $isMinting?: boolean; $isSuccess?: boolean }>
 
 interface MintCardV2Props {
   onMint: () => Promise<void>;
+  contract: ContractConfig;  // Add contract prop
 }
 
-export const MintCardV2 = ({ onMint }: MintCardV2Props) => {
+export const MintCardV2 = ({ onMint, contract }: MintCardV2Props) => {
   const [isMinting, setIsMinting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
 
@@ -190,7 +192,7 @@ export const MintCardV2 = ({ onMint }: MintCardV2Props) => {
     <Card>
       <CardHeader>
         <HeaderTop>
-          <Title>Caribou NFT</Title>
+          <Title>{contract.name}</Title>
           <PriceBadge>1 ETH</PriceBadge>
         </HeaderTop>
         <BadgeContainer>
@@ -204,8 +206,8 @@ export const MintCardV2 = ({ onMint }: MintCardV2Props) => {
       
       <ImageContainer>
         <img
-          src="https://ipfs.io/ipfs/QmQicuf49WKck1YxranWF4UPMdungQYDvrZPsnG6TY8WTM/caribou_nft.jpg"
-          alt="Colorful Caribou NFT artwork"
+          src={contract.imageUrl}
+          alt={`${contract.name} artwork`}
         />
       </ImageContainer>
       

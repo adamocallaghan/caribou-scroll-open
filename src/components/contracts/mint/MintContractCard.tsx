@@ -121,10 +121,11 @@ const toastStyles = {
   },
 };
 
-interface ContractConfig {
+// Export the ContractConfig type
+export interface ContractConfig {
+  name: string;
   address: string;
   abi: string[];
-  name: string;
   imageUrl?: string;
 }
 
@@ -248,7 +249,10 @@ export const MintContractCard = ({ sendHash, contractIndex }: MintContractCardPr
       <CardWrapper>
         <FlipContainer isFlipped={isFlipped}>
           <CardFront>
-            <MintCardV2 onMint={handleMint} />
+            <MintCardV2 
+              onMint={handleMint} 
+              contract={contract}  // Pass the contract data
+            />
             <FlipButton onClick={() => setIsFlipped(!isFlipped)}>
               <img src="/flip-over.svg" alt="Flip card" />
             </FlipButton>
