@@ -39,63 +39,6 @@ const Title = styled.h2`
   color: #222222;
 `;
 
-const ProtocolLogo = styled.img`
-  width: 80px;
-  height: 80px;
-  object-fit: contain;
-`;
-
-const ProtocolName = styled.div`
-  font-size: 1.4rem;
-  margin: 0;
-`;
-
-const MarketInfo = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin: 0;
-  font-size: 1.1rem;
-`;
-
-const MarketName = styled.div`
-  font-size: 1.2rem;
-`;
-
-const APY = styled.div`
-  font-size: 1.2rem;
-  color: #222222;
-  &:before {
-    content: '•';
-    margin-right: 5px;
-  }
-`;
-
-const BalanceContainer = styled.div`
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-  max-width: 300px;
-  margin: 10px 0;
-  gap: 20px;
-`;
-
-const Balance = styled.div`
-  text-align: center;
-  flex: 1;
-  
-  .label {
-    font-size: 1rem;
-    opacity: 0.8;
-    margin-bottom: 3px;
-  }
-  
-  .amount {
-    font-size: 1.2rem;
-    white-space: nowrap;
-  }
-`;
-
 const ButtonContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -558,10 +501,11 @@ export const EarnContractCard = ({ sendHash, contractIndex }: EarnContractCardPr
           <CardFront>
             <EarnCardV2
               poolName={contract.name}
-              apr="4.5"
+              apr={contract.apy.replace('%', '')}
               available={walletUsdcBalance}
               supplied={usdcBalance}
               symbol={contract.asset}
+              protocol={contract.protocol}
             />
             <FlipButton onClick={() => setIsFlipped(!isFlipped)}>
               <img src="/flip-over.svg" alt="Flip card" />

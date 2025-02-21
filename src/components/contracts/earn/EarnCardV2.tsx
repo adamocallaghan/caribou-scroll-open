@@ -131,9 +131,10 @@ interface EarnCardV2Props {
   available: string;
   supplied: string;
   symbol: string;
+  protocol: string;
 }
 
-export const EarnCardV2 = ({ poolName, apr, available, supplied, symbol }: EarnCardV2Props) => {
+export const EarnCardV2 = ({ poolName, apr, available, supplied, symbol, protocol }: EarnCardV2Props) => {
   return (
     <Card>
       <GradientBackground>
@@ -142,7 +143,7 @@ export const EarnCardV2 = ({ poolName, apr, available, supplied, symbol }: EarnC
             <IconBadge>
               <CoinIcon />
             </IconBadge>
-            <PoolName>RHO Markets</PoolName>
+            <PoolName>{protocol}</PoolName>
           </IconContainer>
           <Title>
             {poolName}
