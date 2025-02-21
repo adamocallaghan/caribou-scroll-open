@@ -11,10 +11,23 @@ const Card = styled.div`
   max-width: 24rem;
   margin: 0 auto;
   border-radius: 0.5rem;
+  overflow: hidden;
+  position: relative;
+  padding: 0 1.5rem;
+`;
+
+const GradientBackground = styled.div`
+  background: linear-gradient(135deg, #006b71 0%, #b8e3e5 50%, #e5f0f0 100%);
+  position: relative;
+  padding: 1.5rem;
+  color: #222222;
+  width: 100%;
+  box-sizing: border-box;
+  border-radius: 0.5rem;
 `;
 
 const CardContent = styled.div`
-  padding: 1rem 1.5rem;
+  padding: 0;
 `;
 
 const Header = styled.div`
@@ -35,7 +48,7 @@ const ProfileImage = styled.div`
   width: 2.5rem;
   height: 2.5rem;
   border-radius: 50%;
-  background: rgba(243, 244, 246, 0.3);
+  background: rgba(0, 107, 113, 0.1);
   flex-shrink: 0;
 `;
 
@@ -44,7 +57,7 @@ const Question = styled.h3`
   font-weight: 500;
   line-height: 1.25;
   margin: 0;
-  color: inherit;
+  color: #222222;
 `;
 
 const GaugeContainer = styled.div`
@@ -62,8 +75,7 @@ const Gauge = styled.div`
 
 const GaugeLabel = styled.span`
   font-size: 0.75rem;
-  color: inherit;
-  opacity: 0.8;
+  color: #666666;
   margin-top: 0.25rem;
 `;
 
@@ -84,19 +96,19 @@ const Button = styled.button<{ variant: 'yes' | 'no' }>`
   transition: all 0.2s;
 
   ${props => props.variant === 'yes' ? `
-    background: rgba(34, 197, 94, 0.15);
+    background: rgba(34, 197, 94, 0.05);
     border-color: rgba(34, 197, 94, 0.3);
-    color: #e5f0f0;
+    color: #15803d;
     &:hover {
-      background: rgba(34, 197, 94, 0.2);
+      background: rgba(34, 197, 94, 0.1);
       border-color: rgba(34, 197, 94, 0.4);
     }
   ` : `
-    background: rgba(239, 68, 68, 0.15);
+    background: rgba(239, 68, 68, 0.05);
     border-color: rgba(239, 68, 68, 0.3);
-    color: #e5f0f0;
+    color: #b91c1c;
     &:hover {
-      background: rgba(239, 68, 68, 0.2);
+      background: rgba(239, 68, 68, 0.1);
       border-color: rgba(239, 68, 68, 0.4);
     }
   `}
@@ -116,8 +128,36 @@ const Footer = styled.div`
 
 const Volume = styled.span`
   font-size: 0.875rem;
-  color: inherit;
-  opacity: 0.8;
+  color: #666666;
+`;
+
+const IconBadge = styled.div`
+  background: rgba(229, 240, 240, 0.1);
+  padding: 0.5rem;
+  border-radius: 9999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+`;
+
+const DecorativeCircle = styled.div<{ position: 'top' | 'bottom' }>`
+  position: absolute;
+  border-radius: 9999px;
+  background: rgba(229, 240, 240, 0.05);
+  
+  ${props => props.position === 'top' ? `
+    width: 4rem;
+    height: 4rem;
+    left: -1rem;
+    top: -1rem;
+  ` : `
+    width: 6rem;
+    height: 6rem;
+    right: -2rem;
+    bottom: -2rem;
+  `}
 `;
 
 interface PredictionCardV2Props {
@@ -208,64 +248,72 @@ export const PredictionCardV2 = ({ marketAddress, description, sendHash }: Predi
     <>
       <ToastPortal />
       <Card>
-        <CardContent>
-          <Header>
-            <QuestionSection>
-              <ProfileImage />
-              <Question>{description}</Question>
-            </QuestionSection>
-            <GaugeContainer>
-              <Gauge>
-                <svg className="w-full h-full transform -rotate-90">
-                  <circle cx="28" cy="28" r="24" stroke="#e5e7eb" strokeWidth="4" fill="none" />
-                  <circle
-                    cx="28"
-                    cy="28"
-                    r="24"
-                    stroke={isYesWinning ? "#22c55e" : "#ef4444"}
-                    strokeWidth="4"
-                    fill="none"
-                    strokeDasharray={`${(truePercentage / 100) * 150.8} 150.8`}
-                    style={{ transition: 'all 0.7s ease-out' }}
-                  />
-                </svg>
-                <div style={{
-                  position: 'absolute',
-                  inset: 0,
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center'
-                }}>
-                  <span style={{ fontSize: '0.875rem', fontWeight: 500 }}>
-                    {truePercentage}%
-                  </span>
-                </div>
-              </Gauge>
-              <GaugeLabel>chance</GaugeLabel>
-            </GaugeContainer>
-          </Header>
+        <GradientBackground>
+          <CardContent>
+            <Header>
+              <QuestionSection>
+                <ProfileImage />
+                <Question>{description}</Question>
+              </QuestionSection>
+              <GaugeContainer>
+                <Gauge>
+                  <svg className="w-full h-full transform -rotate-90">
+                    <circle cx="28" cy="28" r="24" stroke="#e5e7eb" strokeWidth="4" fill="none" />
+                    <circle
+                      cx="28"
+                      cy="28"
+                      r="24"
+                      stroke={isYesWinning ? "#22c55e" : "#ef4444"}
+                      strokeWidth="4"
+                      fill="none"
+                      strokeDasharray={`${(truePercentage / 100) * 150.8} 150.8`}
+                      style={{ transition: 'all 0.7s ease-out' }}
+                    />
+                  </svg>
+                  <div style={{
+                    position: 'absolute',
+                    inset: 0,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center'
+                  }}>
+                    <span style={{ 
+                      fontSize: '0.875rem', 
+                      fontWeight: 500,
+                      color: '#222222'
+                    }}>
+                      {truePercentage}%
+                    </span>
+                  </div>
+                </Gauge>
+                <GaugeLabel>chance</GaugeLabel>
+              </GaugeContainer>
+            </Header>
 
-          <ButtonContainer>
-            <Button
-              variant="yes"
-              onClick={() => handleBet(true)}
-              disabled={isBetting}
-            >
-              Buy Yes ↑
-            </Button>
-            <Button
-              variant="no"
-              onClick={() => handleBet(false)}
-              disabled={isBetting}
-            >
-              Buy No ↓
-            </Button>
-          </ButtonContainer>
+            <ButtonContainer>
+              <Button
+                variant="yes"
+                onClick={() => handleBet(true)}
+                disabled={isBetting}
+              >
+                Buy Yes ↑
+              </Button>
+              <Button
+                variant="no"
+                onClick={() => handleBet(false)}
+                disabled={isBetting}
+              >
+                Buy No ↓
+              </Button>
+            </ButtonContainer>
 
-          <Footer>
-            <Volume>Vol: {Number(totalBets) / 1e18} ETH</Volume>
-          </Footer>
-        </CardContent>
+            <Footer>
+              <Volume>Vol: {Number(totalBets) / 1e18} ETH</Volume>
+            </Footer>
+          </CardContent>
+          <DecorativeCircle position="top" />
+          <DecorativeCircle position="bottom" />
+        </GradientBackground>
       </Card>
     </>
   );
