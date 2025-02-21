@@ -147,21 +147,22 @@ interface EarnContractCardProps {
 const FlipContainer = styled.div<{ isFlipped: boolean }>`
   position: relative;
   width: 100%;
-  height: 100%;
-  transform-style: preserve-3d;
+  min-height: 100%;
   transition: transform 0.6s;
+  transform-style: preserve-3d;
   transform: ${props => props.isFlipped ? 'rotateY(180deg)' : 'rotateY(0)'};
 `;
 
 const CardFront = styled.div`
   position: absolute;
   width: 100%;
-  height: 100%;
+  min-height: 100%;
   backface-visibility: hidden;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  gap: 20px;
   padding: 20px;
   padding-top: 60px;
   padding-bottom: calc(80px + env(safe-area-inset-bottom));
@@ -175,21 +176,16 @@ const CardFront = styled.div`
 const CardBack = styled.div`
   position: absolute;
   width: 100%;
-  height: 100%;
+  min-height: 100%;
   backface-visibility: hidden;
   transform: rotateY(180deg);
   display: flex;
-  flex-direction: column;
-  align-items: center;
   justify-content: center;
+  align-items: center;
   padding: 20px;
-  padding-top: 60px;
-  padding-bottom: calc(80px + env(safe-area-inset-bottom));
-  box-sizing: border-box;
-
-  @media (max-width: 768px) {
-    padding-bottom: calc(120px + env(safe-area-inset-bottom));
-  }
+  padding-top: 80px;
+  padding-bottom: 80px;
+  text-align: center;
 `;
 
 const FlipButton = styled.button`
@@ -202,13 +198,11 @@ const FlipButton = styled.button`
   padding: 0;
   width: 30px;
   height: 30px;
-  z-index: 10;
   
   @media (max-width: 768px) {
     width: 24px;
     height: 24px;
     bottom: calc(env(safe-area-inset-bottom) + 60px);
-    right: max(20px, env(safe-area-inset-right));
   }
 
   img {
