@@ -145,7 +145,6 @@ interface EarnCardBackV2Props {
   symbol: string;
   walletBalance: string;
   depositedBalance: string;
-  apy: string;
   onDeposit: (amount: string) => Promise<void>;
   onWithdraw: (amount: string) => Promise<void>;
   isDepositing: boolean;
@@ -157,7 +156,6 @@ export const EarnCardBackV2 = ({
   symbol,
   walletBalance,
   depositedBalance,
-  apy,
   onDeposit,
   onWithdraw,
   isDepositing,

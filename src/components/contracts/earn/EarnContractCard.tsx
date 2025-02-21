@@ -3,7 +3,6 @@ import { useAppKitAccount, useAppKitNetworkCore, useAppKitProvider, type Provide
 import { BrowserProvider, JsonRpcSigner, Contract, formatUnits } from 'ethers';
 import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
-import { AmountSlider } from './AmountSlider';
 import { ToastPortal } from '../../Toast';
 import { EarnCardV2 } from './EarnCardV2';
 import { EarnCardBackV2 } from './EarnCardBackV2';
@@ -519,7 +518,6 @@ export const EarnContractCard = ({ sendHash, contractIndex }: EarnContractCardPr
               symbol={contract.asset}
               walletBalance={walletUsdcBalance}
               depositedBalance={usdcBalance}
-              apy={contract.apy}
               onDeposit={handleDeposit}
               onWithdraw={handleWithdraw}
               isDepositing={isDepositing}

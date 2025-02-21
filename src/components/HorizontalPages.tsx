@@ -126,8 +126,16 @@ export const HorizontalPages = ({
 
 export const SwapPages = () => {
   return (
-    <HorizontalPages>
-      <SwapContractCardV2 />
+    <HorizontalPages
+      subPages={[
+        { name: 'Swap 2', index: 0 },
+        { name: 'Swap 3', index: 1 },
+        { name: 'Swap 4', index: 2 }
+      ]}
+      bgColor="#96DCED"
+      textColor="#3D3D3D"
+    >
+      <SwapContractCardV2 sendHash={(hash: string) => console.log(hash)} />
       <div>Swap 3</div>
       <div>Swap 4</div>
     </HorizontalPages>
