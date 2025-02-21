@@ -162,11 +162,81 @@ export const SwapContractCardV2 = ({ sendHash }: { sendHash: (hash: string) => v
   const { chainId } = useAppKitNetworkCore();
   const { walletProvider } = useAppKitProvider<Provider>('eip155');
 
-  // ... Keep the existing useEffect for balance fetching ...
+  // Fetch token balance when input token changes
+  useEffect(() => {
+    const fetchBalance = async () => {
+      if (!walletProvider || !address || !inputToken) return;
+
+      try {
+        const provider = new BrowserProvider(walletProvider, chainId);
+        const tokenContract = new Contract(inputToken, TOKEN_ABI, provider);
+        const rawBalance = await tokenContract.balanceOf(address);
+        const selectedToken = TOKENS.find(t => t.address === inputToken);
+        const formattedBalance = (Number(rawBalance) / 10 ** (selectedToken?.decimals || 18)).toString();
+        setTokenBalance(formattedBalance);
+      } catch (error) {
+        console.error('Failed to fetch balance:', error);
+        setTokenBalance('0');
+      }
+    };
+
+    fetchBalance();
+  }, [inputToken, address, walletProvider, chainId]);
 
   const handleSwap = async () => {
-    // ... Keep the existing swap logic ...
+    if (!walletProvider || !address || !inputToken || !outputToken) return;
+    if (parseFloat(amount) === 0) return;
+
+    setIsSwapping(true);
+    const loadingToast = toast.loading('Approving token...');
+
+    try {
+      const provider = new BrowserProvider(walletProvider, chainId);
+      const signer = new JsonRpcSigner(provider, address);
+
+      // First approve
+      const tokenContract = new Contract(inputToken, TOKEN_ABI, signer);
+      const approveTx = await tokenContract.approve(NURI_ROUTER, MaxUint256);
+      await approveTx.wait();
+
+      toast.loading('Swapping tokens...', { id: loadingToast });
+
+      // Then swap
+      const routerContract = new Contract(NURI_ROUTER, ROUTER_ABI, signer);
+      const selectedToken = TOKENS.find(t => t.address === inputToken);
+      const amountIn = BigInt(Math.floor(parseFloat(amount) * 10 ** (selectedToken?.decimals || 18)));
+
+      const params = {
+        tokenIn: inputToken,
+        tokenOut: outputToken,
+        fee: 3000,
+        recipient: address,
+        deadline: 3000000000,
+        amountIn,
+        amountOutMinimum: 1,
+        sqrtPriceLimitX96: 0
+      };
+
+      const tx = await routerContract.exactInputSingle(params);
+      const receipt = await tx.wait();
+
+      if (receipt.status === 1) {
+        toast.success('Swap successful!', { id: loadingToast });
+        sendHash(tx.hash);
+        setAmount(''); // Reset amount after successful swap
+      }
+    } catch (error) {
+      console.error('Swap failed:', error);
+      toast.error('Swap failed', { id: loadingToast });
+    } finally {
+      setIsSwapping(false);
+    }
   };
+
+  const selectedToken = TOKENS.find(t => t.address === inputToken);
+  const formattedBalance = selectedToken ? 
+    `${parseFloat(tokenBalance).toFixed(4)} ${selectedToken.symbol}` : 
+    '0.00';
 
   return (
     <>
@@ -181,7 +251,7 @@ export const SwapContractCardV2 = ({ sendHash }: { sendHash: (hash: string) => v
           <TokenSection>
             <TokenHeader>
               <span>From</span>
-              <TokenBalance>Balance: {tokenBalance}</TokenBalance>
+              <TokenBalance>Balance: {formattedBalance}</TokenBalance>
             </TokenHeader>
             <InputGroup>
               <TokenInput
@@ -192,7 +262,10 @@ export const SwapContractCardV2 = ({ sendHash }: { sendHash: (hash: string) => v
               />
               <TokenSelect
                 value={inputToken}
-                onChange={(e) => setInputToken(e.target.value)}
+                onChange={(e) => {
+                  setInputToken(e.target.value);
+                  setAmount(''); // Reset amount when token changes
+                }}
               >
                 <option value="">Select token</option>
                 {TOKENS.map(token => (
@@ -207,7 +280,11 @@ export const SwapContractCardV2 = ({ sendHash }: { sendHash: (hash: string) => v
           <TokenSection>
             <TokenHeader>
               <span>To</span>
-              <TokenBalance>Balance: 0.00</TokenBalance>
+              <TokenBalance>
+                {outputToken ? 
+                  `${TOKENS.find(t => t.address === outputToken)?.symbol}` : 
+                  'Select token'}
+              </TokenBalance>
             </TokenHeader>
             <InputGroup>
               <TokenInput
