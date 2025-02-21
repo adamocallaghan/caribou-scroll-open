@@ -17,7 +17,7 @@ const Card = styled.div`
 `;
 
 const GradientBackground = styled.div`
-  background: linear-gradient(135deg, #006b71 0%, #b8e3e5 50%, #e5f0f0 100%);
+  background: linear-gradient(135deg, #006b71 0%, #80c5c8 50%, #b8e3e5 100%);
   position: relative;
   padding: 1.5rem;
   color: #222222;
