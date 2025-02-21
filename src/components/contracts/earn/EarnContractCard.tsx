@@ -39,64 +39,6 @@ const Title = styled.h2`
   color: #222222;
 `;
 
-const ButtonContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 30px;
-  width: 100%;
-  max-width: 300px;
-`;
-
-const Separator = styled.div`
-  width: 100%;
-  height: 1px;
-  background: rgba(255, 255, 255, 0.1);
-  margin: 10px 0;
-`;
-
-const Button = styled.button`
-  padding: 10px 20px;
-  border: none;
-  border-radius: 4px;
-  background-color: #222222;
-  color: #f3c86c;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: all 0.2s ease;
-
-  &:hover {
-    opacity: 0.9;
-    transform: translateY(-1px);
-  }
-
-  &:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-    transform: none;
-  }
-`;
-
-const ActionRow = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  width: 100%;
-  margin-top: 2px;
-`;
-
-const SliderSection = styled.div`
-  width: 100%;
-  margin: 0;
-`;
-
-const AmountText = styled.div`
-  font-size: 0.9rem;
-  white-space: nowrap;
-  min-width: 80px;
-  text-align: right;
-`;
-
 const toastStyles = {
   loading: {
     style: {
