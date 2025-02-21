@@ -62,8 +62,8 @@ const Card = styled.div`
 `;
 
 const CardHeader = styled.div`
-  padding: 1.5rem;
-  padding-bottom: 1rem;
+  padding: 1rem 1.5rem;
+  padding-bottom: 0.75rem;
 `;
 
 const HeaderTop = styled.div`
@@ -107,7 +107,9 @@ const Badge = styled.span`
 const ImageContainer = styled.div`
   position: relative;
   aspect-ratio: 1;
-  width: 100%;
+  width: 80%;
+  max-width: 280px;
+  margin: 0 auto;
   overflow: hidden;
   
   img {
@@ -121,13 +123,18 @@ const ImageContainer = styled.div`
       transform: scale(1.02);
     }
   }
+
+  @media (max-width: 768px) {
+    width: 70%;
+    max-width: 220px;
+  }
 `;
 
 const CardFooter = styled.div`
-  padding: 1.5rem;
+  padding: 1rem 1.5rem;
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 0.75rem;
 `;
 
 const Description = styled.p`
@@ -197,16 +204,12 @@ export const MintCardV2 = ({ onMint }: MintCardV2Props) => {
       
       <ImageContainer>
         <img
-          src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-cuAfAjME2mS8PHmVGS0wEWL0ZsKcMQ.png"
+          src="https://ipfs.io/ipfs/QmQicuf49WKck1YxranWF4UPMdungQYDvrZPsnG6TY8WTM/caribou_nft.jpg"
           alt="Colorful Caribou NFT artwork"
         />
       </ImageContainer>
       
       <CardFooter>
-        <Description>
-          Own this stunning piece of digital art featuring a majestic caribou rendered in vibrant neon colors. Each
-          NFT is unique and stored on the blockchain.
-        </Description>
         <MintButton
           onClick={handleMint}
           disabled={isMinting || isSuccess}
