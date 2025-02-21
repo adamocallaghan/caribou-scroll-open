@@ -148,8 +148,8 @@ const FlipContainer = styled.div<{ isFlipped: boolean }>`
   position: relative;
   width: 100%;
   height: 100%;
-  transition: transform 0.6s;
   transform-style: preserve-3d;
+  transition: transform 0.6s;
   transform: ${props => props.isFlipped ? 'rotateY(180deg)' : 'rotateY(0)'};
 `;
 
@@ -162,11 +162,9 @@ const CardFront = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 15px;
-  padding: 15px;
+  padding: 20px;
   padding-top: 60px;
   padding-bottom: calc(80px + env(safe-area-inset-bottom));
-  max-width: 100%;
   box-sizing: border-box;
 
   @media (max-width: 768px) {
@@ -184,11 +182,9 @@ const CardBack = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 15px;
-  padding: 15px;
+  padding: 20px;
   padding-top: 60px;
   padding-bottom: calc(80px + env(safe-area-inset-bottom));
-  max-width: 100%;
   box-sizing: border-box;
 
   @media (max-width: 768px) {
