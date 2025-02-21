@@ -143,11 +143,6 @@ const CardFooter = styled.div`
   gap: 0.75rem;
 `;
 
-const Description = styled.p`
-  font-size: 0.875rem;
-  color: #6b7280;
-`;
-
 const MintButton = styled.button<{ $isMinting?: boolean; $isSuccess?: boolean }>`
   width: 100%;
   padding: 0.875rem;
