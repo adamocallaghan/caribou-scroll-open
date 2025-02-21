@@ -15,7 +15,7 @@ const Card = styled.div`
 `;
 
 const CardHeader = styled.div`
-  padding: 1.5rem;
+  padding: 1.5rem 1.5rem 0.5rem;
 `;
 
 const CardTitle = styled.h2`
@@ -31,10 +31,19 @@ const CardDescription = styled.p`
 `;
 
 const CardContent = styled.div`
-  padding: 1.5rem;
+  padding: 1rem 1.5rem;
   display: flex;
   flex-direction: column;
   gap: 1rem;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+`;
+
+const CardFooter = styled.div`
+  padding: 0.5rem 1.5rem 1.5rem;
+  width: 100%;
+  box-sizing: border-box;
 `;
 
 const TokenSection = styled.div`
@@ -56,6 +65,8 @@ const TokenBalance = styled.span`
 const InputGroup = styled.div`
   display: flex;
   gap: 0.5rem;
+  width: 100%;
+  box-sizing: border-box;
 `;
 
 const TokenInput = styled.input`
@@ -64,6 +75,7 @@ const TokenInput = styled.input`
   border: 1px solid #ddd;
   border-radius: 0.25rem;
   font-size: 1rem;
+  min-width: 0;
   &:focus {
     outline: none;
     border-color: #96DCED;
@@ -76,11 +88,27 @@ const TokenSelect = styled.select`
   border-radius: 0.25rem;
   background: white;
   cursor: pointer;
-  min-width: 120px;
+  width: 120px;
+  flex-shrink: 0;
   &:focus {
     outline: none;
     border-color: #96DCED;
   }
+`;
+
+const SwapInfo = styled.div`
+  background: #f5f5f5;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  width: 100%;
+  box-sizing: border-box;
+`;
+
+const InfoRow = styled.div`
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
 `;
 
 const SwapButton = styled.button`
@@ -93,6 +121,9 @@ const SwapButton = styled.button`
   font-size: 1rem;
   cursor: pointer;
   transition: opacity 0.2s;
+  box-sizing: border-box;
+  display: block;
+  margin: 0 auto;
   &:hover {
     opacity: 0.9;
   }
@@ -102,20 +133,6 @@ const SwapButton = styled.button`
   }
 `;
 
-const SwapInfo = styled.div`
-  background: #f5f5f5;
-  padding: 1rem;
-  border-radius: 0.5rem;
-  font-size: 0.875rem;
-`;
-
-const InfoRow = styled.div`
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 0.5rem;
-`;
-
-// Use the same token configuration as before
 const TOKENS = [
   {
     symbol: 'WETH',
@@ -162,7 +179,6 @@ export const SwapContractCardV2 = ({ sendHash }: { sendHash: (hash: string) => v
   const { chainId } = useAppKitNetworkCore();
   const { walletProvider } = useAppKitProvider<Provider>('eip155');
 
-  // Fetch token balance when input token changes
   useEffect(() => {
     const fetchBalance = async () => {
       if (!walletProvider || !address || !inputToken) return;
@@ -194,14 +210,12 @@ export const SwapContractCardV2 = ({ sendHash }: { sendHash: (hash: string) => v
       const provider = new BrowserProvider(walletProvider, chainId);
       const signer = new JsonRpcSigner(provider, address);
 
-      // First approve
       const tokenContract = new Contract(inputToken, TOKEN_ABI, signer);
       const approveTx = await tokenContract.approve(NURI_ROUTER, MaxUint256);
       await approveTx.wait();
 
       toast.loading('Swapping tokens...', { id: loadingToast });
 
-      // Then swap
       const routerContract = new Contract(NURI_ROUTER, ROUTER_ABI, signer);
       const selectedToken = TOKENS.find(t => t.address === inputToken);
       const amountIn = BigInt(Math.floor(parseFloat(amount) * 10 ** (selectedToken?.decimals || 18)));
@@ -223,7 +237,7 @@ export const SwapContractCardV2 = ({ sendHash }: { sendHash: (hash: string) => v
       if (receipt.status === 1) {
         toast.success('Swap successful!', { id: loadingToast });
         sendHash(tx.hash);
-        setAmount(''); // Reset amount after successful swap
+        setAmount('');
       }
     } catch (error) {
       console.error('Swap failed:', error);
@@ -264,7 +278,7 @@ export const SwapContractCardV2 = ({ sendHash }: { sendHash: (hash: string) => v
                 value={inputToken}
                 onChange={(e) => {
                   setInputToken(e.target.value);
-                  setAmount(''); // Reset amount when token changes
+                  setAmount('');
                 }}
               >
                 <option value="">Select token</option>
@@ -317,14 +331,16 @@ export const SwapContractCardV2 = ({ sendHash }: { sendHash: (hash: string) => v
               <span>~$2.50</span>
             </InfoRow>
           </SwapInfo>
+        </CardContent>
 
+        <CardFooter>
           <SwapButton
             onClick={handleSwap}
             disabled={isSwapping || !inputToken || !outputToken || !amount}
           >
             {isSwapping ? 'Swapping...' : 'Swap'}
           </SwapButton>
-        </CardContent>
+        </CardFooter>
       </Card>
     </>
   );
