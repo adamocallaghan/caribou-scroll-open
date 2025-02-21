@@ -4,6 +4,7 @@ import { useAppKitAccount, useAppKitNetworkCore, useAppKitProvider, type Provide
 import { BrowserProvider, JsonRpcSigner, Contract } from 'ethers';
 import toast from 'react-hot-toast';
 import { ToastPortal } from '../../Toast';
+import { MintCardV2 } from './MintCardV2';
 
 // Wrapper to handle the 3D perspective
 const CardWrapper = styled.div`
@@ -247,13 +248,7 @@ export const MintContractCard = ({ sendHash, contractIndex }: MintContractCardPr
       <CardWrapper>
         <FlipContainer isFlipped={isFlipped}>
           <CardFront>
-            <CardTitle>{contract.name}</CardTitle>
-            {contract.imageUrl && (
-              <NFTImage src={contract.imageUrl} alt={contract.name} />
-            )}
-            <ButtonContainer>
-              <Button onClick={handleMint}>Mint NFT</Button>
-            </ButtonContainer>
+            <MintCardV2 onMint={handleMint} />
             <FlipButton onClick={() => setIsFlipped(!isFlipped)}>
               <img src="/flip-over.svg" alt="Flip card" />
             </FlipButton>
