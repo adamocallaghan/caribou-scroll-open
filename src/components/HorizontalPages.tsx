@@ -4,7 +4,6 @@ import { SubPageConfig } from '../types/pages';
 import { MintContractCard } from './contracts/mint/MintContractCard';
 import { EarnContractCard } from './contracts/earn/EarnContractCard';
 import { PredictionContractCard } from './contracts/prediction/PredictionContractCard';
-import { SwapContractCard } from './contracts/swap/SwapContractCard';
 import { SwapContractCardV2 } from './contracts/swap/SwapContractCardV2';
 
 const Container = styled.div`
@@ -97,12 +96,9 @@ export const HorizontalPages = ({
     }
     if (pageType === 'Swap' && sendHash) {
       if (subPage.index === 0) {
-        return <SwapContractCard sendHash={sendHash} />;
-      }
-      if (subPage.index === 1) {
         return <SwapContractCardV2 sendHash={sendHash} />;
       }
-      return `Swap ${subPage.index + 1}`;
+      return `Swap ${subPage.index + 2}`;
     }
     return subPage.name;
   };
@@ -125,5 +121,15 @@ export const HorizontalPages = ({
         </Page>
       ))}
     </Container>
+  );
+};
+
+export const SwapPages = () => {
+  return (
+    <HorizontalPages>
+      <SwapContractCardV2 />
+      <div>Swap 3</div>
+      <div>Swap 4</div>
+    </HorizontalPages>
   );
 }; 
