@@ -132,9 +132,10 @@ const ImageContainer = styled.div`
 `;
 
 const CardFooter = styled.div`
-  padding: 1rem 1.5rem;
+  padding: 1rem 0;
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: 0.75rem;
 `;
 
@@ -146,6 +147,7 @@ const Description = styled.p`
 const MintButton = styled.button<{ $isMinting?: boolean; $isSuccess?: boolean }>`
   width: 100%;
   padding: 0.875rem;
+  margin: 0 1.5rem;
   border-radius: 0.5rem;
   border: none;
   font-weight: 500;
@@ -161,6 +163,8 @@ const MintButton = styled.button<{ $isMinting?: boolean; $isSuccess?: boolean }>
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
+  box-sizing: border-box;
+  width: calc(100% - 3rem);
   
   &:hover:not(:disabled) {
     background: linear-gradient(to right, #7c28cd, #be185d);
