@@ -12,6 +12,8 @@ const Card = styled.div`
 
 const CardContent = styled.div`
   padding: 1.5rem;
+  width: 100%;
+  box-sizing: border-box;
 `;
 
 const Header = styled.div`
@@ -30,6 +32,8 @@ const Title = styled.h2`
 
 const TabsContainer = styled.div`
   width: 100%;
+  padding: 0 1.5rem;
+  box-sizing: border-box;
 `;
 
 const TabsList = styled.div`
@@ -120,7 +124,8 @@ const SliderMarkers = styled.div`
 `;
 
 const ActionButton = styled.button`
-  width: 100%;
+  width: calc(100% - 3rem);
+  margin: 0 1.5rem;
   padding: 1rem;
   border: none;
   border-radius: 0.5rem;
