@@ -134,7 +134,7 @@ const SwapButton = styled.button`
 `;
 
 const GradientBackground = styled.div`
-  background: linear-gradient(135deg, #6c8ff3 0%, #d1e6ff 50%, #e5f1ff 100%);
+  background: linear-gradient(135deg, #96DCED 0%, #c8ebf6 50%, #e5f5fa 100%);
   position: relative;
   padding: 1.5rem;
 `;
