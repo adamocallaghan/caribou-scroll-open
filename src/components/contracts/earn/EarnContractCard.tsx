@@ -308,9 +308,9 @@ export const EarnContractCard = ({ sendHash, contractIndex }: EarnContractCardPr
     fetchWalletBalance();
   }, [address, walletProvider, chainId]);
 
-  const handleDeposit = async () => {
+  const handleDeposit = async (amount: string) => {
     if (!walletProvider || !address) throw Error('user is disconnected');
-    if (parseFloat(depositAmount) === 0) return;
+    if (parseFloat(amount) === 0) return;
 
     setIsDepositing(true);
     const loadingToast = toast.loading(`Depositing ${contract.asset}...`, toastStyles.loading);
@@ -320,7 +320,7 @@ export const EarnContractCard = ({ sendHash, contractIndex }: EarnContractCardPr
       const signer = new JsonRpcSigner(provider, address);
       
       // Convert amount to BigInt with 6 decimals
-      const depositAmountBigInt = BigInt(Math.floor(parseFloat(depositAmount) * 1_000_000));
+      const depositAmountBigInt = BigInt(Math.floor(parseFloat(amount) * 1_000_000));
       
       // First approve
       const tokenContract = new Contract(contract.tokenAddress, contract.tokenAbi, signer);
@@ -361,7 +361,6 @@ export const EarnContractCard = ({ sendHash, contractIndex }: EarnContractCardPr
         });
         sendHash(tx.hash);
         await Promise.all([fetchBalance(), fetchWalletBalance()]);
-        setDepositAmount('0');
       }
     } catch (error) {
       console.error(`Failed to deposit ${contract.asset}:`, error);
@@ -374,9 +373,9 @@ export const EarnContractCard = ({ sendHash, contractIndex }: EarnContractCardPr
     }
   };
 
-  const handleWithdraw = async () => {
+  const handleWithdraw = async (amount: string) => {
     if (!walletProvider || !address) throw Error('user is disconnected');
-    if (parseFloat(withdrawAmount) === 0) return;
+    if (parseFloat(amount) === 0) return;
 
     setIsWithdrawing(true);
     const loadingToast = toast.loading(`Withdrawing ${contract.asset}...`, toastStyles.loading);
@@ -390,16 +389,16 @@ export const EarnContractCard = ({ sendHash, contractIndex }: EarnContractCardPr
       let withdrawAmountBigInt;
       if (contract.protocol === "RHO Markets") {
         // If withdrawing 100%, use the full rToken balance
-        if (parseFloat(withdrawAmount) === parseFloat(usdcBalance)) {
+        if (parseFloat(amount) === parseFloat(usdcBalance)) {
           withdrawAmountBigInt = rUsdcBalance;
         } else {
           // Otherwise calculate the proportion of rTokens to withdraw
-          const proportion = parseFloat(withdrawAmount) / parseFloat(usdcBalance);
+          const proportion = parseFloat(amount) / parseFloat(usdcBalance);
           withdrawAmountBigInt = BigInt(Math.floor(Number(rUsdcBalance) * proportion));
         }
       } else {
         // For other protocols, convert the amount to BigInt with 6 decimals
-        withdrawAmountBigInt = BigInt(Math.floor(parseFloat(withdrawAmount) * 1_000_000));
+        withdrawAmountBigInt = BigInt(Math.floor(parseFloat(amount) * 1_000_000));
       }
       
       let tx;
@@ -422,7 +421,6 @@ export const EarnContractCard = ({ sendHash, contractIndex }: EarnContractCardPr
         });
         sendHash(tx.hash);
         await Promise.all([fetchBalance(), fetchWalletBalance()]);
-        setWithdrawAmount('0');
       }
     } catch (error) {
       console.error(`Failed to withdraw ${contract.asset}:`, error);

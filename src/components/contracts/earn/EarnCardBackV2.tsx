@@ -171,7 +171,8 @@ export const EarnCardBackV2 = ({
 
   const handleSliderChange = (value: number) => {
     setPercentage(value);
-    setAmount((maxAmount * (value / 100)).toFixed(2));
+    const newAmount = (maxAmount * (value / 100)).toFixed(2);
+    setAmount(newAmount);
   };
 
   const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -186,6 +187,9 @@ export const EarnCardBackV2 = ({
     } else {
       onWithdraw(amount);
     }
+    // Reset amount and percentage after action
+    setAmount('0.00');
+    setPercentage(0);
   };
 
   return (
@@ -199,13 +203,21 @@ export const EarnCardBackV2 = ({
           <TabsList>
             <TabButton 
               active={activeTab === 'deposit'} 
-              onClick={() => setActiveTab('deposit')}
+              onClick={() => {
+                setActiveTab('deposit');
+                setAmount('0.00');
+                setPercentage(0);
+              }}
             >
               Deposit
             </TabButton>
             <TabButton 
               active={activeTab === 'withdraw'} 
-              onClick={() => setActiveTab('withdraw')}
+              onClick={() => {
+                setActiveTab('withdraw');
+                setAmount('0.00');
+                setPercentage(0);
+              }}
             >
               Withdraw
             </TabButton>
@@ -225,6 +237,9 @@ export const EarnCardBackV2 = ({
                 type="number"
                 value={amount}
                 onChange={handleAmountChange}
+                min="0"
+                max={maxAmount.toString()}
+                step="0.01"
               />
               <TokenSymbol>{symbol}</TokenSymbol>
             </InputWrapper>
@@ -250,7 +265,12 @@ export const EarnCardBackV2 = ({
 
           <ActionButton
             onClick={handleAction}
-            disabled={isDepositing || isWithdrawing || parseFloat(amount) === 0}
+            disabled={
+              isDepositing || 
+              isWithdrawing || 
+              parseFloat(amount) === 0 ||
+              parseFloat(amount) > maxAmount
+            }
           >
             {activeTab === 'deposit' 
               ? (isDepositing ? 'Depositing...' : 'Deposit')
