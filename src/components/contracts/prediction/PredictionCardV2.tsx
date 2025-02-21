@@ -165,7 +165,6 @@ export const PredictionCardV2 = ({ marketAddress, description, sendHash }: Predi
 
   const totalBets = totalTrue + totalFalse;
   const truePercentage = parseFloat(calculatePercentage(totalTrue, totalBets));
-  const falsePercentage = parseFloat(calculatePercentage(totalFalse, totalBets));
   const isYesWinning = truePercentage >= 50;
 
   const handleBet = async (isTrue: boolean) => {
