@@ -58,8 +58,8 @@ const Card = styled.div`
   margin: 0 auto;
   overflow: hidden;
   border-radius: 0.5rem;
-  background: linear-gradient(135deg, #f5f3ff 0%, #fdf2f8 100%);
-  border: 2px solid rgba(147, 51, 234, 0.1);
+  background: linear-gradient(135deg, #FFA6A6 0%, #fdf2f8 100%);  // Start with exact card color, fade to light pink
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 `;
 
 const CardHeader = styled.div`
@@ -77,17 +77,16 @@ const HeaderTop = styled.div`
 const Title = styled.h2`
   font-size: 1.5rem;
   font-weight: 700;
-  background: linear-gradient(to right, #9333ea, #db2777);
-  -webkit-background-clip: text;
-  color: transparent;
+  color: #f8fafc;  // Slightly softer white
 `;
 
 const PriceBadge = styled.span`
-  background: #f3f4f6;
+  background: rgba(255, 255, 255, 0.15);  // More transparent
   padding: 0.25rem 0.75rem;
   border-radius: 9999px;
   font-size: 0.875rem;
   font-weight: 500;
+  color: #f8fafc;  // Slightly softer white
 `;
 
 const BadgeContainer = styled.div`
@@ -96,13 +95,18 @@ const BadgeContainer = styled.div`
 `;
 
 const Badge = styled.span`
-  border: 1px solid #e5e7eb;
+  border: 1px solid rgba(255, 255, 255, 0.2);  // More transparent
   padding: 0.25rem 0.75rem;
   border-radius: 9999px;
   font-size: 0.875rem;
   display: flex;
   align-items: center;
   gap: 0.25rem;
+  color: #f8fafc;  // Slightly softer white
+
+  svg {
+    stroke: #f8fafc;  // Slightly softer white
+  }
 `;
 
 const ImageContainer = styled.div`
