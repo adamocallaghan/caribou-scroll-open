@@ -8,7 +8,20 @@ export const ToastPortal = () => {
       containerStyle={{
         position: 'fixed',
         zIndex: 9999,
-        transform: 'none'  // Ensure no inherited transforms
+        transform: 'none',
+        perspective: 'none'
+      }}
+      toastOptions={{
+        duration: 5000,
+        style: {
+          minWidth: '200px',
+          maxWidth: '300px',
+          padding: '12px',
+          fontSize: '0.9rem',
+          textAlign: 'center',
+          transform: 'none',
+          perspective: 'none'
+        },
       }}
     />,
     document.body

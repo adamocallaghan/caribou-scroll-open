@@ -1,9 +1,10 @@
-import { useState, useEffect } from 'react';
 import styled from 'styled-components';
+import { useState, useEffect } from 'react';
 import { useAppKitAccount, useAppKitNetworkCore, useAppKitProvider, type Provider } from '@reown/appkit/react';
 import { BrowserProvider, JsonRpcSigner, Contract, parseEther } from 'ethers';
-import toast, { Toaster } from 'react-hot-toast';
+import toast from 'react-hot-toast';
 import { PREDICTION_MARKET_ABI } from '../../../contracts/prediction/types';
+import { ToastPortal } from '../../Toast';
 
 const CardWrapper = styled.div`
   perspective: 1000px;
@@ -146,35 +147,37 @@ export const PredictionCard = ({ marketAddress, description, sendHash }: Predict
   };
 
   return (
-    <CardWrapper>
-      <CardContent>
-        <Toaster position="bottom-center" />
-        <Description>{description}?</Description>
+    <>
+      <ToastPortal />
+      <CardWrapper>
+        <CardContent>
+          <Description>{description}?</Description>
 
-        <ButtonContainer>
-          <div>
-            <BetButton
-              variant="yes"
-              onClick={() => handleBet(true)}
-              disabled={isBetting}
-            >
-              Yes
-            </BetButton>
-            <Stat variant="yes">{truePercentage}%</Stat>
-          </div>
+          <ButtonContainer>
+            <div>
+              <BetButton
+                variant="yes"
+                onClick={() => handleBet(true)}
+                disabled={isBetting}
+              >
+                Yes
+              </BetButton>
+              <Stat variant="yes">{truePercentage}%</Stat>
+            </div>
 
-          <div>
-            <BetButton
-              variant="no"
-              onClick={() => handleBet(false)}
-              disabled={isBetting}
-            >
-              No
-            </BetButton>
-            <Stat variant="no">{falsePercentage}%</Stat>
-          </div>
-        </ButtonContainer>
-      </CardContent>
-    </CardWrapper>
+            <div>
+              <BetButton
+                variant="no"
+                onClick={() => handleBet(false)}
+                disabled={isBetting}
+              >
+                No
+              </BetButton>
+              <Stat variant="no">{falsePercentage}%</Stat>
+            </div>
+          </ButtonContainer>
+        </CardContent>
+      </CardWrapper>
+    </>
   );
 }; 

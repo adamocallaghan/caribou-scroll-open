@@ -1,5 +1,6 @@
 import { PredictionCard } from './PredictionCard';
 import { PREDICTION_MARKETS } from '../../../contracts/prediction/config';
+import toast from 'react-hot-toast';
 
 interface PredictionContractCardProps {
   sendHash: (hash: string) => void;

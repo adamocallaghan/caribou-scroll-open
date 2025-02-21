@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import { useAppKitAccount, useAppKitNetworkCore, useAppKitProvider, type Provider } from '@reown/appkit/react';
 import { BrowserProvider, JsonRpcSigner, Contract, formatUnits } from 'ethers';
 import { useEffect, useState } from 'react';
-import toast, { Toaster } from 'react-hot-toast';
+import toast from 'react-hot-toast';
 import { AmountSlider } from './AmountSlider';
 import { ToastPortal } from '../../Toast';
 
