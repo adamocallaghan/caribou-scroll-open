@@ -4,6 +4,7 @@ import { BrowserProvider, JsonRpcSigner, Contract, formatUnits } from 'ethers';
 import { useEffect, useState } from 'react';
 import toast, { Toaster } from 'react-hot-toast';
 import { AmountSlider } from './AmountSlider';
+import { ToastPortal } from '../../Toast';
 
 const CardWrapper = styled.div`
   perspective: 1000px;
@@ -549,93 +550,84 @@ export const EarnContractCard = ({ sendHash, contractIndex }: EarnContractCardPr
   };
 
   return (
-    <CardWrapper>
-      <FlipContainer isFlipped={isFlipped}>
-        <CardFront>
-          <Toaster 
-            position="bottom-center"
-            toastOptions={{
-              duration: 5000,
-              style: {
-                minWidth: '250px',
-                maxWidth: '500px',
-                padding: '16px',
-                textAlign: 'center',
-              },
-            }}
-          />
-          {contract.logoUrl && (
-            <ProtocolLogo src={contract.logoUrl} alt={contract.protocol} />
-          )}
-          <ProtocolName>{contract.protocol}</ProtocolName>
-          
-          <MarketInfo>
-            <MarketName>{contract.name}</MarketName>
-            <APY>{contract.apy}</APY>
-          </MarketInfo>
+    <>
+      <ToastPortal />
+      <CardWrapper>
+        <FlipContainer isFlipped={isFlipped}>
+          <CardFront>
+            {contract.logoUrl && (
+              <ProtocolLogo src={contract.logoUrl} alt={contract.protocol} />
+            )}
+            <ProtocolName>{contract.protocol}</ProtocolName>
+            
+            <MarketInfo>
+              <MarketName>{contract.name}</MarketName>
+              <APY>{contract.apy}</APY>
+            </MarketInfo>
 
-          <BalanceContainer>
-            <Balance>
-              <div className="label">Available</div>
-              <div className="amount">${walletUsdcBalance} {contract.asset}</div>
-            </Balance>
-            <Balance>
-              <div className="label">Supplied</div>
-              <div className="amount">${usdcBalance} {contract.asset}</div>
-            </Balance>
-          </BalanceContainer>
+            <BalanceContainer>
+              <Balance>
+                <div className="label">Available</div>
+                <div className="amount">${walletUsdcBalance} {contract.asset}</div>
+              </Balance>
+              <Balance>
+                <div className="label">Supplied</div>
+                <div className="amount">${usdcBalance} {contract.asset}</div>
+              </Balance>
+            </BalanceContainer>
 
-          <FlipButton onClick={() => setIsFlipped(!isFlipped)}>
-            <img src="/flip-over.svg" alt="Flip card" />
-          </FlipButton>
-        </CardFront>
+            <FlipButton onClick={() => setIsFlipped(!isFlipped)}>
+              <img src="/flip-over.svg" alt="Flip card" />
+            </FlipButton>
+          </CardFront>
 
-        <CardBack>
-          <ButtonContainer>
-            <SliderSection>
-              <AmountSlider
-                maxAmount={walletUsdcBalance}
-                onChange={setDepositAmount}
-              />
-            </SliderSection>
-            <ActionRow>
-              <Button 
-                onClick={handleDeposit}
-                disabled={isDepositing || parseFloat(depositAmount) === 0}
-              >
-                {isDepositing ? 'Depositing...' : 'Deposit'}
-              </Button>
-              <AmountText>
-                ${parseFloat(depositAmount).toFixed(2)} {contract.asset}
-              </AmountText>
-            </ActionRow>
+          <CardBack>
+            <ButtonContainer>
+              <SliderSection>
+                <AmountSlider
+                  maxAmount={walletUsdcBalance}
+                  onChange={setDepositAmount}
+                />
+              </SliderSection>
+              <ActionRow>
+                <Button 
+                  onClick={handleDeposit}
+                  disabled={isDepositing || parseFloat(depositAmount) === 0}
+                >
+                  {isDepositing ? 'Depositing...' : 'Deposit'}
+                </Button>
+                <AmountText>
+                  ${parseFloat(depositAmount).toFixed(2)} {contract.asset}
+                </AmountText>
+              </ActionRow>
 
-            <Separator />
+              <Separator />
 
-            <SliderSection>
-              <AmountSlider
-                maxAmount={usdcBalance}
-                onChange={setWithdrawAmount}
-              />
-            </SliderSection>
-            <ActionRow>
-              <Button 
-                onClick={handleWithdraw}
-                disabled={isWithdrawing || parseFloat(withdrawAmount) === 0}
-              >
-                {isWithdrawing ? 'Withdrawing...' : 'Withdraw'}
-              </Button>
-              <AmountText>
-                ${parseFloat(withdrawAmount).toFixed(2)} {contract.asset}
-              </AmountText>
-            </ActionRow>
-          </ButtonContainer>
+              <SliderSection>
+                <AmountSlider
+                  maxAmount={usdcBalance}
+                  onChange={setWithdrawAmount}
+                />
+              </SliderSection>
+              <ActionRow>
+                <Button 
+                  onClick={handleWithdraw}
+                  disabled={isWithdrawing || parseFloat(withdrawAmount) === 0}
+                >
+                  {isWithdrawing ? 'Withdrawing...' : 'Withdraw'}
+                </Button>
+                <AmountText>
+                  ${parseFloat(withdrawAmount).toFixed(2)} {contract.asset}
+                </AmountText>
+              </ActionRow>
+            </ButtonContainer>
 
-          <FlipButton onClick={() => setIsFlipped(!isFlipped)}>
-            <img src="/flip-over.svg" alt="Flip card" />
-          </FlipButton>
-        </CardBack>
-      </FlipContainer>
-    </CardWrapper>
+            <FlipButton onClick={() => setIsFlipped(!isFlipped)}>
+              <img src="/flip-over.svg" alt="Flip card" />
+            </FlipButton>
+          </CardBack>
+        </FlipContainer>
+      </CardWrapper>
+    </>
   );
 }; 

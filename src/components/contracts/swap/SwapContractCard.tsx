@@ -4,6 +4,7 @@ import { useAppKitAccount, useAppKitNetworkCore, useAppKitProvider, type Provide
 import { BrowserProvider, JsonRpcSigner, Contract, MaxUint256 } from 'ethers';
 import toast, { Toaster } from 'react-hot-toast';
 import { AmountSlider } from './AmountSlider';
+import { ToastPortal } from '../../Toast';
 
 const CardWrapper = styled.div`
   perspective: 1000px;
@@ -201,48 +202,49 @@ export const SwapContractCard = ({ sendHash }: { sendHash: (hash: string) => voi
   };
 
   return (
-    <CardWrapper>
-      <CardContent>
-        <Toaster position="bottom-center" />
-        
-        <TokenSelect 
-          value={inputToken} 
-          onChange={handleInputTokenChange}
-        >
-          <option value="">Select input token</option>
-          {TOKENS.map(token => (
-            <option key={token.address} value={token.address}>
-              {token.symbol}
-            </option>
-          ))}
-        </TokenSelect>
+    <>
+      <ToastPortal />
+      <CardWrapper>
+        <CardContent>
+          <TokenSelect 
+            value={inputToken} 
+            onChange={handleInputTokenChange}
+          >
+            <option value="">Select input token</option>
+            {TOKENS.map(token => (
+              <option key={token.address} value={token.address}>
+                {token.symbol}
+              </option>
+            ))}
+          </TokenSelect>
 
-        <TokenSelect 
-          value={outputToken} 
-          onChange={handleOutputTokenChange}
-        >
-          <option value="">Select output token</option>
-          {TOKENS.map(token => (
-            <option key={token.address} value={token.address}>
-              {token.symbol}
-            </option>
-          ))}
-        </TokenSelect>
+          <TokenSelect 
+            value={outputToken} 
+            onChange={handleOutputTokenChange}
+          >
+            <option value="">Select output token</option>
+            {TOKENS.map(token => (
+              <option key={token.address} value={token.address}>
+                {token.symbol}
+              </option>
+            ))}
+          </TokenSelect>
 
-        <SliderContainer>
-          <AmountSlider
-            maxAmount={tokenBalance}
-            onChange={setAmount}
-          />
-        </SliderContainer>
+          <SliderContainer>
+            <AmountSlider
+              maxAmount={tokenBalance}
+              onChange={setAmount}
+            />
+          </SliderContainer>
 
-        <SwapButton 
-          onClick={handleSwap}
-          disabled={isSwapping || !inputToken || !outputToken || parseFloat(amount) === 0}
-        >
-          {isSwapping ? 'Swapping...' : 'Swap'}
-        </SwapButton>
-      </CardContent>
-    </CardWrapper>
+          <SwapButton 
+            onClick={handleSwap}
+            disabled={isSwapping || !inputToken || !outputToken || parseFloat(amount) === 0}
+          >
+            {isSwapping ? 'Swapping...' : 'Swap'}
+          </SwapButton>
+        </CardContent>
+      </CardWrapper>
+    </>
   );
 }; 
