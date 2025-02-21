@@ -1,4 +1,4 @@
-import { PredictionCard } from './PredictionCard';
+import { PredictionCardV2 } from './PredictionCardV2';
 import { PREDICTION_MARKETS } from '../../../contracts/prediction/config';
 
 interface PredictionContractCardProps {
@@ -12,7 +12,7 @@ export const PredictionContractCard = ({ sendHash, contractIndex }: PredictionCo
   if (!market) return null;
 
   return (
-    <PredictionCard
+    <PredictionCardV2
       marketAddress={market.address}
       description={market.description}
       sendHash={sendHash}
