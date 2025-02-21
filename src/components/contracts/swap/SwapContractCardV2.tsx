@@ -133,6 +133,12 @@ const SwapButton = styled.button`
   }
 `;
 
+const GradientBackground = styled.div`
+  background: linear-gradient(135deg, #6c8ff3 0%, #d1e6ff 50%, #e5f1ff 100%);
+  position: relative;
+  padding: 1.5rem;
+`;
+
 const TOKENS = [
   {
     symbol: 'WETH',
@@ -256,91 +262,93 @@ export const SwapContractCardV2 = ({ sendHash }: { sendHash: (hash: string) => v
     <>
       <ToastPortal />
       <Card>
-        <CardHeader>
-          <CardTitle>Swap Tokens</CardTitle>
-          <CardDescription>Trade tokens instantly with low fees</CardDescription>
-        </CardHeader>
-        
-        <CardContent>
-          <TokenSection>
-            <TokenHeader>
-              <span>From</span>
-              <TokenBalance>Balance: {formattedBalance}</TokenBalance>
-            </TokenHeader>
-            <InputGroup>
-              <TokenInput
-                type="number"
-                placeholder="0.0"
-                value={amount}
-                onChange={(e) => setAmount(e.target.value)}
-              />
-              <TokenSelect
-                value={inputToken}
-                onChange={(e) => {
-                  setInputToken(e.target.value);
-                  setAmount('');
-                }}
-              >
-                <option value="">Select token</option>
-                {TOKENS.map(token => (
-                  <option key={token.address} value={token.address}>
-                    {token.symbol}
-                  </option>
-                ))}
-              </TokenSelect>
-            </InputGroup>
-          </TokenSection>
+        <GradientBackground>
+          <CardHeader>
+            <CardTitle>Swap Tokens</CardTitle>
+            <CardDescription>Trade tokens instantly with low fees</CardDescription>
+          </CardHeader>
+          
+          <CardContent>
+            <TokenSection>
+              <TokenHeader>
+                <span>From</span>
+                <TokenBalance>Balance: {formattedBalance}</TokenBalance>
+              </TokenHeader>
+              <InputGroup>
+                <TokenInput
+                  type="number"
+                  placeholder="0.0"
+                  value={amount}
+                  onChange={(e) => setAmount(e.target.value)}
+                />
+                <TokenSelect
+                  value={inputToken}
+                  onChange={(e) => {
+                    setInputToken(e.target.value);
+                    setAmount('');
+                  }}
+                >
+                  <option value="">Select token</option>
+                  {TOKENS.map(token => (
+                    <option key={token.address} value={token.address}>
+                      {token.symbol}
+                    </option>
+                  ))}
+                </TokenSelect>
+              </InputGroup>
+            </TokenSection>
 
-          <TokenSection>
-            <TokenHeader>
-              <span>To</span>
-              <TokenBalance>
-                {outputToken ? 
-                  `${TOKENS.find(t => t.address === outputToken)?.symbol}` : 
-                  'Select token'}
-              </TokenBalance>
-            </TokenHeader>
-            <InputGroup>
-              <TokenInput
-                type="number"
-                placeholder="0.0"
-                value={amount}
-                disabled
-              />
-              <TokenSelect
-                value={outputToken}
-                onChange={(e) => setOutputToken(e.target.value)}
-              >
-                <option value="">Select token</option>
-                {TOKENS.map(token => (
-                  <option key={token.address} value={token.address}>
-                    {token.symbol}
-                  </option>
-                ))}
-              </TokenSelect>
-            </InputGroup>
-          </TokenSection>
+            <TokenSection>
+              <TokenHeader>
+                <span>To</span>
+                <TokenBalance>
+                  {outputToken ? 
+                    `${TOKENS.find(t => t.address === outputToken)?.symbol}` : 
+                    'Select token'}
+                </TokenBalance>
+              </TokenHeader>
+              <InputGroup>
+                <TokenInput
+                  type="number"
+                  placeholder="0.0"
+                  value={amount}
+                  disabled
+                />
+                <TokenSelect
+                  value={outputToken}
+                  onChange={(e) => setOutputToken(e.target.value)}
+                >
+                  <option value="">Select token</option>
+                  {TOKENS.map(token => (
+                    <option key={token.address} value={token.address}>
+                      {token.symbol}
+                    </option>
+                  ))}
+                </TokenSelect>
+              </InputGroup>
+            </TokenSection>
 
-          <SwapInfo>
-            <InfoRow>
-              <span>Price Impact</span>
-              <span>~0.04%</span>
-            </InfoRow>
-            <InfoRow>
-              <span>Network Fee</span>
-              <span>~$2.50</span>
-            </InfoRow>
-          </SwapInfo>
-        </CardContent>
+            <SwapInfo>
+              <InfoRow>
+                <span>Price Impact</span>
+                <span>~0.04%</span>
+              </InfoRow>
+              <InfoRow>
+                <span>Network Fee</span>
+                <span>~$2.50</span>
+              </InfoRow>
+            </SwapInfo>
+          </CardContent>
 
-        <CardFooter>
-          <SwapButton
-            onClick={handleSwap}
-            disabled={isSwapping || !inputToken || !outputToken || !amount}
-          >
-            {isSwapping ? 'Swapping...' : 'Swap'}
-          </SwapButton>
-        </CardFooter>
+          <CardFooter>
+            <SwapButton
+              onClick={handleSwap}
+              disabled={isSwapping || !inputToken || !outputToken || !amount}
+            >
+              {isSwapping ? 'Swapping...' : 'Swap'}
+            </SwapButton>
+          </CardFooter>
+        </GradientBackground>
       </Card>
     </>
   );
