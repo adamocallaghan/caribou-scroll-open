@@ -119,23 +119,6 @@ const SliderMarkers = styled.div`
   color: #92400e;
 `;
 
-const InfoRow = styled.div`
-  display: flex;
-  justify-content: space-between;
-  font-size: 0.875rem;
-  margin-bottom: 0.5rem;
-`;
-
-const InfoLabel = styled.span`
-  color: #92400e;
-  opacity: 0.8;
-`;
-
-const InfoValue = styled.span`
-  color: #92400e;
-  font-weight: 500;
-`;
-
 const ActionButton = styled.button`
   width: 100%;
   padding: 1rem;
@@ -266,11 +249,6 @@ export const EarnCardBackV2 = ({
               style={{ width: '100%' }}
             />
           </SliderContainer>
-
-          <InfoRow>
-            <InfoLabel>APY</InfoLabel>
-            <InfoValue style={{ color: '#15803d' }}>{apy}</InfoValue>
-          </InfoRow>
 
           <ActionButton
             onClick={handleAction}
