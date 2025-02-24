@@ -9,6 +9,7 @@ const CardWrapper = styled.div`
   justify-content: center;
   padding: 0 1.5rem;  // Add horizontal padding
   box-sizing: border-box;
+  margin-top: 30px;  // Add this to move it down
 `;
 
 const Card = styled.div`
