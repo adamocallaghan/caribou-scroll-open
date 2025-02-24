@@ -109,17 +109,6 @@ const MintCardBackContent = styled.div`
   padding: 20px;
 `;
 
-const CardContent = styled.div`
-  padding: 1rem 1.5rem;
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  width: 100%;
-  max-width: 100%;
-  box-sizing: border-box;
-  margin-top: -30px;
-`;
-
 interface HorizontalPagesProps {
   children: ReactNode;
   subPages: SubPageConfig[];
