@@ -1,6 +1,5 @@
 import styled from 'styled-components';
 import { HorizontalPages } from '../components/HorizontalPages';
-import { PortfolioCardV2 } from '../components/contracts/portfolio/PortfolioCardV2';
 
 const PageContent = styled.div`
   position: relative;
@@ -19,14 +18,6 @@ const LogoContainer = styled.div`
 const Logo = styled.img`
   max-width: 300px;
   height: auto;
-`;
-
-const DashboardCard = styled.div`
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 `;
 
 export const DashboardPage = () => {
