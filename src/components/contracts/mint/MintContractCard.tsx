@@ -57,31 +57,6 @@ const CardBack = styled.div`
   font-size: 1.2rem;
 `;
 
-const FlipButton = styled.button`
-  position: absolute;
-  bottom: max(20px, env(safe-area-inset-bottom));
-  right: max(20px, env(safe-area-inset-right));
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 0;
-  width: 30px;
-  height: 30px;
-  
-  @media (max-width: 768px) {
-    width: 24px;
-    height: 24px;
-    bottom: calc(env(safe-area-inset-bottom) + 60px);
-  }
-
-  img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-    filter: invert(89%) sepia(11%) saturate(595%) hue-rotate(190deg) brightness(103%) contrast(103%);
-  }
-`;
-
 const CardTitle = styled.h2`
   margin: 0;
   font-size: 1.5rem;
@@ -216,17 +191,11 @@ export const MintContractCard = ({ sendHash, contractIndex }: MintContractCardPr
           <CardFront>
             <MintCardV2 
               onMint={handleMint} 
-              contract={contract}  // Pass the contract data
+              contract={contract}
             />
-            <FlipButton onClick={() => setIsFlipped(!isFlipped)}>
-              <img src="/flip-over.svg" alt="Flip card" />
-            </FlipButton>
           </CardFront>
           <CardBack>
             <div>This NFT collection...</div>
-            <FlipButton onClick={() => setIsFlipped(!isFlipped)}>
-              <img src="/flip-over.svg" alt="Flip card" />
-            </FlipButton>
           </CardBack>
         </FlipContainer>
       </CardWrapper>

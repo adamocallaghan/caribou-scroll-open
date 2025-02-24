@@ -188,31 +188,6 @@ const CardBack = styled.div`
   text-align: center;
 `;
 
-const FlipButton = styled.button`
-  position: absolute;
-  bottom: max(20px, env(safe-area-inset-bottom));
-  right: max(20px, env(safe-area-inset-right));
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 0;
-  width: 30px;
-  height: 30px;
-  
-  @media (max-width: 768px) {
-    width: 24px;
-    height: 24px;
-    bottom: calc(env(safe-area-inset-bottom) + 60px);
-  }
-
-  img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-    filter: invert(13%) sepia(0%) saturate(11%) hue-rotate(213deg) brightness(95%) contrast(86%);
-  }
-`;
-
 export const EarnContractCard = ({ sendHash, contractIndex }: EarnContractCardProps) => {
   if (contractIndex >= CONTRACTS.length) {
     return (
@@ -436,11 +411,7 @@ export const EarnContractCard = ({ sendHash, contractIndex }: EarnContractCardPr
               symbol={contract.asset}
               protocol={contract.protocol}
             />
-            <FlipButton onClick={() => setIsFlipped(!isFlipped)}>
-              <img src="/flip-over.svg" alt="Flip card" />
-            </FlipButton>
           </CardFront>
-
           <CardBack>
             <EarnCardBackV2
               poolName={contract.name}
@@ -452,9 +423,6 @@ export const EarnContractCard = ({ sendHash, contractIndex }: EarnContractCardPr
               isDepositing={isDepositing}
               isWithdrawing={isWithdrawing}
             />
-            <FlipButton onClick={() => setIsFlipped(!isFlipped)}>
-              <img src="/flip-over.svg" alt="Flip card" />
-            </FlipButton>
           </CardBack>
         </FlipContainer>
       </CardWrapper>
