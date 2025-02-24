@@ -17,9 +17,11 @@ const Card = styled.div`
 `;
 
 const Container = styled.div`
-  padding: 0 1.5rem;
   width: 100%;
-  box-sizing: border-box;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;
 
 const CardHeader = styled.div`
@@ -160,6 +162,17 @@ const CardWrapper = styled.div`
   justify-content: center;
   padding: 0 1.5rem;
   box-sizing: border-box;
+`;
+
+const CardBack = styled.div`
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  transform: rotateY(180deg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;
 
 const TOKENS = [
@@ -377,6 +390,13 @@ export const SwapContractCardV2 = ({ sendHash }: { sendHash: (hash: string) => v
           </Card>
         </CardWrapper>
       </Container>
+      <CardBack>
+        <Container>
+          <GradientBackground>
+            {/* Back content */}
+          </GradientBackground>
+        </Container>
+      </CardBack>
     </>
   );
 }; 
