@@ -81,6 +81,15 @@ const FlipButton = styled.button`
   }
 `;
 
+const CenteredContent = styled.div`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+`;
+
 interface HorizontalPagesProps {
   children: ReactNode;
   subPages: SubPageConfig[];
@@ -150,7 +159,7 @@ export const HorizontalPages = ({
       if (subPage.index === 0) {
         return <SwapContractCardV2 sendHash={sendHash} />;
       }
-      return `Swap ${subPage.index + 2}`;
+      return <CenteredContent>Swap {subPage.index + 2}</CenteredContent>;
     }
     if (pageType === 'Dashboard') {
       if (subPage.index === 0) {
@@ -159,9 +168,9 @@ export const HorizontalPages = ({
         }
         return <PortfolioCardFront />;
       }
-      return `Dashboard ${subPage.index + 2}`;
+      return <CenteredContent>Dashboard {subPage.index + 2}</CenteredContent>;
     }
-    return subPage.name;
+    return <CenteredContent>{subPage.name}</CenteredContent>;
   };
 
   const handleFlip = (index: number) => {
