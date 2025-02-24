@@ -144,8 +144,10 @@ const SwapButton = styled.button`
 const GradientBackground = styled.div`
   background: linear-gradient(135deg, #96DCED 0%, #c8ebf6 50%, #e5f5fa 100%);
   position: relative;
-  padding: 1.5rem;
+  padding: 1rem;
   width: 100%;
+  max-width: 24rem;
+  margin: 0 auto;
   box-sizing: border-box;
   border-radius: 0.5rem;
 `;
@@ -156,7 +158,7 @@ const CardWrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 20px;
+  padding: 0 1.5rem;
   box-sizing: border-box;
 `;
 

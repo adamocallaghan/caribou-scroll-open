@@ -9,11 +9,11 @@ interface PredictionContractCardProps {
 
 const CardWrapper = styled.div`
   width: 100%;
-  height: 100%;  // Changed from 100dvh
+  height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 20px;
+  padding: 0 1.5rem;
   box-sizing: border-box;
 `;
 
