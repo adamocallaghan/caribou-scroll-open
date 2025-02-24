@@ -5,7 +5,6 @@ import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { ToastPortal } from '../../Toast';
 import { EarnCardV2 } from './EarnCardV2';
-import { EarnCardBackV2 } from './EarnCardBackV2';
 
 const CardWrapper = styled.div`
   width: 100%;
