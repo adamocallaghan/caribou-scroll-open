@@ -168,10 +168,8 @@ const CardFront = styled.div`
   padding-top: 60px;
   padding-bottom: calc(80px + env(safe-area-inset-bottom));
   box-sizing: border-box;
-
-  @media (max-width: 768px) {
-    padding-bottom: calc(120px + env(safe-area-inset-bottom));
-  }
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
 `;
 
 const CardBack = styled.div`
@@ -187,6 +185,8 @@ const CardBack = styled.div`
   padding-top: 80px;
   padding-bottom: 80px;
   text-align: center;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
 `;
 
 export const EarnContractCard = ({ sendHash, contractIndex, onStateChange }: EarnContractCardProps) => {

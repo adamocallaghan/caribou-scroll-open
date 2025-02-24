@@ -39,6 +39,8 @@ const CardFront = styled.div`
   padding: 20px;
   padding-top: 80px;
   padding-bottom: 80px;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
 `;
 
 // Back of card
@@ -56,6 +58,8 @@ const CardBack = styled.div`
   padding-bottom: 80px;
   text-align: center;
   font-size: 1.2rem;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
 `;
 
 const CardTitle = styled.h2`
