@@ -27,6 +27,8 @@ const MainContent = styled.div`
   flex-direction: column;
   align-items: center;
   gap: 2rem;
+  margin-top: -30px;  // Move content up
+  padding-bottom: calc(env(safe-area-inset-bottom) + 60px);  // Add padding to bottom
 `;
 
 const MainPageContent = styled.div`

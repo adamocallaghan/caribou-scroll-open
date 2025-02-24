@@ -34,7 +34,8 @@ const Page = styled.div<{ bgColor: string; textColor: string }>`
   perspective: 1000px;
   position: relative;
   font-size: 1.5rem;
-  font-weight: 500;
+  padding-bottom: calc(env(safe-area-inset-bottom) + 60px);
+  margin-top: -30px;
 `;
 
 const FlipContainer = styled.div<{ isFlipped: boolean }>`
@@ -106,6 +107,17 @@ const MintCardBackContent = styled.div`
   text-align: center;
   font-size: 1.2rem;
   padding: 20px;
+`;
+
+const CardContent = styled.div`
+  padding: 1rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  margin-top: -30px;
 `;
 
 interface HorizontalPagesProps {
