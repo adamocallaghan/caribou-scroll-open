@@ -29,6 +29,52 @@ const Page = styled.div<{ bgColor: string; textColor: string }>`
   display: flex;
   justify-content: center;
   align-items: center;
+  perspective: 1000px;
+  position: relative;
+`;
+
+const FlipContainer = styled.div<{ isFlipped: boolean }>`
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.6s;
+  transform-style: preserve-3d;
+  transform: ${props => props.isFlipped ? 'rotateY(180deg)' : 'rotateY(0)'};
+`;
+
+const CardFront = styled.div`
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+`;
+
+const CardBack = styled.div`
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  transform: rotateY(180deg);
+`;
+
+const FlipButton = styled.button`
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  width: 24px;
+  height: 24px;
+  z-index: 10;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    filter: invert(13%) sepia(0%) saturate(11%) hue-rotate(213deg) brightness(95%) contrast(86%);
+  }
 `;
 
 interface HorizontalPagesProps {
@@ -54,6 +100,7 @@ export const HorizontalPages = ({
 }: HorizontalPagesProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [currentPage, setCurrentPage] = useState(currentSubPage);
+  const [flippedPages, setFlippedPages] = useState<{ [key: number]: boolean }>({});
 
   useEffect(() => {
     const container = containerRef.current;
@@ -110,6 +157,13 @@ export const HorizontalPages = ({
     return subPage.name;
   };
 
+  const handleFlip = (index: number) => {
+    setFlippedPages(prev => ({
+      ...prev,
+      [index]: !prev[index]
+    }));
+  };
+
   return (
     <Container ref={containerRef}>
       {/* First page */}
@@ -124,7 +178,17 @@ export const HorizontalPages = ({
           bgColor={bgColor}
           textColor={textColor}
         >
-          {renderSubPageContent(subPage)}
+          <FlipContainer isFlipped={flippedPages[subPage.index] || false}>
+            <CardFront>
+              {renderSubPageContent(subPage)}
+            </CardFront>
+            <CardBack>
+              {/* Render back content if needed */}
+            </CardBack>
+          </FlipContainer>
+          <FlipButton onClick={() => handleFlip(subPage.index)}>
+            <img src="/flip-over.svg" alt="Flip card" />
+          </FlipButton>
         </Page>
       ))}
     </Container>
