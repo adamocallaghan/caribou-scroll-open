@@ -1,4 +1,7 @@
 import styled from 'styled-components';
+import { useState, useEffect } from 'react';
+import { useAppKitAccount, useAppKitNetworkCore, useAppKitProvider, type Provider } from '@reown/appkit/react';
+import { BrowserProvider, JsonRpcSigner, Contract, formatUnits } from 'ethers';
 
 const CardWrapper = styled.div`
   width: 100%;
@@ -99,59 +102,146 @@ const TokenChange = styled.span<{ isPositive: boolean }>`
   color: ${props => props.isPositive ? '#15803d' : '#dc2626'};
 `;
 
-// Mock data
-const tokens = [
+// Token configuration
+const TOKENS = [
   {
-    name: "Ethereum",
-    symbol: "ETH",
-    amount: "2.45",
-    value: 5123.45,
-    priceChange: 2.5,
+    symbol: 'ETH',
+    name: 'Ethereum',
   },
   {
-    name: "Bitcoin",
-    symbol: "BTC",
-    amount: "0.12",
-    value: 4892.32,
-    priceChange: -1.2,
+    symbol: 'USDC',
+    name: 'USD Coin',
+    address: "0x06eFdBFf2a14a7c8E15944D1F4A48F9F95F663A4",
+    abi: [
+      "function balanceOf(address account) external view returns (uint256)",
+      "function decimals() external view returns (uint8)"
+    ]
   },
   {
-    name: "Solana",
-    symbol: "SOL",
-    amount: "145.32",
-    value: 2341.87,
-    priceChange: 5.7,
-  },
+    symbol: 'USDT',
+    name: 'Tether USD',
+    address: "0xf55BEC9cafDbE8730f096Aa55dad6D22d44099Df",
+    abi: [
+      "function balanceOf(address account) external view returns (uint256)",
+      "function decimals() external view returns (uint8)"
+    ]
+  }
 ];
 
 export const PortfolioCardBack = () => {
+  const { address } = useAppKitAccount();
+  const { chainId } = useAppKitNetworkCore();
+  const { walletProvider } = useAppKitProvider<Provider>('eip155');
+  const [tokenBalances, setTokenBalances] = useState<Array<{
+    symbol: string;
+    name: string;
+    amount: string;
+    value: number;
+    priceChange: number;
+  }>>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchBalances = async () => {
+      setIsLoading(true);
+      if (!walletProvider || !address) {
+        console.log("No wallet connected");
+        setIsLoading(false);
+        return;
+      }
+
+      try {
+        const provider = new BrowserProvider(walletProvider, chainId);
+        const balances = await Promise.all(
+          TOKENS.map(async (token) => {
+            try {
+              let balance;
+              let decimals = 18;
+
+              if (token.symbol === 'ETH') {
+                balance = await provider.getBalance(address);
+                console.log(`ETH balance: ${balance}`);
+              } else {
+                const contract = new Contract(token.address!, token.abi, provider);
+                balance = await contract.balanceOf(address);
+                decimals = await contract.decimals();
+                console.log(`${token.symbol} balance: ${balance}`);
+              }
+
+              const prices: { [key: string]: number } = {
+                'ETH': 3500,
+                'USDC': 1,
+                'USDT': 1
+              };
+
+              const formattedBalance = formatUnits(balance, decimals);
+              const value = Number(formattedBalance) * prices[token.symbol];
+
+              return {
+                symbol: token.symbol,
+                name: token.name,
+                amount: Number(formattedBalance).toFixed(4),
+                value: value,
+                priceChange: 5
+              };
+            } catch (error) {
+              console.error(`Error fetching ${token.symbol} balance:`, error);
+              return {
+                symbol: token.symbol,
+                name: token.name,
+                amount: '0.0000',
+                value: 0,
+                priceChange: 0
+              };
+            }
+          })
+        );
+
+        console.log("Token balances:", balances);
+        setTokenBalances(balances);
+      } catch (error) {
+        console.error("Failed to fetch token balances:", error);
+        setTokenBalances([]);
+      }
+      setIsLoading(false);
+    };
+
+    fetchBalances();
+  }, [address, chainId, walletProvider]);
+
   return (
     <CardWrapper>
       <Card>
         <CardContent>
-          <TokenList>
-            {tokens.map((token) => (
-              <TokenItem key={token.symbol}>
-                <TokenInfo>
-                  <TokenIcon>
-                    {token.symbol.charAt(0)}
-                  </TokenIcon>
-                  <TokenDetails>
-                    <TokenName>{token.name}</TokenName>
-                    <TokenAmount>
-                      {token.amount} {token.symbol}
-                    </TokenAmount>
-                  </TokenDetails>
-                </TokenInfo>
-                <TokenValues>
-                  <TokenValue>${token.value.toLocaleString()}</TokenValue>
-                  <TokenChange isPositive={token.priceChange >= 0}>
-                    {token.priceChange >= 0 ? '+' : ''}{token.priceChange}%
-                  </TokenChange>
-                </TokenValues>
-              </TokenItem>
-            ))}
-          </TokenList>
+          {isLoading ? (
+            <div style={{ color: '#FFFFFF' }}>Loading balances...</div>
+          ) : tokenBalances.length > 0 ? (
+            <TokenList>
+              {tokenBalances.map((token) => (
+                <TokenItem key={token.symbol}>
+                  <TokenInfo>
+                    <TokenIcon>
+                      {token.symbol.charAt(0)}
+                    </TokenIcon>
+                    <TokenDetails>
+                      <TokenName>{token.name}</TokenName>
+                      <TokenAmount>
+                        {token.amount} {token.symbol}
+                      </TokenAmount>
+                    </TokenDetails>
+                  </TokenInfo>
+                  <TokenValues>
+                    <TokenValue>${token.value.toLocaleString()}</TokenValue>
+                    <TokenChange isPositive={token.priceChange >= 0}>
+                      {token.priceChange >= 0 ? '+' : ''}{token.priceChange}%
+                    </TokenChange>
+                  </TokenValues>
+                </TokenItem>
+              ))}
+            </TokenList>
+          ) : (
+            <div style={{ color: '#FFFFFF' }}>No tokens found</div>
+          )}
         </CardContent>
       </Card>
     </CardWrapper>

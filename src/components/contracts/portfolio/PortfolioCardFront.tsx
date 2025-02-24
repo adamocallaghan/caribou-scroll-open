@@ -1,5 +1,7 @@
 import styled from 'styled-components';
 import { LineChart, Line, XAxis, YAxis, ResponsiveContainer, Tooltip } from 'recharts';
+import { useState, useEffect } from 'react';
+import { useAppKitAccount, useAppKitNetworkCore, useAppKitProvider, type Provider } from '@reown/appkit/react';
 
 const CardWrapper = styled.div`
   width: 100%;
@@ -66,6 +68,13 @@ const ChartContainer = styled.div`
   margin: 1rem 0;
 `;
 
+const Balance = styled.div`
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #FFFFFF;
+  margin-bottom: 0.25rem;
+`;
+
 // Mock data
 const portfolioData = [
   { date: "Mon", value: 31000 },
@@ -78,8 +87,37 @@ const portfolioData = [
 ];
 
 export const PortfolioCardFront = () => {
-  const totalValue = 36500; // This should be calculated from your actual data
-  const weekChange = 4.2;
+  const [totalValue, setTotalValue] = useState(0);
+  const [chartData, setChartData] = useState([]);
+  const { address } = useAppKitAccount();
+
+  useEffect(() => {
+    // Calculate total value from PortfolioCardBack
+    // This should ideally be lifted to a parent component or context
+    // For now, we'll generate sample data based on the current total
+    const generateChartData = (currentValue: number) => {
+      const days = 7;
+      const data = [];
+      let value = currentValue;
+      
+      for (let i = days - 1; i >= 0; i--) {
+        const date = new Date();
+        date.setDate(date.getDate() - i);
+        
+        data.push({
+          date: date.toLocaleDateString(),
+          value: i === 0 ? value : value / (1.05 ** (days - i))
+        });
+      }
+      
+      setChartData(data);
+    };
+
+    // Set a sample total value - this should be calculated from actual balances
+    const sampleTotal = 10000; // Replace with actual total from token balances
+    setTotalValue(sampleTotal);
+    generateChartData(sampleTotal);
+  }, [address]);
 
   return (
     <CardWrapper>
@@ -88,14 +126,11 @@ export const PortfolioCardFront = () => {
           <Header>
             <Title>Total Portfolio Value</Title>
             <PortfolioValue>${totalValue.toLocaleString()}</PortfolioValue>
-            <ChangeIndicator isPositive={weekChange >= 0}>
-              {weekChange >= 0 ? '↑' : '↓'} {Math.abs(weekChange)}% past week
-            </ChangeIndicator>
           </Header>
 
           <ChartContainer>
-            <ResponsiveContainer width="100%" height="100%">
-              <LineChart data={portfolioData}>
+            <ResponsiveContainer width="100%" height={200}>
+              <LineChart data={chartData}>
                 <XAxis 
                   dataKey="date" 
                   stroke="#FF69B4" 
