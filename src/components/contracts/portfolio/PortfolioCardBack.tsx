@@ -1,5 +1,25 @@
 import styled from 'styled-components';
 
+const CardWrapper = styled.div`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 1.5rem;  // Add horizontal padding
+  box-sizing: border-box;
+`;
+
+const Card = styled.div`
+  width: 100%;
+  max-width: 24rem;
+  margin: 0 auto;
+  background: linear-gradient(135deg, #48466D 0%, #6B6992 50%, #8E8BB0 100%);
+  border-radius: 0.5rem;
+  overflow: hidden;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+`;
+
 const CardContent = styled.div`
   padding: 1.5rem;
   width: 100%;
@@ -104,30 +124,34 @@ const tokens = [
 
 export const PortfolioCardBack = () => {
   return (
-    <CardContent>
-      <TokenList>
-        {tokens.map((token) => (
-          <TokenItem key={token.symbol}>
-            <TokenInfo>
-              <TokenIcon>
-                {token.symbol.charAt(0)}
-              </TokenIcon>
-              <TokenDetails>
-                <TokenName>{token.name}</TokenName>
-                <TokenAmount>
-                  {token.amount} {token.symbol}
-                </TokenAmount>
-              </TokenDetails>
-            </TokenInfo>
-            <TokenValues>
-              <TokenValue>${token.value.toLocaleString()}</TokenValue>
-              <TokenChange isPositive={token.priceChange >= 0}>
-                {token.priceChange >= 0 ? '+' : ''}{token.priceChange}%
-              </TokenChange>
-            </TokenValues>
-          </TokenItem>
-        ))}
-      </TokenList>
-    </CardContent>
+    <CardWrapper>
+      <Card>
+        <CardContent>
+          <TokenList>
+            {tokens.map((token) => (
+              <TokenItem key={token.symbol}>
+                <TokenInfo>
+                  <TokenIcon>
+                    {token.symbol.charAt(0)}
+                  </TokenIcon>
+                  <TokenDetails>
+                    <TokenName>{token.name}</TokenName>
+                    <TokenAmount>
+                      {token.amount} {token.symbol}
+                    </TokenAmount>
+                  </TokenDetails>
+                </TokenInfo>
+                <TokenValues>
+                  <TokenValue>${token.value.toLocaleString()}</TokenValue>
+                  <TokenChange isPositive={token.priceChange >= 0}>
+                    {token.priceChange >= 0 ? '+' : ''}{token.priceChange}%
+                  </TokenChange>
+                </TokenValues>
+              </TokenItem>
+            ))}
+          </TokenList>
+        </CardContent>
+      </Card>
+    </CardWrapper>
   );
 }; 

@@ -1,6 +1,26 @@
 import styled from 'styled-components';
 import { LineChart, Line, XAxis, YAxis, ResponsiveContainer, Tooltip } from 'recharts';
 
+const CardWrapper = styled.div`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 1.5rem;  // Add horizontal padding
+  box-sizing: border-box;
+`;
+
+const Card = styled.div`
+  width: 100%;
+  max-width: 24rem;
+  margin: 0 auto;
+  background: linear-gradient(135deg, #48466D 0%, #6B6992 50%, #8E8BB0 100%);
+  border-radius: 0.5rem;
+  overflow: hidden;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+`;
+
 const CardContent = styled.div`
   padding: 1.5rem;
   width: 100%;
@@ -10,7 +30,6 @@ const CardContent = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
   text-align: center;
 `;
 
@@ -62,59 +81,63 @@ export const PortfolioCardFront = () => {
   const weekChange = 4.2;
 
   return (
-    <CardContent>
-      <Header>
-        <Title>Total Portfolio Value</Title>
-        <PortfolioValue>${totalValue.toLocaleString()}</PortfolioValue>
-        <ChangeIndicator isPositive={weekChange >= 0}>
-          {weekChange >= 0 ? '↑' : '↓'} {Math.abs(weekChange)}% past week
-        </ChangeIndicator>
-      </Header>
+    <CardWrapper>
+      <Card>
+        <CardContent>
+          <Header>
+            <Title>Total Portfolio Value</Title>
+            <PortfolioValue>${totalValue.toLocaleString()}</PortfolioValue>
+            <ChangeIndicator isPositive={weekChange >= 0}>
+              {weekChange >= 0 ? '↑' : '↓'} {Math.abs(weekChange)}% past week
+            </ChangeIndicator>
+          </Header>
 
-      <ChartContainer>
-        <ResponsiveContainer width="100%" height="100%">
-          <LineChart data={portfolioData}>
-            <XAxis 
-              dataKey="date" 
-              stroke="#888888" 
-              fontSize={12} 
-              tickLine={false} 
-              axisLine={false} 
-            />
-            <YAxis
-              stroke="#888888"
-              fontSize={12}
-              tickLine={false}
-              axisLine={false}
-              tickFormatter={(value) => `$${value}`}
-            />
-            <Tooltip
-              content={({ active, payload }) => {
-                if (active && payload && payload.length) {
-                  return (
-                    <div style={{
-                      background: 'white',
-                      padding: '0.5rem',
-                      border: '1px solid #ccc',
-                      borderRadius: '0.25rem',
-                    }}>
-                      <div>${payload[0].value}</div>
-                    </div>
-                  );
-                }
-                return null;
-              }}
-            />
-            <Line 
-              type="monotone" 
-              dataKey="value" 
-              stroke="#92400e" 
-              strokeWidth={2} 
-              dot={false} 
-            />
-          </LineChart>
-        </ResponsiveContainer>
-      </ChartContainer>
-    </CardContent>
+          <ChartContainer>
+            <ResponsiveContainer width="100%" height="100%">
+              <LineChart data={portfolioData}>
+                <XAxis 
+                  dataKey="date" 
+                  stroke="#888888" 
+                  fontSize={12} 
+                  tickLine={false} 
+                  axisLine={false} 
+                />
+                <YAxis
+                  stroke="#888888"
+                  fontSize={12}
+                  tickLine={false}
+                  axisLine={false}
+                  tickFormatter={(value) => `$${value}`}
+                />
+                <Tooltip
+                  content={({ active, payload }) => {
+                    if (active && payload && payload.length) {
+                      return (
+                        <div style={{
+                          background: 'white',
+                          padding: '0.5rem',
+                          border: '1px solid #ccc',
+                          borderRadius: '0.25rem',
+                        }}>
+                          <div>${payload[0].value}</div>
+                        </div>
+                      );
+                    }
+                    return null;
+                  }}
+                />
+                <Line 
+                  type="monotone" 
+                  dataKey="value" 
+                  stroke="#92400e" 
+                  strokeWidth={2} 
+                  dot={false} 
+                />
+              </LineChart>
+            </ResponsiveContainer>
+          </ChartContainer>
+        </CardContent>
+      </Card>
+    </CardWrapper>
   );
 }; 

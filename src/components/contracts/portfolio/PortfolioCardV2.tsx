@@ -3,26 +3,30 @@ import { PortfolioCardFront } from './PortfolioCardFront';
 
 const CardWrapper = styled.div`
   width: 100%;
-  height: 100dvh;
-  max-height: calc(100dvh - env(safe-area-inset-bottom));
-  overflow: auto;
+  height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 20px;
-  padding-top: 60px;
-  padding-bottom: calc(80px + env(safe-area-inset-bottom));
   box-sizing: border-box;
+`;
 
-  @media (max-width: 768px) {
-    padding-bottom: calc(120px + env(safe-area-inset-bottom));
-  }
+const Card = styled.div`
+  width: 100%;
+  max-width: 24rem;
+  margin: 0 auto;
+  background: linear-gradient(135deg, #48466D 0%, #6B6992 50%, #8E8BB0 100%);  // Gradient from dark purple to lighter purple
+  border-radius: 0.5rem;  // Rounded corners
+  overflow: hidden;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);  // Optional: adds subtle shadow
 `;
 
 export const PortfolioCardV2 = () => {
   return (
     <CardWrapper>
-      <PortfolioCardFront />
+      <Card>
+        <PortfolioCardFront />
+      </Card>
     </CardWrapper>
   );
 }; 
