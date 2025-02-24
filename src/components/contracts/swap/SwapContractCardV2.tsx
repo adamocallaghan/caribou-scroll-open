@@ -49,7 +49,7 @@ const Container = styled.div`
 `;
 
 const GradientBackground = styled.div`
-  background: linear-gradient(135deg, #96DCED 0%, #c8ebf6 50%, #e5f5fa 100%);
+  background: linear-gradient(135deg, #4287f5 0%, #7eabf8 50%, #d4e3fd 100%);
   position: relative;
   padding: 1rem;
   width: 100%;
@@ -128,7 +128,7 @@ const TokenInput = styled.input`
   min-width: 0;
   &:focus {
     outline: none;
-    border-color: #96DCED;
+    border-color: #4287f5;
   }
 `;
 
@@ -142,7 +142,7 @@ const TokenSelect = styled.select`
   flex-shrink: 0;
   &:focus {
     outline: none;
-    border-color: #96DCED;
+    border-color: #4287f5;
   }
 `;
 
@@ -166,7 +166,7 @@ const SwapButton = styled.button`
   padding: 0.75rem;
   border: none;
   border-radius: 0.25rem;
-  background: #96DCED;
+  background: #4287f5;
   color: white;
   font-size: 1rem;
   cursor: pointer;

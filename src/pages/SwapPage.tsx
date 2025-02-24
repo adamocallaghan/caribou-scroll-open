@@ -1,5 +1,19 @@
 import styled from 'styled-components';
 
+const Page = styled.div`
+  height: 100vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  scroll-snap-align: start;
+  background-color: #4287f5;  // New blue background
+  color: #FFFFFF;
+  font-size: 2rem;
+  font-weight: bold;
+`;
+
 const Container = styled.div`
   width: 100%;
   height: 100%;
@@ -28,13 +42,15 @@ const SwapImage = styled.img`
 
 export const SwapPage = () => {
   return (
-    <Container>
-      <MainContent>
-        <MainPageContent>
-          Swap
-        </MainPageContent>
-        <SwapImage src="/swap.svg" alt="Swap" />
-      </MainContent>
-    </Container>
+    <Page>
+      <Container>
+        <MainContent>
+          <MainPageContent>
+            Swap
+          </MainPageContent>
+          <SwapImage src="/swap.svg" alt="Swap" />
+        </MainContent>
+      </Container>
+    </Page>
   );
 }; 

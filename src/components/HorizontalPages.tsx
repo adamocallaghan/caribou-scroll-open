@@ -283,8 +283,8 @@ export const SwapPages = () => {
         { name: 'Swap 3', index: 1 },
         { name: 'Swap 4', index: 2 }
       ]}
-      bgColor="#96DCED"
-      textColor="#3D3D3D"
+      bgColor="#4287f5"
+      textColor="#FFFFFF"
     >
       <SwapContractCardV2 sendHash={(hash: string) => console.log(hash)} />
       <div>Swap 3</div>

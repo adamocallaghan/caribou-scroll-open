@@ -22,7 +22,7 @@ export const PAGES: PageConfig[] = [
   },
   {
     name: 'Swap',
-    color: '#96DCED',
+    color: '#4287f5',
     textColor: '#3D3D3D',
     subPages: [
       { name: 'Swap 1', index: 0 },
