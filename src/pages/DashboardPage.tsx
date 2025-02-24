@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { PortfolioCardV2 } from '../components/contracts/portfolio/PortfolioCardV2';
 
 const PageContent = styled.div`
   position: relative;
@@ -25,6 +26,7 @@ export const DashboardPage = () => {
       <LogoContainer>
         <Logo src="caribou-logo-text-2.png" alt="Caribou Logo" />
       </LogoContainer>
+      <PortfolioCardV2 />
     </PageContent>
   );
 }; 
