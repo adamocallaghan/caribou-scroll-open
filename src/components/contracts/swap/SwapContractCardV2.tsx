@@ -221,13 +221,17 @@ const ROUTER_ABI = [
   'function exactInputSingle((address tokenIn, address tokenOut, uint24 fee, address recipient, uint256 deadline, uint256 amountIn, uint256 amountOutMinimum, uint160 sqrtPriceLimitX96)) external returns (uint256 amountOut)'
 ];
 
-export const SwapContractCardV2 = ({ sendHash }: { sendHash: (hash: string) => void }) => {
+interface SwapContractCardV2Props {
+  sendHash: (hash: string) => void;
+  isFlipped?: boolean;
+}
+
+export const SwapContractCardV2 = ({ sendHash, isFlipped = false }: SwapContractCardV2Props) => {
   const [inputToken, setInputToken] = useState('');
   const [outputToken, setOutputToken] = useState('');
   const [amount, setAmount] = useState('');
   const [isSwapping, setIsSwapping] = useState(false);
   const [tokenBalance, setTokenBalance] = useState('0');
-  const [isFlipped, setIsFlipped] = useState(false);
 
   const { address } = useAppKitAccount();
   const { chainId } = useAppKitNetworkCore();
