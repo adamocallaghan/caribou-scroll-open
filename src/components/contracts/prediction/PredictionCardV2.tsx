@@ -11,7 +11,7 @@ const Card = styled.div`
   max-width: 24rem;
   margin: 0 auto;
   padding: 1rem;
-  background: linear-gradient(135deg, #006b71 0%, #80c5c8 50%, #B87471 100%);
+  background: linear-gradient(135deg, #006b71 0%, #80c5c8 50%, #e8f6f7 100%);
   border-radius: 0.5rem;
   box-sizing: border-box;
   overflow: hidden;
