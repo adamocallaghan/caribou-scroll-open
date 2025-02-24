@@ -5,7 +5,6 @@ import { MintContractCard } from './contracts/mint/MintContractCard';
 import { EarnContractCard } from './contracts/earn/EarnContractCard';
 import { PredictionContractCard } from './contracts/prediction/PredictionContractCard';
 import { SwapContractCardV2 } from './contracts/swap/SwapContractCardV2';
-import { PortfolioCardV2 } from './contracts/portfolio/PortfolioCardV2';
 import { PortfolioCardBack } from './contracts/portfolio/PortfolioCardBack';
 import { PortfolioCardFront } from './contracts/portfolio/PortfolioCardFront';
 import { EarnCardBackV2 } from './contracts/earn/EarnCardBackV2';

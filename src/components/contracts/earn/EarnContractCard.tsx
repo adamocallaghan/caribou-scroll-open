@@ -207,7 +207,6 @@ export const EarnContractCard = ({ sendHash, contractIndex, onStateChange }: Ear
   const [rUsdcBalance, setRUsdcBalance] = useState<bigint>(BigInt(0));
   const [isDepositing, setIsDepositing] = useState(false);
   const [isWithdrawing, setIsWithdrawing] = useState(false);
-  const [isFlipped, setIsFlipped] = useState(false);
 
   // Function to fetch USDC wallet balance
   const fetchWalletBalance = async () => {
@@ -415,7 +414,7 @@ export const EarnContractCard = ({ sendHash, contractIndex, onStateChange }: Ear
     <>
       <ToastPortal />
       <CardWrapper>
-        <FlipContainer isFlipped={isFlipped}>
+        <FlipContainer isFlipped={false}>
           <CardFront>
             <EarnCardV2
               poolName={contract.name}

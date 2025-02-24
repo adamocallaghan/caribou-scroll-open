@@ -1,6 +1,5 @@
 import styled from 'styled-components';
 import { PortfolioCardFront } from './PortfolioCardFront';
-import { PortfolioCardBack } from './PortfolioCardBack';
 
 const CardWrapper = styled.div`
   width: 100%;

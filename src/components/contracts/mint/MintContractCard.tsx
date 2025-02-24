@@ -127,13 +127,11 @@ interface MintContractCardProps {
 }
 
 export const MintContractCard = ({ sendHash, contractIndex }: MintContractCardProps) => {
-  const [isFlipped, setIsFlipped] = useState(false);
-
   // Add safety check for contract index
   if (contractIndex >= CONTRACTS.length) {
     return (
       <CardWrapper>
-        <FlipContainer isFlipped={isFlipped}>
+        <FlipContainer isFlipped={false}>
           <CardFront>
             <CardTitle>No Contract Available</CardTitle>
           </CardFront>
@@ -189,7 +187,7 @@ export const MintContractCard = ({ sendHash, contractIndex }: MintContractCardPr
     <>
       <ToastPortal />
       <CardWrapper>
-        <FlipContainer isFlipped={isFlipped}>
+        <FlipContainer isFlipped={false}>
           <CardFront>
             <MintCardV2 
               onMint={handleMint} 
