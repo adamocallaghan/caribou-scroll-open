@@ -30,12 +30,18 @@ const CardFront = styled.div`
   width: 100%;
   height: 100%;
   backface-visibility: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;
 
 const Container = styled.div`
   width: 100%;
   max-width: 24rem;
   margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;
 
 const GradientBackground = styled.div`
