@@ -60,6 +60,9 @@ const CardBack = styled.div`
   height: 100%;
   backface-visibility: hidden;
   transform: rotateY(180deg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;
 
 const FlipButton = styled.button`

@@ -1,6 +1,12 @@
 import styled from 'styled-components';
 import { useState } from 'react';
 
+const Container = styled.div`
+  padding: 0 1.5rem;
+  width: 100%;
+  box-sizing: border-box;
+`;
+
 const Card = styled.div`
   width: 100%;
   max-width: 24rem;
@@ -8,12 +14,19 @@ const Card = styled.div`
   background: linear-gradient(135deg, #f3c86c 0%, #ffecd1 50%, #fff6e5 100%);
   border-radius: 0.5rem;
   overflow: hidden;
+  display: flex;
+  align-items: center;
+  min-height: 400px;
 `;
 
 const CardContent = styled.div`
   padding: 1.5rem;
   width: 100%;
   box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
 `;
 
 const Header = styled.div`
@@ -34,6 +47,9 @@ const TabsContainer = styled.div`
   width: 100%;
   padding: 0 1.5rem;
   box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 `;
 
 const TabsList = styled.div`
@@ -198,92 +214,94 @@ export const EarnCardBackV2 = ({
   };
 
   return (
-    <Card>
-      <CardContent>
-        <Header>
-          <Title>{poolName}</Title>
-        </Header>
+    <Container>
+      <Card>
+        <CardContent>
+          <Header>
+            <Title>{poolName}</Title>
+          </Header>
 
-        <TabsContainer>
-          <TabsList>
-            <TabButton 
-              active={activeTab === 'deposit'} 
-              onClick={() => {
-                setActiveTab('deposit');
-                setAmount('0.00');
-                setPercentage(0);
-              }}
-            >
-              Deposit
-            </TabButton>
-            <TabButton 
-              active={activeTab === 'withdraw'} 
-              onClick={() => {
-                setActiveTab('withdraw');
-                setAmount('0.00');
-                setPercentage(0);
-              }}
-            >
-              Withdraw
-            </TabButton>
-          </TabsList>
+          <TabsContainer>
+            <TabsList>
+              <TabButton 
+                active={activeTab === 'deposit'} 
+                onClick={() => {
+                  setActiveTab('deposit');
+                  setAmount('0.00');
+                  setPercentage(0);
+                }}
+              >
+                Deposit
+              </TabButton>
+              <TabButton 
+                active={activeTab === 'withdraw'} 
+                onClick={() => {
+                  setActiveTab('withdraw');
+                  setAmount('0.00');
+                  setPercentage(0);
+                }}
+              >
+                Withdraw
+              </TabButton>
+            </TabsList>
 
-          <InputContainer>
-            <InputHeader>
-              <Label>Amount</Label>
-              <Balance>
-                {activeTab === 'deposit' ? 'Balance' : 'Deposited'}: {
-                  activeTab === 'deposit' ? walletBalance : depositedBalance
-                } {symbol}
-              </Balance>
-            </InputHeader>
-            <InputWrapper>
-              <Input 
-                type="number"
-                value={amount}
-                onChange={handleAmountChange}
+            <InputContainer>
+              <InputHeader>
+                <Label>Amount</Label>
+                <Balance>
+                  {activeTab === 'deposit' ? 'Balance' : 'Deposited'}: {
+                    activeTab === 'deposit' ? walletBalance : depositedBalance
+                  } {symbol}
+                </Balance>
+              </InputHeader>
+              <InputWrapper>
+                <Input 
+                  type="number"
+                  value={amount}
+                  onChange={handleAmountChange}
+                  min="0"
+                  max={maxAmount.toString()}
+                  step="0.01"
+                />
+                <TokenSymbol>{symbol}</TokenSymbol>
+              </InputWrapper>
+            </InputContainer>
+
+            <SliderContainer>
+              <SliderMarkers>
+                <span>0%</span>
+                <span>25%</span>
+                <span>50%</span>
+                <span>75%</span>
+                <span>100%</span>
+              </SliderMarkers>
+              <input
+                type="range"
                 min="0"
-                max={maxAmount.toString()}
-                step="0.01"
+                max="100"
+                value={percentage}
+                onChange={(e) => handleSliderChange(Number(e.target.value))}
+                style={{ width: '100%' }}
               />
-              <TokenSymbol>{symbol}</TokenSymbol>
-            </InputWrapper>
-          </InputContainer>
+            </SliderContainer>
 
-          <SliderContainer>
-            <SliderMarkers>
-              <span>0%</span>
-              <span>25%</span>
-              <span>50%</span>
-              <span>75%</span>
-              <span>100%</span>
-            </SliderMarkers>
-            <input
-              type="range"
-              min="0"
-              max="100"
-              value={percentage}
-              onChange={(e) => handleSliderChange(Number(e.target.value))}
-              style={{ width: '100%' }}
-            />
-          </SliderContainer>
-
-          <ActionButton
-            onClick={handleAction}
-            disabled={
-              isDepositing || 
-              isWithdrawing || 
-              parseFloat(amount) === 0 ||
-              parseFloat(amount) > maxAmount
-            }
-          >
-            {activeTab === 'deposit' 
-              ? (isDepositing ? 'Depositing...' : 'Deposit')
-              : (isWithdrawing ? 'Withdrawing...' : 'Withdraw')
-            }
-          </ActionButton>
-        </TabsContainer>
-      </CardContent>
-    </Card>
+            <ActionButton
+              onClick={handleAction}
+              disabled={
+                isDepositing || 
+                isWithdrawing || 
+                parseFloat(amount) === 0 ||
+                parseFloat(amount) > maxAmount
+              }
+            >
+              {activeTab === 'deposit' 
+                ? (isDepositing ? 'Depositing...' : 'Deposit')
+                : (isWithdrawing ? 'Withdrawing...' : 'Withdraw')
+              }
+            </ActionButton>
+          </TabsContainer>
+        </CardContent>
+      </Card>
+    </Container>
   );
 }; 
