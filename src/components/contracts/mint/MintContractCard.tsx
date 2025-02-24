@@ -190,17 +190,10 @@ export const MintContractCard = ({ sendHash, contractIndex }: MintContractCardPr
     <>
       <ToastPortal />
       <CardWrapper>
-        <FlipContainer isFlipped={false}>
-          <CardFront>
-            <MintCardV2 
-              onMint={handleMint} 
-              contract={contract}
-            />
-          </CardFront>
-          <CardBack>
-            <div>This NFT collection...</div>
-          </CardBack>
-        </FlipContainer>
+        <MintCardV2 
+          onMint={handleMint} 
+          contract={contract}
+        />
       </CardWrapper>
     </>
   );

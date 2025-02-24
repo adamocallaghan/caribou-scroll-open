@@ -414,30 +414,14 @@ export const EarnContractCard = ({ sendHash, contractIndex, onStateChange }: Ear
     <>
       <ToastPortal />
       <CardWrapper>
-        <FlipContainer isFlipped={false}>
-          <CardFront>
-            <EarnCardV2
-              poolName={contract.name}
-              apr={contract.apy.replace('%', '')}
-              available={walletUsdcBalance}
-              supplied={usdcBalance}
-              symbol={contract.asset}
-              protocol={contract.protocol}
-            />
-          </CardFront>
-          <CardBack>
-            <EarnCardBackV2
-              poolName={contract.name}
-              symbol={contract.asset}
-              walletBalance={walletUsdcBalance}
-              depositedBalance={usdcBalance}
-              onDeposit={handleDeposit}
-              onWithdraw={handleWithdraw}
-              isDepositing={isDepositing}
-              isWithdrawing={isWithdrawing}
-            />
-          </CardBack>
-        </FlipContainer>
+        <EarnCardV2
+          poolName={contract.name}
+          apr={contract.apy.replace('%', '')}
+          available={walletUsdcBalance}
+          supplied={usdcBalance}
+          symbol={contract.asset}
+          protocol={contract.protocol}
+        />
       </CardWrapper>
     </>
   );
