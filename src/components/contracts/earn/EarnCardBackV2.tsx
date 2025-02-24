@@ -128,15 +128,44 @@ const TokenSymbol = styled.span`
 `;
 
 const SliderContainer = styled.div`
-  margin-bottom: 1.5rem;
+  width: 100%;
+  padding: 1rem 0.5rem;
+  margin: 1rem 0;
 `;
 
 const SliderMarkers = styled.div`
   display: flex;
   justify-content: space-between;
-  margin-bottom: 0.5rem;
-  font-size: 0.875rem;
+  margin-bottom: 0.75rem;
   color: #92400e;
+  font-size: 0.875rem;
+`;
+
+const StyledSlider = styled.input`
+  width: 100%;
+  height: 4px;
+  -webkit-appearance: none;
+  background: rgba(243, 200, 108, 0.2);
+  border-radius: 2px;
+  outline: none;
+  
+  &::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 16px;
+    height: 16px;
+    background: #92400e;
+    border-radius: 50%;
+    cursor: pointer;
+  }
+
+  &::-moz-range-thumb {
+    width: 16px;
+    height: 16px;
+    background: #92400e;
+    border-radius: 50%;
+    cursor: pointer;
+    border: none;
+  }
 `;
 
 const ActionButton = styled.button`
@@ -275,13 +304,12 @@ export const EarnCardBackV2 = ({
                 <span>75%</span>
                 <span>100%</span>
               </SliderMarkers>
-              <input
+              <StyledSlider
                 type="range"
                 min="0"
                 max="100"
                 value={percentage}
                 onChange={(e) => handleSliderChange(Number(e.target.value))}
-                style={{ width: '100%' }}
               />
             </SliderContainer>
 
