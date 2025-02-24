@@ -51,6 +51,16 @@ const ProfileImage = styled.div`
   border-radius: 50%;
   background: rgba(0, 107, 113, 0.1);
   flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+
+  img {
+    width: 60%;
+    height: 60%;
+    object-fit: contain;
+  }
 `;
 
 const Question = styled.h3`
@@ -138,6 +148,19 @@ interface PredictionCardV2Props {
   sendHash: (hash: string) => void;
 }
 
+const getMarketIcon = (description: string) => {
+  if (description.toLowerCase().includes('bitcoin')) {
+    return '/bitcoin.png';
+  }
+  if (description.toLowerCase().includes('alien')) {
+    return '/alien.png';
+  }
+  if (description.toLowerCase().includes('tiktok')) {
+    return '/tiktok.png';
+  }
+  return null;
+};
+
 export const PredictionCardV2 = ({ marketAddress, description, sendHash }: PredictionCardV2Props) => {
   const [totalTrue, setTotalTrue] = useState<bigint>(BigInt(0));
   const [totalFalse, setTotalFalse] = useState<bigint>(BigInt(0));
@@ -224,7 +247,9 @@ export const PredictionCardV2 = ({ marketAddress, description, sendHash }: Predi
           <CardContent>
             <Header>
               <QuestionSection>
-                <ProfileImage />
+                <ProfileImage>
+                  <img src={getMarketIcon(description)} alt="Market Icon" />
+                </ProfileImage>
                 <Question>{description}</Question>
               </QuestionSection>
               <GaugeContainer>
