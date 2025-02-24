@@ -150,6 +150,16 @@ const GradientBackground = styled.div`
   border-radius: 0.5rem;
 `;
 
+const CardWrapper = styled.div`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  box-sizing: border-box;
+`;
+
 const TOKENS = [
   {
     symbol: 'WETH',
@@ -273,95 +283,97 @@ export const SwapContractCardV2 = ({ sendHash }: { sendHash: (hash: string) => v
     <>
       <ToastPortal />
       <Container>
-        <Card>
-          <GradientBackground>
-            <CardHeader>
-              <CardTitle>Swap Tokens</CardTitle>
-              <CardDescription>Trade tokens instantly with low fees</CardDescription>
-            </CardHeader>
-            
-            <CardContent>
-              <TokenSection>
-                <TokenHeader>
-                  <span>From</span>
-                  <TokenBalance>Balance: {formattedBalance}</TokenBalance>
-                </TokenHeader>
-                <InputGroup>
-                  <TokenInput
-                    type="number"
-                    placeholder="0.0"
-                    value={amount}
-                    onChange={(e) => setAmount(e.target.value)}
-                  />
-                  <TokenSelect
-                    value={inputToken}
-                    onChange={(e) => {
-                      setInputToken(e.target.value);
-                      setAmount('');
-                    }}
-                  >
-                    <option value="">Select token</option>
-                    {TOKENS.map(token => (
-                      <option key={token.address} value={token.address}>
-                        {token.symbol}
-                      </option>
-                    ))}
-                  </TokenSelect>
-                </InputGroup>
-              </TokenSection>
+        <CardWrapper>
+          <Card>
+            <GradientBackground>
+              <CardHeader>
+                <CardTitle>Swap Tokens</CardTitle>
+                <CardDescription>Trade tokens instantly with low fees</CardDescription>
+              </CardHeader>
+              
+              <CardContent>
+                <TokenSection>
+                  <TokenHeader>
+                    <span>From</span>
+                    <TokenBalance>Balance: {formattedBalance}</TokenBalance>
+                  </TokenHeader>
+                  <InputGroup>
+                    <TokenInput
+                      type="number"
+                      placeholder="0.0"
+                      value={amount}
+                      onChange={(e) => setAmount(e.target.value)}
+                    />
+                    <TokenSelect
+                      value={inputToken}
+                      onChange={(e) => {
+                        setInputToken(e.target.value);
+                        setAmount('');
+                      }}
+                    >
+                      <option value="">Select token</option>
+                      {TOKENS.map(token => (
+                        <option key={token.address} value={token.address}>
+                          {token.symbol}
+                        </option>
+                      ))}
+                    </TokenSelect>
+                  </InputGroup>
+                </TokenSection>
 
-              <TokenSection>
-                <TokenHeader>
-                  <span>To</span>
-                  <TokenBalance>
-                    {outputToken ? 
-                      `${TOKENS.find(t => t.address === outputToken)?.symbol}` : 
-                      'Select token'}
-                  </TokenBalance>
-                </TokenHeader>
-                <InputGroup>
-                  <TokenInput
-                    type="number"
-                    placeholder="0.0"
-                    value={amount}
-                    disabled
-                  />
-                  <TokenSelect
-                    value={outputToken}
-                    onChange={(e) => setOutputToken(e.target.value)}
-                  >
-                    <option value="">Select token</option>
-                    {TOKENS.map(token => (
-                      <option key={token.address} value={token.address}>
-                        {token.symbol}
-                      </option>
-                    ))}
-                  </TokenSelect>
-                </InputGroup>
-              </TokenSection>
+                <TokenSection>
+                  <TokenHeader>
+                    <span>To</span>
+                    <TokenBalance>
+                      {outputToken ? 
+                        `${TOKENS.find(t => t.address === outputToken)?.symbol}` : 
+                        'Select token'}
+                    </TokenBalance>
+                  </TokenHeader>
+                  <InputGroup>
+                    <TokenInput
+                      type="number"
+                      placeholder="0.0"
+                      value={amount}
+                      disabled
+                    />
+                    <TokenSelect
+                      value={outputToken}
+                      onChange={(e) => setOutputToken(e.target.value)}
+                    >
+                      <option value="">Select token</option>
+                      {TOKENS.map(token => (
+                        <option key={token.address} value={token.address}>
+                          {token.symbol}
+                        </option>
+                      ))}
+                    </TokenSelect>
+                  </InputGroup>
+                </TokenSection>
 
-              <SwapInfo>
-                <InfoRow>
-                  <span>Price Impact</span>
-                  <span>~0.04%</span>
-                </InfoRow>
-                <InfoRow>
-                  <span>Network Fee</span>
-                  <span>~$2.50</span>
-                </InfoRow>
-              </SwapInfo>
-            </CardContent>
+                <SwapInfo>
+                  <InfoRow>
+                    <span>Price Impact</span>
+                    <span>~0.04%</span>
+                  </InfoRow>
+                  <InfoRow>
+                    <span>Network Fee</span>
+                    <span>~$2.50</span>
+                  </InfoRow>
+                </SwapInfo>
+              </CardContent>
 
-            <CardFooter>
-              <SwapButton
-                onClick={handleSwap}
-                disabled={isSwapping || !inputToken || !outputToken || !amount}
-              >
-                {isSwapping ? 'Swapping...' : 'Swap'}
-              </SwapButton>
-            </CardFooter>
-          </GradientBackground>
-        </Card>
+              <CardFooter>
+                <SwapButton
+                  onClick={handleSwap}
+                  disabled={isSwapping || !inputToken || !outputToken || !amount}
+                >
+                  {isSwapping ? 'Swapping...' : 'Swap'}
+                </SwapButton>
+              </CardFooter>
+            </GradientBackground>
+          </Card>
+        </CardWrapper>
       </Container>
     </>
   );

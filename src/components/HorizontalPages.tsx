@@ -8,6 +8,7 @@ import { SwapContractCardV2 } from './contracts/swap/SwapContractCardV2';
 import { PortfolioCardV2 } from './contracts/portfolio/PortfolioCardV2';
 import { PortfolioCardBack } from './contracts/portfolio/PortfolioCardBack';
 import { PortfolioCardFront } from './contracts/portfolio/PortfolioCardFront';
+import { EarnCardBackV2 } from './contracts/earn/EarnCardBackV2';
 
 const Container = styled.div`
   width: 100%;
@@ -114,6 +115,17 @@ export const HorizontalPages = ({
   const containerRef = useRef<HTMLDivElement>(null);
   const [currentPage, setCurrentPage] = useState(currentSubPage);
   const [flippedPages, setFlippedPages] = useState<{ [key: number]: boolean }>({});
+  const [earnCardStates, setEarnCardStates] = useState<{
+    [key: number]: {
+      contract: any;
+      walletUsdcBalance: string;
+      usdcBalance: string;
+      isDepositing: boolean;
+      isWithdrawing: boolean;
+      handleDeposit: (amount: string) => Promise<void>;
+      handleWithdraw: (amount: string) => Promise<void>;
+    }
+  }>({});
 
   useEffect(() => {
     const container = containerRef.current;
@@ -145,12 +157,43 @@ export const HorizontalPages = ({
     return () => container.removeEventListener('scroll', handleScroll);
   }, [currentPage, onSubPageChange, subPages.length]);
 
+  const handleEarnCardStateChange = (index: number, state: any) => {
+    setEarnCardStates(prev => ({
+      ...prev,
+      [index]: state
+    }));
+  };
+
   const renderSubPageContent = (subPage: SubPageConfig, isBack: boolean = false) => {
     if (pageType === 'Mint' && sendHash) {
+      if (isBack) {
+        return <div>This NFT collection...</div>;
+      }
       return <MintContractCard sendHash={sendHash} contractIndex={subPage.index} />;
     }
     if (pageType === 'Earn' && sendHash) {
-      return <EarnContractCard sendHash={sendHash} contractIndex={subPage.index} />;
+      if (isBack) {
+        const state = earnCardStates[subPage.index];
+        return state ? (
+          <EarnCardBackV2 
+            poolName={state.contract?.name}
+            symbol={state.contract?.asset}
+            walletBalance={state.walletUsdcBalance}
+            depositedBalance={state.usdcBalance}
+            onDeposit={state.handleDeposit}
+            onWithdraw={state.handleWithdraw}
+            isDepositing={state.isDepositing}
+            isWithdrawing={state.isWithdrawing}
+          />
+        ) : null;
+      }
+      return (
+        <EarnContractCard 
+          sendHash={sendHash} 
+          contractIndex={subPage.index}
+          onStateChange={(state) => handleEarnCardStateChange(subPage.index, state)}
+        />
+      );
     }
     if (pageType === 'Predict' && sendHash) {
       return <PredictionContractCard sendHash={sendHash} contractIndex={subPage.index} />;

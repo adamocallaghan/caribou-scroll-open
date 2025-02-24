@@ -141,6 +141,7 @@ const CONTRACTS: ContractConfig[] = [
 interface EarnContractCardProps {
   sendHash: (hash: string) => void;
   contractIndex: number;
+  onStateChange?: (state: any) => void;
 }
 
 // Add flip-related styled components
@@ -188,7 +189,7 @@ const CardBack = styled.div`
   text-align: center;
 `;
 
-export const EarnContractCard = ({ sendHash, contractIndex }: EarnContractCardProps) => {
+export const EarnContractCard = ({ sendHash, contractIndex, onStateChange }: EarnContractCardProps) => {
   if (contractIndex >= CONTRACTS.length) {
     return (
       <CardContent>
@@ -396,6 +397,19 @@ export const EarnContractCard = ({ sendHash, contractIndex }: EarnContractCardPr
       setIsWithdrawing(false);
     }
   };
+
+  // Pass state up to parent
+  useEffect(() => {
+    onStateChange?.({
+      contract: CONTRACTS[contractIndex],
+      walletUsdcBalance,
+      usdcBalance,
+      isDepositing,
+      isWithdrawing,
+      handleDeposit,
+      handleWithdraw
+    });
+  }, [contractIndex, walletUsdcBalance, usdcBalance, isDepositing, isWithdrawing]);
 
   return (
     <>
