@@ -19,21 +19,24 @@ const CardWrapper = styled.div`
 const FlipContainer = styled.div<{ isFlipped: boolean }>`
   position: relative;
   width: 100%;
-  height: 100%;
+  min-height: 100%;
   transition: transform 0.6s;
   transform-style: preserve-3d;
   transform: ${props => props.isFlipped ? 'rotateY(180deg)' : 'rotateY(0)'};
+  -webkit-transform-style: preserve-3d;
 `;
 
 const CardFront = styled.div`
   position: absolute;
   width: 100%;
-  height: 100%;
+  min-height: 100%;
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
   display: flex;
   align-items: center;
   justify-content: center;
+  transform: rotateY(0deg);
+  -webkit-transform: rotateY(0deg);
 `;
 
 const Container = styled.div`
@@ -185,10 +188,11 @@ const SwapButton = styled.button`
 const CardBack = styled.div`
   position: absolute;
   width: 100%;
-  height: 100%;
+  min-height: 100%;
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
   transform: rotateY(180deg);
+  -webkit-transform: rotateY(180deg);
   display: flex;
   align-items: center;
   justify-content: center;
