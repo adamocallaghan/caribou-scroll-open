@@ -8,11 +8,13 @@ import { MintCardV2 } from './MintCardV2';
 
 // Wrapper to handle the 3D perspective
 const CardWrapper = styled.div`
-  perspective: 1000px;
   width: 100%;
-  height: 100dvh;
-  max-height: 100dvh;
-  overflow: auto;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  box-sizing: border-box;
 `;
 
 // Container for the flip animation
