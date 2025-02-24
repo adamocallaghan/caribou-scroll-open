@@ -66,7 +66,7 @@ const CardBack = styled.div`
 
 const FlipButton = styled.button`
   position: absolute;
-  bottom: 20px;
+  bottom: calc(env(safe-area-inset-bottom) + 80px);
   right: 20px;
   background: none;
   border: none;
@@ -75,6 +75,10 @@ const FlipButton = styled.button`
   width: 24px;
   height: 24px;
   z-index: 10;
+
+  @media (max-width: 768px) {
+    bottom: calc(env(safe-area-inset-bottom) + 100px);
+  }
 
   img {
     width: 100%;
