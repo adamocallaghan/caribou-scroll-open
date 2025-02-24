@@ -6,6 +6,7 @@ import toast from 'react-hot-toast';
 import { ToastPortal } from '../../Toast';
 
 const CardWrapper = styled.div`
+  perspective: 1000px;
   width: 100%;
   height: 100%;
   display: flex;
@@ -13,6 +14,22 @@ const CardWrapper = styled.div`
   justify-content: center;
   padding: 0 1.5rem;
   box-sizing: border-box;
+`;
+
+const FlipContainer = styled.div<{ isFlipped: boolean }>`
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.6s;
+  transform-style: preserve-3d;
+  transform: ${props => props.isFlipped ? 'rotateY(180deg)' : 'rotateY(0)'};
+`;
+
+const CardFront = styled.div`
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
 `;
 
 const Container = styled.div`
@@ -210,6 +227,7 @@ export const SwapContractCardV2 = ({ sendHash }: { sendHash: (hash: string) => v
   const [amount, setAmount] = useState('');
   const [isSwapping, setIsSwapping] = useState(false);
   const [tokenBalance, setTokenBalance] = useState('0');
+  const [isFlipped, setIsFlipped] = useState(false);
 
   const { address } = useAppKitAccount();
   const { chainId } = useAppKitNetworkCore();
@@ -292,105 +310,109 @@ export const SwapContractCardV2 = ({ sendHash }: { sendHash: (hash: string) => v
     <>
       <ToastPortal />
       <CardWrapper>
-        <Container>
-          <GradientBackground>
-            <Card>
-              <CardHeader>
-                <CardTitle>Swap Tokens</CardTitle>
-                <CardDescription>Trade tokens instantly with low fees</CardDescription>
-              </CardHeader>
-              
-              <CardContent>
-                <TokenSection>
-                  <TokenHeader>
-                    <span>From</span>
-                    <TokenBalance>Balance: {formattedBalance}</TokenBalance>
-                  </TokenHeader>
-                  <InputGroup>
-                    <TokenInput
-                      type="number"
-                      placeholder="0.0"
-                      value={amount}
-                      onChange={(e) => setAmount(e.target.value)}
-                    />
-                    <TokenSelect
-                      value={inputToken}
-                      onChange={(e) => {
-                        setInputToken(e.target.value);
-                        setAmount('');
-                      }}
+        <FlipContainer isFlipped={isFlipped}>
+          <CardFront>
+            <Container>
+              <GradientBackground>
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Swap Tokens</CardTitle>
+                    <CardDescription>Trade tokens instantly with low fees</CardDescription>
+                  </CardHeader>
+                  
+                  <CardContent>
+                    <TokenSection>
+                      <TokenHeader>
+                        <span>From</span>
+                        <TokenBalance>Balance: {formattedBalance}</TokenBalance>
+                      </TokenHeader>
+                      <InputGroup>
+                        <TokenInput
+                          type="number"
+                          placeholder="0.0"
+                          value={amount}
+                          onChange={(e) => setAmount(e.target.value)}
+                        />
+                        <TokenSelect
+                          value={inputToken}
+                          onChange={(e) => {
+                            setInputToken(e.target.value);
+                            setAmount('');
+                          }}
+                        >
+                          <option value="">Select token</option>
+                          {TOKENS.map(token => (
+                            <option key={token.address} value={token.address}>
+                              {token.symbol}
+                            </option>
+                          ))}
+                        </TokenSelect>
+                      </InputGroup>
+                    </TokenSection>
+
+                    <TokenSection>
+                      <TokenHeader>
+                        <span>To</span>
+                        <TokenBalance>
+                          {outputToken ? 
+                            `${TOKENS.find(t => t.address === outputToken)?.symbol}` : 
+                            'Select token'}
+                        </TokenBalance>
+                      </TokenHeader>
+                      <InputGroup>
+                        <TokenInput
+                          type="number"
+                          placeholder="0.0"
+                          value={amount}
+                          disabled
+                        />
+                        <TokenSelect
+                          value={outputToken}
+                          onChange={(e) => setOutputToken(e.target.value)}
+                        >
+                          <option value="">Select token</option>
+                          {TOKENS.map(token => (
+                            <option key={token.address} value={token.address}>
+                              {token.symbol}
+                            </option>
+                          ))}
+                        </TokenSelect>
+                      </InputGroup>
+                    </TokenSection>
+
+                    <SwapInfo>
+                      <InfoRow>
+                        <span>Price Impact</span>
+                        <span>~0.04%</span>
+                      </InfoRow>
+                      <InfoRow>
+                        <span>Network Fee</span>
+                        <span>~$2.50</span>
+                      </InfoRow>
+                    </SwapInfo>
+                  </CardContent>
+
+                  <CardFooter>
+                    <SwapButton
+                      onClick={handleSwap}
+                      disabled={isSwapping || !inputToken || !outputToken || !amount}
                     >
-                      <option value="">Select token</option>
-                      {TOKENS.map(token => (
-                        <option key={token.address} value={token.address}>
-                          {token.symbol}
-                        </option>
-                      ))}
-                    </TokenSelect>
-                  </InputGroup>
-                </TokenSection>
-
-                <TokenSection>
-                  <TokenHeader>
-                    <span>To</span>
-                    <TokenBalance>
-                      {outputToken ? 
-                        `${TOKENS.find(t => t.address === outputToken)?.symbol}` : 
-                        'Select token'}
-                    </TokenBalance>
-                  </TokenHeader>
-                  <InputGroup>
-                    <TokenInput
-                      type="number"
-                      placeholder="0.0"
-                      value={amount}
-                      disabled
-                    />
-                    <TokenSelect
-                      value={outputToken}
-                      onChange={(e) => setOutputToken(e.target.value)}
-                    >
-                      <option value="">Select token</option>
-                      {TOKENS.map(token => (
-                        <option key={token.address} value={token.address}>
-                          {token.symbol}
-                        </option>
-                      ))}
-                    </TokenSelect>
-                  </InputGroup>
-                </TokenSection>
-
-                <SwapInfo>
-                  <InfoRow>
-                    <span>Price Impact</span>
-                    <span>~0.04%</span>
-                  </InfoRow>
-                  <InfoRow>
-                    <span>Network Fee</span>
-                    <span>~$2.50</span>
-                  </InfoRow>
-                </SwapInfo>
-              </CardContent>
-
-              <CardFooter>
-                <SwapButton
-                  onClick={handleSwap}
-                  disabled={isSwapping || !inputToken || !outputToken || !amount}
-                >
-                  {isSwapping ? 'Swapping...' : 'Swap'}
-                </SwapButton>
-              </CardFooter>
-            </Card>
-          </GradientBackground>
-        </Container>
+                      {isSwapping ? 'Swapping...' : 'Swap'}
+                    </SwapButton>
+                  </CardFooter>
+                </Card>
+              </GradientBackground>
+            </Container>
+          </CardFront>
+          <CardBack>
+            <Container>
+              <GradientBackground>
+                {/* Back content */}
+              </GradientBackground>
+            </Container>
+          </CardBack>
+        </FlipContainer>
       </CardWrapper>
-      <CardBack>
-        <Container>
-          <GradientBackground>
-            {/* Back content */}
-          </GradientBackground>
-        </Container>
-      </CardBack>
     </>
   );
 }; 
