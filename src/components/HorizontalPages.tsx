@@ -6,6 +6,8 @@ import { EarnContractCard } from './contracts/earn/EarnContractCard';
 import { PredictionContractCard } from './contracts/prediction/PredictionContractCard';
 import { SwapContractCardV2 } from './contracts/swap/SwapContractCardV2';
 import { PortfolioCardV2 } from './contracts/portfolio/PortfolioCardV2';
+import { PortfolioCardBack } from './contracts/portfolio/PortfolioCardBack';
+import { PortfolioCardFront } from './contracts/portfolio/PortfolioCardFront';
 
 const Container = styled.div`
   width: 100%;
@@ -132,7 +134,7 @@ export const HorizontalPages = ({
     return () => container.removeEventListener('scroll', handleScroll);
   }, [currentPage, onSubPageChange, subPages.length]);
 
-  const renderSubPageContent = (subPage: SubPageConfig) => {
+  const renderSubPageContent = (subPage: SubPageConfig, isBack: boolean = false) => {
     if (pageType === 'Mint' && sendHash) {
       return <MintContractCard sendHash={sendHash} contractIndex={subPage.index} />;
     }
@@ -150,7 +152,10 @@ export const HorizontalPages = ({
     }
     if (pageType === 'Dashboard') {
       if (subPage.index === 0) {
-        return <PortfolioCardV2 />;
+        if (isBack) {
+          return <PortfolioCardBack />;
+        }
+        return <PortfolioCardFront />;
       }
       return `Dashboard ${subPage.index + 2}`;
     }
@@ -183,7 +188,7 @@ export const HorizontalPages = ({
               {renderSubPageContent(subPage)}
             </CardFront>
             <CardBack>
-              {/* Render back content if needed */}
+              {renderSubPageContent(subPage, true)}
             </CardBack>
           </FlipContainer>
           <FlipButton onClick={() => handleFlip(subPage.index)}>
