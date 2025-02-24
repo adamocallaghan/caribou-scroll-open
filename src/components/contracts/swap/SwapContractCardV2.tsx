@@ -5,23 +5,38 @@ import { BrowserProvider, JsonRpcSigner, Contract, MaxUint256 } from 'ethers';
 import toast from 'react-hot-toast';
 import { ToastPortal } from '../../Toast';
 
-const Card = styled.div`
-  width: 100%;
-  max-width: 24rem;
-  margin: 0 auto;
-  border-radius: 0.5rem;
-  overflow: hidden;
-  position: relative;
-  background: white;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-`;
-
-const Container = styled.div`
+const CardWrapper = styled.div`
   width: 100%;
   height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 0 1.5rem;
+  box-sizing: border-box;
+`;
+
+const Container = styled.div`
+  width: 100%;
+  max-width: 24rem;
+  margin: 0 auto;
+`;
+
+const GradientBackground = styled.div`
+  background: linear-gradient(135deg, #96DCED 0%, #c8ebf6 50%, #e5f5fa 100%);
+  position: relative;
+  padding: 1rem;
+  width: 100%;
+  box-sizing: border-box;
+  border-radius: 0.5rem;
+`;
+
+const Card = styled.div`
+  width: 100%;
+  border-radius: 0.5rem;
+  overflow: hidden;
+  position: relative;
+  background: white;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 `;
 
 const CardHeader = styled.div`
@@ -141,27 +156,6 @@ const SwapButton = styled.button`
     opacity: 0.5;
     cursor: not-allowed;
   }
-`;
-
-const GradientBackground = styled.div`
-  background: linear-gradient(135deg, #96DCED 0%, #c8ebf6 50%, #e5f5fa 100%);
-  position: relative;
-  padding: 1rem;
-  width: 100%;
-  max-width: 24rem;
-  margin: 0 auto;
-  box-sizing: border-box;
-  border-radius: 0.5rem;
-`;
-
-const CardWrapper = styled.div`
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0 1.5rem;
-  box-sizing: border-box;
 `;
 
 const CardBack = styled.div`
@@ -297,10 +291,10 @@ export const SwapContractCardV2 = ({ sendHash }: { sendHash: (hash: string) => v
   return (
     <>
       <ToastPortal />
-      <Container>
-        <CardWrapper>
-          <Card>
-            <GradientBackground>
+      <CardWrapper>
+        <Container>
+          <GradientBackground>
+            <Card>
               <CardHeader>
                 <CardTitle>Swap Tokens</CardTitle>
                 <CardDescription>Trade tokens instantly with low fees</CardDescription>
@@ -386,10 +380,10 @@ export const SwapContractCardV2 = ({ sendHash }: { sendHash: (hash: string) => v
                   {isSwapping ? 'Swapping...' : 'Swap'}
                 </SwapButton>
               </CardFooter>
-            </GradientBackground>
-          </Card>
-        </CardWrapper>
-      </Container>
+            </Card>
+          </GradientBackground>
+        </Container>
+      </CardWrapper>
       <CardBack>
         <Container>
           <GradientBackground>
