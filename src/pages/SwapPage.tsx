@@ -11,7 +11,7 @@ const Page = styled.div`
   background-color: #4287f5;  // New blue background
   color: #FFFFFF;
   font-size: 2rem;
-  font-weight: normal;
+  font-weight: 500;
 `;
 
 const Container = styled.div`
@@ -34,6 +34,7 @@ const MainContent = styled.div`
 const MainPageContent = styled.div`
   font-size: 4rem;
   text-align: center;
+  font-weight: 700;
 `;
 
 const SwapImage = styled.img`
@@ -55,4 +56,4 @@ export const SwapPage = () => {
       </Container>
     </Page>
   );
-}; 
+};
