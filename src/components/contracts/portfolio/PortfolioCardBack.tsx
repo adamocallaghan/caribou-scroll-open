@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { useState, useEffect } from 'react';
 import { useAppKitAccount, useAppKitNetworkCore, useAppKitProvider, type Provider } from '@reown/appkit/react';
-import { BrowserProvider, JsonRpcSigner, Contract, formatUnits } from 'ethers';
+import { BrowserProvider, Contract, formatUnits } from 'ethers';
 
 const CardWrapper = styled.div`
   width: 100%;
@@ -102,8 +102,15 @@ const TokenChange = styled.span<{ isPositive: boolean }>`
   color: ${props => props.isPositive ? '#15803d' : '#dc2626'};
 `;
 
-// Token configuration
-const TOKENS = [
+// Update the token interface to fix the ABI type
+interface Token {
+  symbol: string;
+  name: string;
+  address?: string;
+  abi?: string[];
+}
+
+const TOKENS: Token[] = [
   {
     symbol: 'ETH',
     name: 'Ethereum',
@@ -162,7 +169,11 @@ export const PortfolioCardBack = () => {
                 balance = await provider.getBalance(address);
                 console.log(`ETH balance: ${balance}`);
               } else {
-                const contract = new Contract(token.address!, token.abi, provider);
+                const contract = new Contract(
+                  token.address!,
+                  token.abi as string[],  // Type assertion here
+                  provider
+                );
                 balance = await contract.balanceOf(address);
                 decimals = await contract.decimals();
                 console.log(`${token.symbol} balance: ${balance}`);

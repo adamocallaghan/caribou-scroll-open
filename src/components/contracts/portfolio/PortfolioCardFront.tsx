@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { LineChart, Line, XAxis, YAxis, ResponsiveContainer, Tooltip } from 'recharts';
 import { useState, useEffect } from 'react';
-import { useAppKitAccount, useAppKitNetworkCore, useAppKitProvider, type Provider } from '@reown/appkit/react';
+import { useAppKitAccount } from '@reown/appkit/react';
 
 const CardWrapper = styled.div`
   width: 100%;
@@ -75,29 +75,21 @@ const Balance = styled.div`
   margin-bottom: 0.25rem;
 `;
 
-// Mock data
-const portfolioData = [
-  { date: "Mon", value: 31000 },
-  { date: "Tue", value: 32400 },
-  { date: "Wed", value: 31800 },
-  { date: "Thu", value: 34200 },
-  { date: "Fri", value: 35100 },
-  { date: "Sat", value: 34800 },
-  { date: "Sun", value: 36500 },
-];
+// Add interface for chart data
+interface ChartDataPoint {
+  date: string;
+  value: number;
+}
 
 export const PortfolioCardFront = () => {
   const [totalValue, setTotalValue] = useState(0);
-  const [chartData, setChartData] = useState([]);
+  const [chartData, setChartData] = useState<ChartDataPoint[]>([]);  // Add type
   const { address } = useAppKitAccount();
 
   useEffect(() => {
-    // Calculate total value from PortfolioCardBack
-    // This should ideally be lifted to a parent component or context
-    // For now, we'll generate sample data based on the current total
     const generateChartData = (currentValue: number) => {
       const days = 7;
-      const data = [];
+      const data: ChartDataPoint[] = [];  // Add type
       let value = currentValue;
       
       for (let i = days - 1; i >= 0; i--) {
@@ -113,8 +105,7 @@ export const PortfolioCardFront = () => {
       setChartData(data);
     };
 
-    // Set a sample total value - this should be calculated from actual balances
-    const sampleTotal = 10000; // Replace with actual total from token balances
+    const sampleTotal = 10000;
     setTotalValue(sampleTotal);
     generateChartData(sampleTotal);
   }, [address]);

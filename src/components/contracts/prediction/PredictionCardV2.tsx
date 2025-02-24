@@ -148,7 +148,7 @@ interface PredictionCardV2Props {
   sendHash: (hash: string) => void;
 }
 
-const getMarketIcon = (description: string) => {
+const getMarketIcon = (description: string): string => {
   if (description.toLowerCase().includes('bitcoin')) {
     return '/bitcoin.png';
   }
@@ -158,7 +158,7 @@ const getMarketIcon = (description: string) => {
   if (description.toLowerCase().includes('tiktok')) {
     return '/tiktok.png';
   }
-  return null;
+  return '/default-icon.png';
 };
 
 export const PredictionCardV2 = ({ marketAddress, description, sendHash }: PredictionCardV2Props) => {
