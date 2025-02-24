@@ -8,11 +8,13 @@ import { EarnCardV2 } from './EarnCardV2';
 import { EarnCardBackV2 } from './EarnCardBackV2';
 
 const CardWrapper = styled.div`
-  perspective: 1000px;
   width: 100%;
-  height: 100dvh;
-  max-height: calc(100dvh - env(safe-area-inset-bottom));
-  overflow: auto;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  box-sizing: border-box;
 `;
 
 const CardContent = styled.div`
@@ -143,51 +145,6 @@ interface EarnContractCardProps {
   contractIndex: number;
   onStateChange?: (state: any) => void;
 }
-
-// Add flip-related styled components
-const FlipContainer = styled.div<{ isFlipped: boolean }>`
-  position: relative;
-  width: 100%;
-  min-height: 100%;
-  transition: transform 0.6s;
-  transform-style: preserve-3d;
-  transform: ${props => props.isFlipped ? 'rotateY(180deg)' : 'rotateY(0)'};
-`;
-
-const CardFront = styled.div`
-  position: absolute;
-  width: 100%;
-  min-height: 100%;
-  backface-visibility: hidden;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 20px;
-  padding: 20px;
-  padding-top: 60px;
-  padding-bottom: calc(80px + env(safe-area-inset-bottom));
-  box-sizing: border-box;
-  -webkit-backface-visibility: hidden;
-  backface-visibility: hidden;
-`;
-
-const CardBack = styled.div`
-  position: absolute;
-  width: 100%;
-  min-height: 100%;
-  backface-visibility: hidden;
-  transform: rotateY(180deg);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 20px;
-  padding-top: 80px;
-  padding-bottom: 80px;
-  text-align: center;
-  -webkit-backface-visibility: hidden;
-  backface-visibility: hidden;
-`;
 
 export const EarnContractCard = ({ sendHash, contractIndex, onStateChange }: EarnContractCardProps) => {
   if (contractIndex >= CONTRACTS.length) {
