@@ -6,10 +6,15 @@ const CardContent = styled.div`
   box-sizing: border-box;
   position: relative;
   min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 `;
 
 const TokenList = styled.div`
   margin-top: 1.5rem;
+  width: 100%;
 `;
 
 const TokenItem = styled.div`

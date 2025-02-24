@@ -7,6 +7,11 @@ const CardContent = styled.div`
   box-sizing: border-box;
   position: relative;
   min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
 `;
 
 const Header = styled.div`

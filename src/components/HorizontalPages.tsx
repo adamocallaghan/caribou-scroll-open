@@ -33,6 +33,8 @@ const Page = styled.div<{ bgColor: string; textColor: string }>`
   align-items: center;
   perspective: 1000px;
   position: relative;
+  font-size: 1.5rem;
+  font-weight: 500;
 `;
 
 const FlipContainer = styled.div<{ isFlipped: boolean }>`

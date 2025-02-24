@@ -31,7 +31,7 @@ export const DashboardPage = () => {
     <HorizontalPages 
       subPages={subPages}
       bgColor="#48466D"
-      textColor="#3D3D3D"
+      textColor="#FF69B4"
       pageType="Dashboard"
     >
       <PageContent>
