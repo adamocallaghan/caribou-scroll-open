@@ -15,7 +15,7 @@ const Card = styled.div`
   width: 100%;
   max-width: 24rem;
   margin: 0 auto;
-  background: linear-gradient(135deg, #48466D 0%, #6B6992 50%, #8E8BB0 100%);
+  background: linear-gradient(135deg, #48466D 0%, #6B6992 50%, #E6A4B4 100%);
   border-radius: 0.5rem;
   overflow: hidden;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -39,7 +39,7 @@ const Header = styled.div`
 
 const Title = styled.h3`
   font-size: 0.875rem;
-  color: #666666;
+  color: #FF69B4;
   margin: 0;
   margin-bottom: 0.25rem;
 `;
@@ -47,7 +47,7 @@ const Title = styled.h3`
 const PortfolioValue = styled.div`
   font-size: 1.5rem;
   font-weight: 600;
-  color: #222222;
+  color: #FFFFFF;
   margin-bottom: 0.25rem;
 `;
 
@@ -97,13 +97,13 @@ export const PortfolioCardFront = () => {
               <LineChart data={portfolioData}>
                 <XAxis 
                   dataKey="date" 
-                  stroke="#888888" 
+                  stroke="#FF69B4" 
                   fontSize={12} 
                   tickLine={false} 
                   axisLine={false} 
                 />
                 <YAxis
-                  stroke="#888888"
+                  stroke="#FF69B4"
                   fontSize={12}
                   tickLine={false}
                   axisLine={false}
@@ -129,7 +129,7 @@ export const PortfolioCardFront = () => {
                 <Line 
                   type="monotone" 
                   dataKey="value" 
-                  stroke="#92400e" 
+                  stroke="#FF69B4" 
                   strokeWidth={2} 
                   dot={false} 
                 />

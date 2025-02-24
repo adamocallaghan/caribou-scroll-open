@@ -14,7 +14,7 @@ const Card = styled.div`
   width: 100%;
   max-width: 24rem;
   margin: 0 auto;
-  background: linear-gradient(135deg, #48466D 0%, #6B6992 50%, #8E8BB0 100%);
+  background: linear-gradient(135deg, #48466D 0%, #6B6992 50%, #E6A4B4 100%);
   border-radius: 0.5rem;
   overflow: hidden;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -59,10 +59,11 @@ const TokenIcon = styled.div`
   width: 2rem;
   height: 2rem;
   border-radius: 9999px;
-  background: rgba(243, 200, 108, 0.1);
+  background: rgba(255, 105, 180, 0.2);
   display: flex;
   align-items: center;
   justify-content: center;
+  color: #FFFFFF;
 `;
 
 const TokenDetails = styled.div`
@@ -73,12 +74,12 @@ const TokenDetails = styled.div`
 const TokenName = styled.span`
   font-size: 0.875rem;
   font-weight: 500;
-  color: #222222;
+  color: #FFFFFF;
 `;
 
 const TokenAmount = styled.span`
   font-size: 0.75rem;
-  color: #666666;
+  color: #FF69B4;
 `;
 
 const TokenValues = styled.div`
@@ -88,7 +89,7 @@ const TokenValues = styled.div`
 const TokenValue = styled.span`
   font-size: 0.875rem;
   font-weight: 500;
-  color: #222222;
+  color: #FFFFFF;
   display: block;
 `;
 

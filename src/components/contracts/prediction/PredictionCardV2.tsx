@@ -11,7 +11,7 @@ const Card = styled.div`
   max-width: 24rem;
   margin: 0 auto;
   padding: 1rem;
-  background: linear-gradient(135deg, #006b71 0%, #80c5c8 50%, #b8e3e5 100%);
+  background: linear-gradient(135deg, #006b71 0%, #80c5c8 50%, #B87471 100%);
   border-radius: 0.5rem;
   box-sizing: border-box;
   overflow: hidden;
@@ -130,24 +130,6 @@ const Footer = styled.div`
 const Volume = styled.span`
   font-size: 0.875rem;
   color: #666666;
-`;
-
-const DecorativeCircle = styled.div<{ position: 'top' | 'bottom' }>`
-  position: absolute;
-  border-radius: 9999px;
-  background: rgba(229, 240, 240, 0.05);
-  
-  ${props => props.position === 'top' ? `
-    width: 4rem;
-    height: 4rem;
-    left: -1rem;
-    top: -1rem;
-  ` : `
-    width: 6rem;
-    height: 6rem;
-    right: -2rem;
-    bottom: -2rem;
-  `}
 `;
 
 interface PredictionCardV2Props {
@@ -301,8 +283,6 @@ export const PredictionCardV2 = ({ marketAddress, description, sendHash }: Predi
               <Volume>Vol: {Number(totalBets) / 1e18} ETH</Volume>
             </Footer>
           </CardContent>
-          <DecorativeCircle position="top" />
-          <DecorativeCircle position="bottom" />
         </GradientBackground>
       </Card>
     </>
