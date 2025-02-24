@@ -9,9 +9,9 @@ const CardWrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 0 1.5rem;  // Add horizontal padding
+  padding: 0 1.5rem;
   box-sizing: border-box;
-  margin-top: 30px;  // Add this to move it down
+  margin-top: 30px;
 `;
 
 const Card = styled.div`
@@ -54,25 +54,10 @@ const PortfolioValue = styled.div`
   margin-bottom: 0.25rem;
 `;
 
-const ChangeIndicator = styled.div<{ isPositive: boolean }>`
-  display: flex;
-  align-items: center;
-  gap: 0.25rem;
-  font-size: 0.875rem;
-  color: ${props => props.isPositive ? '#15803d' : '#dc2626'};
-`;
-
 const ChartContainer = styled.div`
   height: 180px;
   width: 100%;
   margin: 1rem 0;
-`;
-
-const Balance = styled.div`
-  font-size: 1.5rem;
-  font-weight: 600;
-  color: #FFFFFF;
-  margin-bottom: 0.25rem;
 `;
 
 // Add interface for chart data
@@ -83,13 +68,13 @@ interface ChartDataPoint {
 
 export const PortfolioCardFront = () => {
   const [totalValue, setTotalValue] = useState(0);
-  const [chartData, setChartData] = useState<ChartDataPoint[]>([]);  // Add type
+  const [chartData, setChartData] = useState<ChartDataPoint[]>([]);
   const { address } = useAppKitAccount();
 
   useEffect(() => {
     const generateChartData = (currentValue: number) => {
       const days = 7;
-      const data: ChartDataPoint[] = [];  // Add type
+      const data: ChartDataPoint[] = [];
       let value = currentValue;
       
       for (let i = days - 1; i >= 0; i--) {
