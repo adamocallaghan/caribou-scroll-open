@@ -72,11 +72,12 @@ const CardTitle = styled.h2`
   margin: 0;
   font-size: 1.5rem;
   font-weight: 600;
+  color: #FFFFFF;
 `;
 
 const CardDescription = styled.p`
   margin: 0.5rem 0 0;
-  color: #666;
+  color: rgba(255, 255, 255, 0.8);
   font-size: 0.875rem;
 `;
 

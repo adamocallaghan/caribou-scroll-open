@@ -11,7 +11,7 @@ const Page = styled.div`
   background-color: #4287f5;  // New blue background
   color: #FFFFFF;
   font-size: 2rem;
-  font-weight: bold;
+  font-weight: normal;
 `;
 
 const Container = styled.div`
