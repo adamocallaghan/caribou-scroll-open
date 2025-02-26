@@ -50,18 +50,44 @@ const Description = styled.p`
   max-width: 80%;
 `;
 
-export const MintCardBack = () => {
+interface MintCardBackProps {
+  contractIndex: number;
+}
+
+export const MintCardBack = ({ contractIndex }: MintCardBackProps) => {
+  const getCardContent = (index: number) => {
+    switch (index) {
+      case 0:
+        return {
+          title: "About This Collection",
+          description: "This NFT collection represents your stake in the Caribou protocol. Each NFT is unique and provides proof of your participation in the protocol's early stages. Holding this NFT may grant you special privileges and rewards in the future of the Caribou ecosystem."
+        };
+      case 1:
+        return {
+          title: "Scroll Tarot Community",
+          description: "The Scroll Tarot NFT is your key to an exclusive community of DeFi strategists and traders. Holders gain access to daily market analysis, trading signals, and collaborative strategy sessions. Join fellow holders in discovering new opportunities across the Scroll ecosystem."
+        };
+      case 2:
+        return {
+          title: "Enter The Maze",
+          description: "Welcome to The Maze - Scroll's premier GameFi experience. This NFT serves as your permanent access pass to an immersive strategy game built on Scroll. Navigate through dynamic mazes, solve blockchain puzzles, and compete with other players for rewards."
+        };
+      default:
+        return {
+          title: "Collection Information",
+          description: "Information about this NFT collection is not available."
+        };
+    }
+  };
+
+  const content = getCardContent(contractIndex);
+
   return (
     <CardWrapper>
       <Card>
         <CardContent>
-          <Title>About This Collection</Title>
-          <Description>
-            This NFT collection represents your stake in the Caribou protocol. 
-            Each NFT is unique and provides proof of your participation in the 
-            protocol's early stages. Holding this NFT may grant you special 
-            privileges and rewards in the future of the Caribou ecosystem.
-          </Description>
+          <Title>{content.title}</Title>
+          <Description>{content.description}</Description>
         </CardContent>
       </Card>
     </CardWrapper>

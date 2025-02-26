@@ -176,7 +176,7 @@ export const HorizontalPages = ({
   const renderSubPageContent = (subPage: SubPageConfig, isBack: boolean = false) => {
     if (pageType === 'Mint' && sendHash) {
       if (isBack) {
-        return <MintCardBack />;
+        return <MintCardBack contractIndex={subPage.index} />;
       }
       return <MintContractCard sendHash={sendHash} contractIndex={subPage.index} />;
     }

@@ -104,7 +104,7 @@ const CONTRACTS: ContractConfig[] = [
     abi: [
       "function safeMint(address to) public"
     ],
-    imageUrl: "https://ipfs.io/ipfs/QmQicuf49WKck1YxranWF4UPMdungQYDvrZPsnG6TY8WTM/caribou_nft.jpg"
+    imageUrl: "https://cdn.leonardo.ai/users/5fa161d0-2570-4088-9b52-3ce39109b665/generations/1a0ebae2-90bf-496f-9423-cb68065234d5/Leonardo_Phoenix_10_A_stylized_geometrically_represented_Carib_0.jpg"
   },
   {
     name: "Scroll Tarot NFT",
@@ -112,7 +112,7 @@ const CONTRACTS: ContractConfig[] = [
     abi: [
       "function safeMint(address to) public"
     ],
-    imageUrl: "/scroll_tarot.jpg"
+    imageUrl: "https://cdn.leonardo.ai/users/5fa161d0-2570-4088-9b52-3ce39109b665/generations/4fd356d0-12fb-4d06-a715-abd59c3e057e/Leonardo_Phoenix_10_A_vintage_style_tarot_card_with_the_word_S_1.jpg"
   },
   {
     name: "The Maze",
