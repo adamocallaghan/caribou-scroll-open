@@ -1,6 +1,5 @@
 import styled from 'styled-components';
 import { HorizontalPages } from '../components/HorizontalPages';
-import { EarnPositionsCard } from '../components/contracts/portfolio/EarnPositionsCard';
 
 const PageContent = styled.div`
   position: relative;
