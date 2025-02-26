@@ -9,6 +9,7 @@ import { PortfolioCardBack } from './contracts/portfolio/PortfolioCardBack';
 import { PortfolioCardFront } from './contracts/portfolio/PortfolioCardFront';
 import { EarnCardBackV2 } from './contracts/earn/EarnCardBackV2';
 import { EarnPositionsCard } from './contracts/portfolio/EarnPositionsCard';
+import { MintCardBack } from './contracts/mint/MintCardBack';
 
 const Container = styled.div`
   width: 100%;
@@ -186,11 +187,7 @@ export const HorizontalPages = ({
   const renderSubPageContent = (subPage: SubPageConfig, isBack: boolean = false) => {
     if (pageType === 'Mint' && sendHash) {
       if (isBack) {
-        return (
-          <MintCardBackContent>
-            This NFT collection...
-          </MintCardBackContent>
-        );
+        return <MintCardBack />;
       }
       return <MintContractCard sendHash={sendHash} contractIndex={subPage.index} />;
     }
