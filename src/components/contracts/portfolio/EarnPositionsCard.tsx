@@ -1,36 +1,49 @@
 import styled from 'styled-components';
+import { useState, useEffect } from 'react';
+import { useAppKitAccount, useAppKitNetworkCore, useAppKitProvider, type Provider } from '@reown/appkit/react';
+import { BrowserProvider, Contract, formatUnits } from 'ethers';
 
-// Sample data
-const earnPositions = [
+// Import market configuration
+interface EarnMarket {
+  name: string;
+  asset: string;
+  address: string;
+  rewardToken: string;
+}
+
+// Define the markets (copy from your EarnContractCard)
+const EARN_MARKETS: EarnMarket[] = [
   {
-    id: "1",
-    protocol: "Aave",
-    token: "USDC",
-    balance: 5000.75,
-    apy: 4.2,
+    name: "USDC Pool",
+    asset: "USDC",
+    address: "0x06eFdBFf2a14a7c8E15944D1F4A48F9F95F663A4",
+    rewardToken: "0xf55BEC9cafDbE8730f096Aa55dad6D22d44099Df"
   },
   {
-    id: "2",
-    protocol: "Compound",
-    token: "ETH",
-    balance: 2.35,
-    apy: 3.1,
-  },
-  {
-    id: "3",
-    protocol: "Curve",
-    token: "ETH-USDC LP",
-    balance: 10250.5,
-    apy: 8.7,
-  },
-  {
-    id: "4",
-    protocol: "Lido",
-    token: "stETH",
-    balance: 5.75,
-    apy: 3.8,
-  },
+    name: "USDT Pool",
+    asset: "USDT",
+    address: "0xf55BEC9cafDbE8730f096Aa55dad6D22d44099Df",
+    rewardToken: "0x06eFdBFf2a14a7c8E15944D1F4A48F9F95F663A4"
+  }
 ];
+
+// Define the ABI (copy from your EarnContractCard)
+const EARN_MARKET_ABI = [
+  "function symbol() view returns (string)",
+  "function decimals() view returns (uint8)",
+  "function balanceOf(address) view returns (uint256)",
+  "function totalSupply() view returns (uint256)",
+  "function rewardToken() view returns (address)",
+  "function rewardRate() view returns (uint256)"
+];
+
+interface Position {
+  id: string;
+  protocol: string;
+  token: string;
+  balance: number;
+  apy: number;
+}
 
 const CardWrapper = styled.div`
   width: 100%;
@@ -117,6 +130,115 @@ const Badge = styled.span`
 `;
 
 export const EarnPositionsCard = () => {
+  const { address } = useAppKitAccount();
+  const { chainId } = useAppKitNetworkCore();
+  const { walletProvider } = useAppKitProvider<Provider>('eip155');
+  const [positions, setPositions] = useState<Position[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isWalletReady, setIsWalletReady] = useState(false);
+
+  // First, check if wallet is ready
+  useEffect(() => {
+    if (walletProvider && address && chainId) {
+      setIsWalletReady(true);
+    } else {
+      setIsWalletReady(false);
+    }
+  }, [walletProvider, address, chainId]);
+
+  // Then fetch positions only when wallet is ready
+  useEffect(() => {
+    if (!isWalletReady) return;
+
+    const fetchPositions = async () => {
+      setIsLoading(true);
+      try {
+        const provider = new BrowserProvider(walletProvider!, chainId);
+
+        const positionPromises = EARN_MARKETS.map(async (market) => {
+          try {
+            // Create contract instance with provider (not signer)
+            const contract = new Contract(
+              market.address,
+              EARN_MARKET_ABI,
+              provider
+            );
+
+            // First check balance
+            const balance = await contract.balanceOf(address);
+            const decimals = await contract.decimals();
+            const formattedBalance = Number(formatUnits(balance, decimals));
+
+            // Only proceed if there's a balance
+            if (formattedBalance >= 0.01) {
+              try {
+                // Get other contract data
+                const [totalSupply, rewardRate, rewardToken] = await Promise.all([
+                  contract.totalSupply(),
+                  contract.rewardRate(),
+                  contract.rewardToken()
+                ]);
+
+                // Get reward token decimals
+                const rewardTokenContract = new Contract(
+                  rewardToken,
+                  ["function decimals() view returns (uint8)"],
+                  provider
+                );
+                const rewardDecimals = await rewardTokenContract.decimals();
+
+                // Calculate APY
+                const yearlyRewards = Number(formatUnits(rewardRate, rewardDecimals)) * 31536000;
+                const poolSize = Number(formatUnits(totalSupply, decimals));
+                const apy = (yearlyRewards / poolSize) * 100;
+
+                console.log(`Successfully fetched ${market.name} position:`, {
+                  balance: formattedBalance,
+                  apy
+                });
+
+                return {
+                  id: market.address,
+                  protocol: market.name,
+                  token: market.asset,
+                  balance: formattedBalance,
+                  apy: Number(apy.toFixed(2))
+                };
+              } catch (error) {
+                console.error(`Error calculating APY for ${market.name}:`, error);
+                // Return position with balance but no APY if APY calculation fails
+                return {
+                  id: market.address,
+                  protocol: market.name,
+                  token: market.asset,
+                  balance: formattedBalance,
+                  apy: 0
+                };
+              }
+            }
+            return null;
+          } catch (error) {
+            console.error(`Error fetching ${market.name} position:`, error);
+            return null;
+          }
+        });
+
+        const fetchedPositions = (await Promise.all(positionPromises))
+          .filter((position): position is Position => position !== null);
+
+        console.log("Final positions:", fetchedPositions);
+        setPositions(fetchedPositions);
+      } catch (error) {
+        console.error('Failed to fetch positions:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchPositions();
+  }, [isWalletReady, address, chainId, walletProvider]);
+
+  // Render logic
   return (
     <CardWrapper>
       <Card>
@@ -126,29 +248,37 @@ export const EarnPositionsCard = () => {
             <Description>Your active DeFi earning positions</Description>
           </Header>
 
-          <Table>
-            <TableHeader>
-              <TableCell>Protocol / Token</TableCell>
-              <TableCell>Balance</TableCell>
-              <TableCell>APY</TableCell>
-            </TableHeader>
-            {earnPositions.map((position) => (
-              <TableRow key={position.id}>
-                <TableCell>
-                  {position.protocol}
-                  <span style={{ color: '#FF69B4', marginLeft: '0.5rem' }}>
-                    {position.token}
-                  </span>
-                </TableCell>
-                <TableCell>
-                  {position.balance.toFixed(2)}
-                </TableCell>
-                <TableCell>
-                  <Badge>{position.apy}%</Badge>
-                </TableCell>
-              </TableRow>
-            ))}
-          </Table>
+          {!isWalletReady ? (
+            <div style={{ color: '#FFFFFF', textAlign: 'center' }}>Connect wallet to view positions</div>
+          ) : isLoading ? (
+            <div style={{ color: '#FFFFFF', textAlign: 'center' }}>Loading positions...</div>
+          ) : positions.length > 0 ? (
+            <Table>
+              <TableHeader>
+                <TableCell>Protocol / Token</TableCell>
+                <TableCell>Balance</TableCell>
+                <TableCell>APY</TableCell>
+              </TableHeader>
+              {positions.map((position) => (
+                <TableRow key={position.id}>
+                  <TableCell>
+                    {position.protocol}
+                    <span style={{ color: '#FF69B4', marginLeft: '0.5rem' }}>
+                      {position.token}
+                    </span>
+                  </TableCell>
+                  <TableCell>
+                    {position.balance.toFixed(4)}
+                  </TableCell>
+                  <TableCell>
+                    <Badge>{position.apy}%</Badge>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </Table>
+          ) : (
+            <div style={{ color: '#FFFFFF', textAlign: 'center' }}>No active positions found</div>
+          )}
         </CardContent>
       </Card>
     </CardWrapper>
