@@ -14,8 +14,9 @@ const CardWrapper = styled.div`
 const Card = styled.div`
   width: 100%;
   max-width: 24rem;
+  height: 420px;
   margin: 0 auto;
-  background: linear-gradient(135deg, #48466D 0%, #6B6992 50%, #E6A4B4 100%);
+  background: linear-gradient(135deg, #FF69B4 0%, #FFC0CB 50%, #FFFFFF 100%);
   border-radius: 0.5rem;
   overflow: hidden;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -24,26 +25,29 @@ const Card = styled.div`
 const CardContent = styled.div`
   padding: 1.5rem;
   width: 100%;
+  height: 100%;
   box-sizing: border-box;
   position: relative;
-  min-height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   text-align: center;
 `;
 
 const Title = styled.h3`
-  font-size: 1.25rem;
-  color: #FFFFFF;
-  margin: 0 0 1rem 0;
+  font-size: 1.5rem;
+  color: #333333;
+  margin: 0 0 1.5rem 0;
+  font-weight: 600;
 `;
 
 const Description = styled.p`
-  font-size: 0.875rem;
-  color: #FF69B4;
+  font-size: 1rem;
+  color: #4A4A4A;
   margin: 0;
-  line-height: 1.5;
+  line-height: 1.6;
+  max-width: 80%;
 `;
 
 export const MintCardBack = () => {
