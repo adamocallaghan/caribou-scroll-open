@@ -100,17 +100,6 @@ const CenteredContent = styled.div`
   text-align: center;
 `;
 
-const MintCardBackContent = styled.div`
-  width: 100%;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  font-size: 1.2rem;
-  padding: 20px;
-`;
-
 interface HorizontalPagesProps {
   children: ReactNode;
   subPages: SubPageConfig[];
