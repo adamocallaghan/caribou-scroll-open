@@ -402,7 +402,7 @@ export const SwapContractCardV2 = ({ sendHash, isFlipped = false }: SwapContract
                       </InfoRow>
                       <InfoRow>
                         <span>Network Fee</span>
-                        <span>~$2.50</span>
+                        <span>~$0.03</span>
                       </InfoRow>
                     </SwapInfo>
                   </CardContent>
