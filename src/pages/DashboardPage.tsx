@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { HorizontalPages } from '../components/HorizontalPages';
+import { EarnPositionsCard } from '../components/contracts/portfolio/EarnPositionsCard';
 
 const PageContent = styled.div`
   position: relative;
@@ -23,8 +24,7 @@ const Logo = styled.img`
 export const DashboardPage = () => {
   const subPages = [
     { name: 'Portfolio', index: 0 },
-    { name: 'Dashboard 2', index: 1 },
-    { name: 'Dashboard 3', index: 2 }
+    { name: 'Earn Positions', index: 1 }
   ];
 
   return (

@@ -8,6 +8,7 @@ import { SwapContractCardV2 } from './contracts/swap/SwapContractCardV2';
 import { PortfolioCardBack } from './contracts/portfolio/PortfolioCardBack';
 import { PortfolioCardFront } from './contracts/portfolio/PortfolioCardFront';
 import { EarnCardBackV2 } from './contracts/earn/EarnCardBackV2';
+import { EarnPositionsCard } from './contracts/portfolio/EarnPositionsCard';
 
 const Container = styled.div`
   width: 100%;
@@ -228,12 +229,10 @@ export const HorizontalPages = ({
     }
     if (pageType === 'Dashboard') {
       if (subPage.index === 0) {
-        if (isBack) {
-          return <PortfolioCardBack />;
-        }
-        return <PortfolioCardFront />;
+        return isBack ? <PortfolioCardBack /> : <PortfolioCardFront />;
+      } else if (subPage.index === 1) {
+        return <EarnPositionsCard />;
       }
-      return <CenteredContent>Dashboard {subPage.index + 2}</CenteredContent>;
     }
     return <CenteredContent>{subPage.name}</CenteredContent>;
   };
