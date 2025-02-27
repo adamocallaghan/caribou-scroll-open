@@ -3,8 +3,8 @@ import type { AppKitNetwork } from '@reown/appkit/networks'
 import { EthersAdapter } from '@reown/appkit-adapter-ethers'
 
 // Get projectId from https://cloud.reown.com
-export const projectId = import.meta.env.VITE_PROJECT_ID || "b56e18d47c72ab683b10814fe9495694"
-
+export const projectId = import.meta.env.VITE_PROJECT_ID || "23c2bd6fe736aa2ce393d9411e9a15e8"
+// b56e18d47c72ab683b10814fe9495694 - old working project id
 if (!projectId) {
   throw new Error('Project ID is not defined')
 }
