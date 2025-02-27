@@ -17,7 +17,8 @@ const getAppUrl = () => {
   const allowedOrigins: Record<string, string> = {
     'http://localhost:5173': 'http://localhost:5173',
     'https://caribou-scroll-open.vercel.app': 'https://caribou-scroll-open.vercel.app',
-    'https://www.caribouapp.xyz': 'https://www.caribouapp.xyz'
+    'https://www.caribouapp.xyz': 'https://www.caribouapp.xyz',
+    'https://caribouapp.xyz': 'https://caribouapp.xyz'
   };
 
   return allowedOrigins[origin] || origin;
