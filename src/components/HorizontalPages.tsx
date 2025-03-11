@@ -10,6 +10,7 @@ import { PortfolioCardFront } from './contracts/portfolio/PortfolioCardFront';
 import { EarnCardBackV2 } from './contracts/earn/EarnCardBackV2';
 import { EarnPositionsCard } from './contracts/portfolio/EarnPositionsCard';
 import { MintCardBack } from './contracts/mint/MintCardBack';
+import { DigitalCollectiblesCard } from './contracts/portfolio/DigitalCollectiblesCard';
 
 const Container = styled.div`
   width: 100%;
@@ -217,7 +218,7 @@ export const HorizontalPages = ({
       if (subPage.index === 0) {
         return isBack ? <PortfolioCardBack /> : <PortfolioCardFront />;
       } else if (subPage.index === 1) {
-        return <EarnPositionsCard />;
+        return isBack ? <DigitalCollectiblesCard /> : <EarnPositionsCard />;
       }
     }
     return <CenteredContent>{subPage.name}</CenteredContent>;
