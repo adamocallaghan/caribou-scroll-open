@@ -11,6 +11,7 @@ import { EarnCardBackV2 } from './contracts/earn/EarnCardBackV2';
 import { EarnPositionsCard } from './contracts/portfolio/EarnPositionsCard';
 import { MintCardBack } from './contracts/mint/MintCardBack';
 import { DigitalCollectiblesCard } from './contracts/portfolio/DigitalCollectiblesCard';
+import { TrendingTokens } from './contracts/swap/TrendingTokens';
 
 const Container = styled.div`
   width: 100%;
@@ -211,6 +212,8 @@ export const HorizontalPages = ({
     if (pageType === 'Swap' && sendHash) {
       if (subPage.index === 0) {
         return <SwapContractCardV2 sendHash={sendHash} />;
+      } else if (subPage.index === 1) {
+        return <TrendingTokens />;
       }
       return <CenteredContent>Swap {subPage.index + 2}</CenteredContent>;
     }
