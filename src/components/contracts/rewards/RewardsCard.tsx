@@ -88,14 +88,6 @@ const LockTime = styled.div`
   margin-top: 0.5rem;
 `;
 
-interface RewardsCardProps {
-  protocolName: string;
-  points: number;
-  logoUrl: string;
-  contractIndex: number;
-}
-
-// Update the SAMPLE_PROTOCOLS array
 const SAMPLE_PROTOCOLS = [
   {
     name: "Caribou",
