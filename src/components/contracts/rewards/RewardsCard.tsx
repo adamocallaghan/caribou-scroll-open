@@ -1,5 +1,15 @@
 import styled from 'styled-components';
 
+const CardWrapper = styled.div`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 1.5rem;
+  box-sizing: border-box;
+`;
+
 const Card = styled.div`
   width: 100%;
   max-width: 24rem;
@@ -8,15 +18,9 @@ const Card = styled.div`
   border-radius: 0.5rem;
   overflow: hidden;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-`;
-
-const CardContent = styled.div`
   padding: 1.5rem;
-  width: 100%;
-  box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  align-items: center;
   gap: 1.5rem;
 `;
 
@@ -111,8 +115,8 @@ export const RewardsCard = ({ contractIndex }: { contractIndex: number }) => {
   const protocol = SAMPLE_PROTOCOLS[contractIndex] || SAMPLE_PROTOCOLS[0];
 
   return (
-    <Card>
-      <CardContent>
+    <CardWrapper>
+      <Card>
         <ProtocolSection>
           <LogoContainer>
             <Logo src={protocol.logo} alt={`${protocol.name} logo`} />
@@ -126,7 +130,7 @@ export const RewardsCard = ({ contractIndex }: { contractIndex: number }) => {
           <PointsLabel>Total Points Earned</PointsLabel>
           <PointsValue>{protocol.points.toLocaleString()}</PointsValue>
         </PointsSection>
-      </CardContent>
-    </Card>
+      </Card>
+    </CardWrapper>
   );
 }; 
