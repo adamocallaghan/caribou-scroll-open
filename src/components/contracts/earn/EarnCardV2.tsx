@@ -187,7 +187,7 @@ const Tooltip = styled.div<{ isVisible: boolean }>`
 const getMarketDescription = (poolName: string) => {
   switch (poolName) {
     case 'USDC Lending Pool':
-      return "This market allows you to deposit your USDC for other Scroll users to borrow. Your funds are kept safe through mechanisms (such as liquidations) that ensure that the protocol is always over collateralised and can pay out your deposited USDC. But please be aware that smart contract risk is always present";
+      return "This market enables USDC deposits which can be borrowed by other users. The protocol maintains strict collateralization ratios and liquidation mechanisms to protect lenders, though smart contract risks apply.";
     case 'USDT Lending Pool':
       return "This market enables USDT deposits which can be borrowed by other users. The protocol maintains strict collateralization ratios and liquidation mechanisms to protect lenders, though smart contract risks apply.";
     case 'USDC-ETH LP Pool':
