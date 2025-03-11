@@ -136,10 +136,13 @@ const InfoIconContainer = styled.div<{ isBack?: boolean }>`
   background: rgba(243, 200, 108, 0.1);
   padding: 0.5rem;
   border-radius: 50%;
-  display: ${props => props.isBack ? 'none' : 'flex'};
+  display: flex;
   align-items: center;
   justify-content: center;
   transition: opacity 0.2s;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  transform: ${props => props.isBack ? 'rotateY(180deg)' : 'rotateY(0)'};
 
   &:hover {
     opacity: 0.8;
