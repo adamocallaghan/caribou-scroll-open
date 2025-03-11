@@ -1,7 +1,8 @@
 import styled from 'styled-components';
 import { LineChart, Line, XAxis, YAxis, ResponsiveContainer, Tooltip } from 'recharts';
 import { useState, useEffect } from 'react';
-import { useAppKitAccount } from '@reown/appkit/react';
+import { useAppKitAccount, useAppKitNetworkCore, useAppKitProvider, type Provider } from '@reown/appkit/react';
+import { BrowserProvider, Contract, formatUnits } from 'ethers';
 
 const CardWrapper = styled.div`
   width: 100%;
@@ -66,34 +67,141 @@ interface ChartDataPoint {
   value: number;
 }
 
+// Add token configuration
+const TOKENS = [
+  {
+    symbol: 'ETH',
+    name: 'Ethereum',
+    price: 3500
+  },
+  {
+    symbol: 'USDC',
+    name: 'USD Coin',
+    address: "0x06eFdBFf2a14a7c8E15944D1F4A48F9F95F663A4",
+    price: 1,
+    abi: [
+      "function balanceOf(address) view returns (uint256)",
+      "function decimals() view returns (uint8)"
+    ]
+  },
+  {
+    symbol: 'USDT',
+    name: 'Tether USD',
+    address: "0xf55BEC9cafDbE8730f096Aa55dad6D22d44099Df",
+    price: 1,
+    abi: [
+      "function balanceOf(address) view returns (uint256)",
+      "function decimals() view returns (uint8)"
+    ]
+  }
+];
+
+// Add Earn markets configuration
+const EARN_MARKETS = [
+  {
+    name: "USDC Lending Pool",
+    protocol: "RHO Markets",
+    address: "0xAE1846110F72f2DaaBC75B7cEEe96558289EDfc5",
+    asset: "USDC",
+    price: 1,
+    abi: ["function balanceOf(address) view returns (uint256)", "function decimals() view returns (uint8)"]
+  },
+  {
+    name: "USDT Lending Pool",
+    protocol: "Lore Finance",
+    address: "0xC5776416Ea3e88e04E95bCd3fF99b27902da7892",
+    asset: "USDT",
+    price: 1,
+    abi: ["function balanceOf(address) view returns (uint256)", "function decimals() view returns (uint8)"]
+  },
+  {
+    name: "USDC Lending Pool",
+    protocol: "AAVE",
+    address: "0x1D738a3436A8C49CefFbaB7fbF04B660fb528CbD",
+    asset: "USDC",
+    price: 1,
+    abi: ["function balanceOf(address) view returns (uint256)", "function decimals() view returns (uint8)"]
+  }
+];
+
 export const PortfolioCardFront = () => {
   const [totalValue, setTotalValue] = useState(0);
   const [chartData, setChartData] = useState<ChartDataPoint[]>([]);
   const { address } = useAppKitAccount();
+  const { chainId } = useAppKitNetworkCore();
+  const { walletProvider } = useAppKitProvider<Provider>('eip155');
 
   useEffect(() => {
-    const generateChartData = (currentValue: number) => {
-      const days = 7;
-      const data: ChartDataPoint[] = [];
-      let value = currentValue;
-      
-      for (let i = days - 1; i >= 0; i--) {
-        const date = new Date();
-        date.setDate(date.getDate() - i);
+    const calculateTotalValue = async () => {
+      if (!walletProvider || !address) return;
+
+      try {
+        const provider = new BrowserProvider(walletProvider, chainId);
+        let total = 0;
+
+        // Calculate token values
+        for (const token of TOKENS) {
+          try {
+            let balance;
+            let decimals = 18;
+
+            if (token.symbol === 'ETH') {
+              balance = await provider.getBalance(address);
+            } else {
+              const contract = new Contract(token.address!, token.abi!, provider);
+              balance = await contract.balanceOf(address);
+              decimals = await contract.decimals();
+            }
+
+            const formattedBalance = Number(formatUnits(balance, decimals));
+            total += formattedBalance * token.price;
+          } catch (error) {
+            console.error(`Error fetching ${token.symbol} balance:`, error);
+          }
+        }
+
+        // Calculate Earn positions values
+        for (const market of EARN_MARKETS) {
+          try {
+            const contract = new Contract(market.address, market.abi, provider);
+            const balance = await contract.balanceOf(address);
+            const decimals = await contract.decimals();
+            const formattedBalance = Number(formatUnits(balance, decimals));
+            total += formattedBalance * market.price;
+          } catch (error) {
+            console.error(`Error fetching ${market.name} balance:`, error);
+          }
+        }
+
+        setTotalValue(total);
+
+        // Generate chart data based on real total value
+        const days = 7;
+        const data: ChartDataPoint[] = [];
         
-        data.push({
-          date: date.toLocaleDateString(),
-          value: i === 0 ? value : value / (1.05 ** (days - i))
-        });
+        for (let i = days - 1; i >= 0; i--) {
+          const date = new Date();
+          date.setDate(date.getDate() - i);
+          
+          // For past days, show 10% less each day back
+          const value = i === 0 
+            ? total 
+            : total / (1.1 ** i); // This will show 10% increase each day
+          
+          data.push({
+            date: date.toLocaleDateString(),
+            value
+          });
+        }
+        
+        setChartData(data);
+      } catch (error) {
+        console.error('Error calculating total value:', error);
       }
-      
-      setChartData(data);
     };
 
-    const sampleTotal = 10000;
-    setTotalValue(sampleTotal);
-    generateChartData(sampleTotal);
-  }, [address]);
+    calculateTotalValue();
+  }, [address, chainId, walletProvider]);
 
   return (
     <CardWrapper>
