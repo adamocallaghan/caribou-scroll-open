@@ -7,7 +7,7 @@ import { DashboardPage } from '../pages/DashboardPage';
 import { HorizontalPages } from './HorizontalPages';
 import { PredictionPage } from '../pages/PredictionPage';
 import { SwapPage } from '../pages/SwapPage';
-import { LaunchPage } from '../pages/LaunchPage';
+import { RewardsPage } from '../pages/RewardsPage';
 import { SocialPage } from '../pages/SocialPage';
 
 const Container = styled.div`
@@ -153,16 +153,16 @@ export const PageContainer = ({ sendHash }: PageContainerProps) => {
             <SwapPage />
           </HorizontalPages>
         );
-      case 'Launch':
+      case 'Rewards':
         return (
           <HorizontalPages
             subPages={PAGES[pageIndex].subPages}
             bgColor={PAGES[pageIndex].color}
             textColor={PAGES[pageIndex].textColor}
-            pageType="Launch"
+            pageType="Rewards"
             sendHash={sendHash}
           >
-            <LaunchPage />
+            <RewardsPage />
           </HorizontalPages>
         );
       case 'Social':
