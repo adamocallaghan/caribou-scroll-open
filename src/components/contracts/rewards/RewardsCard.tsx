@@ -116,16 +116,6 @@ const SAMPLE_PROTOCOLS = [
     logo: "https://dd.dexscreener.com/ds-data/tokens/scroll/0xaaae8378809bb8815c08d3c59eb0c7d1529ad769.png",
     pointsLabel: "veNuri awarded",
     lockTime: "08/03/2029 - 4 Year Lock"
-  },
-  {
-    name: "Reown Finance",
-    points: 2100,
-    logo: "/reown-logo.svg"
-  },
-  {
-    name: "DeFi Points",
-    points: 1500,
-    logo: "/defi-logo.svg"
   }
 ];
 
