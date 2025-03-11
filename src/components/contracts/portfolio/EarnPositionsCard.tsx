@@ -3,20 +3,12 @@ import { useState, useEffect } from 'react';
 import { useAppKitAccount, useAppKitNetworkCore, useAppKitProvider, type Provider } from '@reown/appkit/react';
 import { BrowserProvider, Contract, formatUnits } from 'ethers';
 
-// Import market configuration
-interface EarnMarket {
-  name: string;
-  asset: string;
-  address: string;
-  rewardToken: string;
-}
-
-// Define the markets (copy from your EarnContractCard)
+// Define the markets
 const EARN_MARKETS = [
   {
     name: "USDC Lending Pool",
     protocol: "RHO Markets",
-    address: "0xAE1846110F72f2DaaBC75B7cEEe96558289EDfc5",  // RHO Markets contract
+    address: "0xAE1846110F72f2DaaBC75B7cEEe96558289EDfc5",
     asset: "USDC",
     rewardToken: "0xf55BEC9cafDbE8730f096Aa55dad6D22d44099Df"
   },
