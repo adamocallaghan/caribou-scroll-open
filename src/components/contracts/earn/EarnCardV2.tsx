@@ -126,7 +126,7 @@ const CoinIcon = () => (
   </svg>
 );
 
-const InfoIconContainer = styled.div`
+const InfoIconContainer = styled.div<{ isBack?: boolean }>`
   position: absolute;
   top: 1rem;
   right: 1rem;
@@ -136,7 +136,7 @@ const InfoIconContainer = styled.div`
   background: rgba(243, 200, 108, 0.1);
   padding: 0.5rem;
   border-radius: 50%;
-  display: flex;
+  display: ${props => props.isBack ? 'none' : 'flex'};
   align-items: center;
   justify-content: center;
   transition: opacity 0.2s;
@@ -204,18 +204,27 @@ interface EarnCardV2Props {
   supplied: string;
   symbol: string;
   protocol: string;
+  isBack?: boolean;
 }
 
-export const EarnCardV2 = ({ poolName, apr, available, supplied, symbol, protocol }: EarnCardV2Props) => {
+export const EarnCardV2 = ({ 
+  poolName, 
+  apr, 
+  available, 
+  supplied, 
+  symbol, 
+  protocol,
+  isBack = false
+}: EarnCardV2Props) => {
   const [showTooltip, setShowTooltip] = useState(false);
 
   return (
     <Card>
       <GradientBackground>
-        <InfoIconContainer onClick={() => setShowTooltip(!showTooltip)}>
+        <InfoIconContainer isBack={isBack} onClick={() => setShowTooltip(!showTooltip)}>
           <InfoIcon />
         </InfoIconContainer>
-        <Tooltip isVisible={showTooltip}>
+        <Tooltip isVisible={showTooltip && !isBack}>
           {getMarketDescription(poolName)}
         </Tooltip>
         <CardHeader>
