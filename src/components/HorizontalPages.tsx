@@ -12,6 +12,7 @@ import { EarnPositionsCard } from './contracts/portfolio/EarnPositionsCard';
 import { MintCardBack } from './contracts/mint/MintCardBack';
 import { DigitalCollectiblesCard } from './contracts/portfolio/DigitalCollectiblesCard';
 import { TrendingTokens } from './contracts/swap/TrendingTokens';
+import { RewardsCard } from './contracts/rewards/RewardsCard';
 
 const Container = styled.div`
   width: 100%;
@@ -223,6 +224,9 @@ export const HorizontalPages = ({
       } else if (subPage.index === 1) {
         return isBack ? <DigitalCollectiblesCard /> : <EarnPositionsCard />;
       }
+    }
+    if (pageType === 'Rewards') {
+      return <RewardsCard contractIndex={subPage.index} />;
     }
     return <CenteredContent>{subPage.name}</CenteredContent>;
   };
