@@ -13,6 +13,7 @@ import { MintCardBack } from './contracts/mint/MintCardBack';
 import { DigitalCollectiblesCard } from './contracts/portfolio/DigitalCollectiblesCard';
 import { TrendingTokens } from './contracts/swap/TrendingTokens';
 import { RewardsCard } from './contracts/rewards/RewardsCard';
+import { RewardsCardBack } from './contracts/rewards/RewardsCardBack';
 
 const Container = styled.div`
   width: 100%;
@@ -226,6 +227,10 @@ export const HorizontalPages = ({
       }
     }
     if (pageType === 'Rewards') {
+      if (isBack) {
+        const protocolName = ['Caribou', 'Scroll Marks', 'Nuri Exchange'][subPage.index];
+        return <RewardsCardBack protocolName={protocolName} />;
+      }
       return <RewardsCard contractIndex={subPage.index} />;
     }
     return <CenteredContent>{subPage.name}</CenteredContent>;
