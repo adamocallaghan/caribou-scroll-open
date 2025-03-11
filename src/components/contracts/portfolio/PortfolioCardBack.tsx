@@ -109,9 +109,12 @@ const TokenChange = styled.span<{ isPositive: boolean }>`
   color: ${props => props.isPositive ? '#15803d' : '#dc2626'};
 `;
 
-// Update the token interface to fix the ABI type
+// Add type for valid token symbols
+type TokenSymbol = 'ETH' | 'USDC' | 'USDT';
+
+// Update the Token interface to use TokenSymbol
 interface Token {
-  symbol: string;
+  symbol: TokenSymbol;
   name: string;
   address?: string;
   abi?: string[];
@@ -142,8 +145,8 @@ const TOKENS: Token[] = [
   }
 ];
 
-// Add token icon URLs
-const TOKEN_ICONS = {
+// Update TOKEN_ICONS with proper typing
+const TOKEN_ICONS: Record<TokenSymbol, string> = {
   ETH: "https://scrollscan.com/token/images/weth_28.png",
   USDC: "https://scrollscan.com/token/images/usdc_ofc_32.png",
   USDT: "https://scrollscan.com/token/images/tetherusd_new_32.png"
@@ -153,14 +156,14 @@ export const PortfolioCardBack = () => {
   const { address } = useAppKitAccount();
   const { chainId } = useAppKitNetworkCore();
   const { walletProvider } = useAppKitProvider<Provider>('eip155');
+  const [isLoading, setIsLoading] = useState(true);
   const [tokenBalances, setTokenBalances] = useState<Array<{
-    symbol: string;
+    symbol: TokenSymbol;
     name: string;
     amount: string;
     value: number;
     priceChange: number;
   }>>([]);
-  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchBalances = async () => {
