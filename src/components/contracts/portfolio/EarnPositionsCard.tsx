@@ -12,18 +12,27 @@ interface EarnMarket {
 }
 
 // Define the markets (copy from your EarnContractCard)
-const EARN_MARKETS: EarnMarket[] = [
+const EARN_MARKETS = [
   {
-    name: "USDC Pool",
+    name: "USDC Lending Pool",
+    protocol: "RHO Markets",
+    address: "0xAE1846110F72f2DaaBC75B7cEEe96558289EDfc5",  // RHO Markets contract
     asset: "USDC",
-    address: "0x06eFdBFf2a14a7c8E15944D1F4A48F9F95F663A4",
     rewardToken: "0xf55BEC9cafDbE8730f096Aa55dad6D22d44099Df"
   },
   {
-    name: "USDT Pool",
+    name: "USDT Lending Pool",
+    protocol: "Lore Finance",
+    address: "0xC5776416Ea3e88e04E95bCd3fF99b27902da7892",  // Use aToken address for balance
     asset: "USDT",
-    address: "0xf55BEC9cafDbE8730f096Aa55dad6D22d44099Df",
     rewardToken: "0x06eFdBFf2a14a7c8E15944D1F4A48F9F95F663A4"
+  },
+  {
+    name: "USDC Lending Pool",
+    protocol: "AAVE",
+    address: "0x1D738a3436A8C49CefFbaB7fbF04B660fb528CbD",  // Use aToken address for balance
+    asset: "USDC",
+    rewardToken: "0xf55BEC9cafDbE8730f096Aa55dad6D22d44099Df"
   }
 ];
 
@@ -157,17 +166,22 @@ export const EarnPositionsCard = () => {
 
         const positionPromises = EARN_MARKETS.map(async (market) => {
           try {
-            // Create contract instance with provider (not signer)
+            console.log(`Fetching position for ${market.name} at address ${market.address}`);
+            
             const contract = new Contract(
               market.address,
               EARN_MARKET_ABI,
               provider
             );
 
-            // First check balance
+            // Log the contract methods we're calling
+            console.log(`Calling balanceOf for ${market.name}`);
             const balance = await contract.balanceOf(address);
+            console.log(`Raw balance for ${market.name}:`, balance.toString());
+            
             const decimals = await contract.decimals();
             const formattedBalance = Number(formatUnits(balance, decimals));
+            console.log(`Formatted balance for ${market.name}:`, formattedBalance);
 
             // Only proceed if there's a balance
             if (formattedBalance >= 0.01) {
