@@ -43,9 +43,10 @@ const LogoContainer = styled.div`
 `;
 
 const Logo = styled.img`
-  width: 2.5rem;
-  height: 2.5rem;
-  object-fit: contain;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
 `;
 
 const ProtocolInfo = styled.div`
@@ -79,6 +80,14 @@ const PointsValue = styled.div`
   color: #FFFFFF;
 `;
 
+// Add a new styled component for the lock time
+const LockTime = styled.div`
+  font-size: 0.75rem;
+  color: #e5f0f0;
+  opacity: 0.8;
+  margin-top: 0.5rem;
+`;
+
 interface RewardsCardProps {
   protocolName: string;
   points: number;
@@ -86,17 +95,27 @@ interface RewardsCardProps {
   contractIndex: number;
 }
 
-// Sample protocol data - in a real app, this would come from your backend
+// Update the SAMPLE_PROTOCOLS array
 const SAMPLE_PROTOCOLS = [
   {
-    name: "Caribou Protocol",
+    name: "Caribou",
     points: 1250,
-    logo: "/caribou-logo.svg"
+    logo: "/caribou_logo.jpg",
+    pointsLabel: "Total Points Earned"
   },
   {
-    name: "Scroll Exchange",
+    name: "Scroll Marks",
     points: 850,
-    logo: "/scroll-logo.svg"
+    logo: "/scroll.png",
+    pointsLabel: "Total Marks Earned"
+  },
+  {
+    name: "Nuri Exchange",
+    points: 1000,
+    pointsSuffix: "veNuri",
+    logo: "https://dd.dexscreener.com/ds-data/tokens/scroll/0xaaae8378809bb8815c08d3c59eb0c7d1529ad769.png",
+    pointsLabel: "veNuri awarded",
+    lockTime: "08/03/2029 - 4 Year Lock"
   },
   {
     name: "Reown Finance",
@@ -111,7 +130,6 @@ const SAMPLE_PROTOCOLS = [
 ];
 
 export const RewardsCard = ({ contractIndex }: { contractIndex: number }) => {
-  // Get protocol data based on contract index
   const protocol = SAMPLE_PROTOCOLS[contractIndex] || SAMPLE_PROTOCOLS[0];
 
   return (
@@ -127,8 +145,12 @@ export const RewardsCard = ({ contractIndex }: { contractIndex: number }) => {
         </ProtocolSection>
         
         <PointsSection>
-          <PointsLabel>Total Points Earned</PointsLabel>
-          <PointsValue>{protocol.points.toLocaleString()}</PointsValue>
+          <PointsLabel>{protocol.pointsLabel}</PointsLabel>
+          <PointsValue>
+            {protocol.points.toLocaleString()}
+            {protocol.pointsSuffix ? ` ${protocol.pointsSuffix}` : ''}
+          </PointsValue>
+          {protocol.lockTime && <LockTime>{protocol.lockTime}</LockTime>}
         </PointsSection>
       </Card>
     </CardWrapper>
