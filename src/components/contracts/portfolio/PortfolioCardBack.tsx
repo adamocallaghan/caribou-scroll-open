@@ -63,11 +63,18 @@ const TokenIcon = styled.div`
   width: 2rem;
   height: 2rem;
   border-radius: 9999px;
-  background: rgba(255, 105, 180, 0.2);
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #FFFFFF;
+  overflow: hidden;
+  background: #FFFFFF;  // White background for the icons
+`;
+
+const TokenIconImage = styled.img`
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  padding: 0.25rem;  // Add some padding to prevent icons from touching the edges
 `;
 
 const TokenDetails = styled.div`
@@ -134,6 +141,13 @@ const TOKENS: Token[] = [
     ]
   }
 ];
+
+// Add token icon URLs
+const TOKEN_ICONS = {
+  ETH: "https://scrollscan.com/token/images/weth_28.png",
+  USDC: "https://scrollscan.com/token/images/usdc_ofc_32.png",
+  USDT: "https://scrollscan.com/token/images/tetherusd_new_32.png"
+};
 
 export const PortfolioCardBack = () => {
   const { address } = useAppKitAccount();
@@ -232,7 +246,10 @@ export const PortfolioCardBack = () => {
                 <TokenItem key={token.symbol}>
                   <TokenInfo>
                     <TokenIcon>
-                      {token.symbol.charAt(0)}
+                      <TokenIconImage 
+                        src={TOKEN_ICONS[token.symbol]} 
+                        alt={token.symbol}
+                      />
                     </TokenIcon>
                     <TokenDetails>
                       <TokenName>{token.name}</TokenName>
