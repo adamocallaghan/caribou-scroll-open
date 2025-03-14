@@ -2,6 +2,7 @@ import { PredictionCardV2 } from './PredictionCardV2';
 import { PREDICTION_MARKETS } from '../../../contracts/prediction/config';
 import styled from 'styled-components';
 import { logUserAction } from '../../../utils/pointsTracker';
+import { useAppKitAccount } from '@reown/appkit/react';
 
 interface PredictionContractCardProps {
   sendHash: (hash: string) => void;
@@ -19,13 +20,16 @@ const CardWrapper = styled.div`
 `;
 
 export const PredictionContractCard = ({ sendHash, contractIndex }: PredictionContractCardProps) => {
+  const { address } = useAppKitAccount();
   const market = PREDICTION_MARKETS[contractIndex];
   
   if (!market) return null;
 
   const handleBetPlacement = async (hash: string) => {
     await sendHash(hash);
-    await logUserAction(address, 'prediction_bet');
+    if (address) {
+      await logUserAction(address, 'prediction_bet');
+    }
   };
 
   return (
