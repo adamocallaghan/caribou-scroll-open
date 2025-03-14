@@ -1,6 +1,3 @@
-import { writeFile, readFile } from 'fs/promises';
-import path from 'path';
-
 interface UserAction {
   address: string;
   action: 'earn_position' | 'prediction_bet' | 'nft_mint';
