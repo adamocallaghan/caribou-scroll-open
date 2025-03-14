@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { ToastPortal } from '../../Toast';
 import { EarnCardV2 } from './EarnCardV2';
+import { logUserAction } from '../../../utils/pointsTracker';
 
 const CardWrapper = styled.div`
   width: 100%;
@@ -281,6 +282,7 @@ export const EarnContractCard = ({ sendHash, contractIndex, onStateChange }: Ear
         });
         sendHash(tx.hash);
         await Promise.all([fetchBalance(), fetchWalletBalance()]);
+        await logUserAction(address, 'earn_position');
       }
     } catch (error) {
       console.error(`Failed to deposit ${contract.asset}:`, error);

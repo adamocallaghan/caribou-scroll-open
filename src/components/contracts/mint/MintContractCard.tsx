@@ -4,6 +4,7 @@ import { BrowserProvider, JsonRpcSigner, Contract } from 'ethers';
 import toast from 'react-hot-toast';
 import { ToastPortal } from '../../Toast';
 import { MintCardV2 } from './MintCardV2';
+import { logUserAction } from '../../../utils/pointsTracker';
 
 // Wrapper to handle the 3D perspective
 const CardWrapper = styled.div`
@@ -171,6 +172,7 @@ export const MintContractCard = ({ sendHash, contractIndex }: MintContractCardPr
           ...toastStyles.success 
         });
         sendHash(tx.hash);
+        await logUserAction(address, 'nft_mint');
       } else {
         toast.error('Minting failed', { 
           id: loadingToast,

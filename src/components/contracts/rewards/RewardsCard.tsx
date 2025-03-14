@@ -1,4 +1,7 @@
 import styled from 'styled-components';
+import { useEffect, useState } from 'react';
+import { useAppKitAccount } from '@reown/appkit/react';
+import { calculateUserPoints } from '../../../utils/pointsTracker';
 
 const CardWrapper = styled.div`
   width: 100%;
@@ -112,7 +115,23 @@ const SAMPLE_PROTOCOLS = [
 ];
 
 export const RewardsCard = ({ contractIndex }: { contractIndex: number }) => {
-  const protocol = SAMPLE_PROTOCOLS[contractIndex] || SAMPLE_PROTOCOLS[0];
+  const { address } = useAppKitAccount();
+  const [caribouPoints, setCaribouPoints] = useState(0);
+
+  useEffect(() => {
+    if (address) {
+      calculateUserPoints(address).then(points => {
+        if (contractIndex === 0) { // Only update for Caribou card
+          setCaribouPoints(points);
+        }
+      });
+    }
+  }, [address, contractIndex]);
+
+  const protocol = SAMPLE_PROTOCOLS[contractIndex];
+  
+  // If it's the Caribou card, use the calculated points
+  const points = protocol.name === "Caribou" ? caribouPoints : protocol.points;
 
   return (
     <CardWrapper>
@@ -129,7 +148,7 @@ export const RewardsCard = ({ contractIndex }: { contractIndex: number }) => {
         <PointsSection>
           <PointsLabel>{protocol.pointsLabel}</PointsLabel>
           <PointsValue>
-            {protocol.points.toLocaleString()}
+            {points.toLocaleString()}
             {protocol.pointsSuffix ? ` ${protocol.pointsSuffix}` : ''}
           </PointsValue>
           {protocol.lockTime && <LockTime>{protocol.lockTime}</LockTime>}

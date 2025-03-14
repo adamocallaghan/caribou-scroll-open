@@ -1,6 +1,7 @@
 import { PredictionCardV2 } from './PredictionCardV2';
 import { PREDICTION_MARKETS } from '../../../contracts/prediction/config';
 import styled from 'styled-components';
+import { logUserAction } from '../../../utils/pointsTracker';
 
 interface PredictionContractCardProps {
   sendHash: (hash: string) => void;
@@ -22,12 +23,17 @@ export const PredictionContractCard = ({ sendHash, contractIndex }: PredictionCo
   
   if (!market) return null;
 
+  const handleBetPlacement = async (hash: string) => {
+    await sendHash(hash);
+    await logUserAction(address, 'prediction_bet');
+  };
+
   return (
     <CardWrapper>
       <PredictionCardV2
         marketAddress={market.address}
         description={market.description}
-        sendHash={sendHash}
+        sendHash={handleBetPlacement}
       />
     </CardWrapper>
   );
