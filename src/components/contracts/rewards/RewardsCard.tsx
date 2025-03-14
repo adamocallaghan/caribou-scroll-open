@@ -91,13 +91,13 @@ const LockTime = styled.div`
 const SAMPLE_PROTOCOLS = [
   {
     name: "Caribou",
-    points: 1250,
+    points: 0,
     logo: "/caribou_logo.jpg",
     pointsLabel: "Total Points Earned"
   },
   {
     name: "Scroll Marks",
-    points: 850,
+    points: 0,
     logo: "/scroll.png",
     pointsLabel: "Total Marks Earned"
   },
