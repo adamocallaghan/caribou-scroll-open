@@ -71,9 +71,9 @@ export const PAGES: PageConfig[] = [
     name: 'Social',
     color: '#cad9e5',
     textColor: '#222222',
-    subPages: Array.from({ length: 4 }, (_, i) => ({ 
-      name: `Social ${i + 1}`, 
-      index: i 
+    subPages: Array.from({ length: 1 }, (_, i) => ({ 
+      name: `Social ${i + 1}`,
+      index: i
     }))
   }
 ]; 

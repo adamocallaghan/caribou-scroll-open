@@ -233,6 +233,22 @@ export const HorizontalPages = ({
       }
       return <RewardsCard contractIndex={subPage.index} />;
     }
+    if (pageType === 'Social') {
+      return (
+        <CenteredContent>
+          <div style={{ 
+            fontSize: '1.5rem', 
+            textAlign: 'center',
+            padding: '2rem',
+            background: 'rgba(255, 255, 255, 0.1)',
+            borderRadius: '0.5rem',
+            maxWidth: '80%'
+          }}>
+            Social token and token-gated chats coming soon!
+          </div>
+        </CenteredContent>
+      );
+    }
     return <CenteredContent>{subPage.name}</CenteredContent>;
   };
 
