@@ -130,17 +130,27 @@ const Badge = styled.span`
   font-size: 0.75rem;
 `;
 
-// Update the MARKET_APYS object with all market APYs
-const MARKET_APYS = {
+// Define types for our APY structure
+type TokenAPY = {
+  USDC?: number;
+  USDT?: number;
+};
+
+type MarketAPYs = {
+  [key: string]: TokenAPY;
+};
+
+// Update the MARKET_APYS object with proper typing
+const MARKET_APYS: MarketAPYs = {
   'RHO': {
-    'USDC': 5.4,
-    'USDT': 4.8
+    USDC: 5.4,
+    USDT: 4.8
   },
   'Lore': {
-    'USDT': 3.2
+    USDT: 3.2
   },
   'AAVE': {
-    'USDC': 2.8
+    USDC: 2.8
   }
 };
 
@@ -247,8 +257,7 @@ export const EarnPositionsCard = () => {
           .filter((position): position is Position => position !== null)
           .map(position => ({
             ...position,
-            // Override the calculated APY with the static APY from MARKET_APYS
-            apy: MARKET_APYS[position.protocol as keyof typeof MARKET_APYS]?.[position.token as 'USDC' | 'USDT'] || 0
+            apy: MARKET_APYS[position.protocol]?.[position.token as keyof TokenAPY] || 0
           }));
 
         console.log("Final positions:", fetchedPositions);
