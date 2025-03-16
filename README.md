@@ -1,17 +1,14 @@
-# Reown AppKit Example using ethers (Vite + React)
+# Caribou
 
-This is a [Vite](https://vitejs.dev) project together with React.
+![caribou_thumbnail](./caribou_thumbnail.png)
 
-## Usage
+Caribou is your mobile-first, social login portal to the Scroll ecosystem. Caribou allows users to log in using familiar Web2 authentication methods, avoiding often intimidating blockers for new users like private keys, self custodial wallets, and adding networks, while encouraging use through a familiar Web3 "swipe & flip" based interface and a range of different apps and digital assets available directly from the app.
 
-1. Go to [Reown Cloud](https://cloud.reown.com) and create a new project.
-2. Copy your `Project ID`
-3. Rename `.env.example` to `.env` and paste your `Project ID` as the value for `VITE_PROJECT_ID`
-4. Run `pnpm install` to install dependencies
-5. Run `pnpm run dev` to start the development server
+## Features:
+- Token & Portfolio Tracking
+- Swap & Trending Tokens
+- Prediction Markets
+- Earn Markets (DeFi)
+- Mint NFTs & Digital Collectibles
+- Rewards
 
-## Resources
-
-- [Reown — Docs](https://docs.reown.com)
-- [Vite — GitHub](https://github.com/vitejs/vite)
-- [Vite — Docs](https://vitejs.dev/guide/)
